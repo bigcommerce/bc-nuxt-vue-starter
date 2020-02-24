@@ -1,5 +1,4 @@
 <template>
-  <div>
   <svg class="NuxtLogo" width="245" height="180" viewBox="0 0 452 342" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path
@@ -17,71 +16,7 @@
       />
     </g>
   </svg>
-  <SfProductCard
-    :image="image"
-    :image-width="imageWidth"
-    :image-height="imageHeight"
-    :title="title"
-    :link="link"
-    :linkTag="linkTag"
-    :regular-price="regularPrice"
-    :special-price="specialPrice"
-    :score-rating="scoreRating"
-    :max-rating="maxRating"
-    :wishlistIcon="wishlistIcon"
-    :isAddedToCart="isAddedToCart"
-    :addToCartDisabled="addToCartDisabled"
-    :showAddToCartButton="showAddToCartButton"
-    :isOnWishlistIcon="isOnWishlistIcon"
-    :isOnWishlist="isOnWishlist"
-  />
-  <SfAddToCart
-    v-model="qty"
-    :disabled="disabled"
-    :qty-min="qtyMin"
-    @click="()=>{}"/>
-  </div>
 </template>
-
-<script>
-import { SfProductCard, SfAddToCart } from '@storefront-ui/vue'
-
-export default {
-  components: {
-    SfProductCard,
-    SfAddToCart
-  },
-  props: {
-    disabled: {
-      default: false
-    },
-    qtyMin: {
-      default: 1
-    }
-  },
-  data () {
-    return {
-      image: 'assets/storybook/SfProductCard/product_thumb.jpg',
-      imageWidth: 216,
-      imageHeight: 326,
-      title: 'Product name',
-      link: '',
-      linkTag: '',
-      regularPrice: '$10,99',
-      specialPrice: '$5,99',
-      maxRating: 5,
-      scoreRating: 4,
-      wishlistIcon: 'heart',
-      showAddToCartButton: false,
-      isAddedToCart: false,
-      addToCartDisabled: false,
-      isOnWishlist: false,
-      isOnWishlistIcon: 'heart_fill',
-      qty: 1
-    }
-  }
-}
-</script>
 
 <style>
 .NuxtLogo {
