@@ -10,38 +10,23 @@
           class="gallery-mobile mobile-only"
           :image-width="375"
           :image-height="490"
-          :images="[
-            {
-              mobile: { url: 'assets/storybook/Product/productM.jpg' },
-              desktop: { url: 'assets/storybook/Product/productM.jpg' },
-              big: { url: 'assets/storybook/Product/productM.jpg' }
-            },
-            {
-              mobile: { url: 'assets/storybook/Product/productM.jpg' },
-              desktop: { url: 'assets/storybook/Product/productM.jpg' },
-              big: { url: 'assets/storybook/Product/productM.jpg' }
-            }
-          ]"
+          :images="product.imageList"
         />
-        <SfImage
-          src="assets/storybook/Product/productA.jpg"
-          :width="590"
-          :height="700"
-          class="desktop-only"
-        />
-        <SfImage
-          src="assets/storybook/Product/productB.jpg"
-          :width="590"
-          :height="700"
-          class="desktop-only"
-        />
+        <div v-for="(image, index) in product.imageList" :key="index">
+          <SfImage
+            :src="image.desktop.url"
+            :width="590"
+            :height="700"
+            class="desktop-only"
+          />
+        </div>
       </div>
       <div class="product__description">
         <SfSticky class="product-details">
           <div class="product-details__mobile-top">
             <div>
               <SfHeading
-                title="Cashmere Sweater"
+                :title="product.name"
                 :level="1"
                 class="sf-heading--no-underline sf-heading--left product-details__heading"
               />
@@ -62,11 +47,7 @@
               </div>
             </div>
           </div>
-          <p class="product-details__description desktop-only">
-            Find stunning women cocktail and party dresses. Stand out in lace
-            and metallic cocktail dresses and party dresses from all your
-            favorite brands.
-          </p>
+          <p class="product-details__description desktop-only" :v-text="product.description" />
           <div class="product-details__action">
             <button class="sf-action">
               Size guide
@@ -130,12 +111,7 @@
           <SfTabs class="product-details__tabs" :open-tab="2">
             <SfTab title="Description">
               <div>
-                <p>
-                  The Karissa V-Neck Tee features a semi-fitted shape that's
-                  flattering for every figure. You can hit the gym with
-                  confidence while it hugs curves and hides common "problem"
-                  areas. Find stunning women's cocktail dresses and party
-                  dresses.
+                <p :v-text="product.description">
                 </p>
               </div>
               <div class="product-details__properties">
@@ -177,104 +153,6 @@
         </SfSticky>
       </div>
     </div>
-    <SfSection title-heading="Match it with" class="section">
-      <SfCarousel class="product-carousel">
-        <SfCarouselItem v-for="(product, i) in products" :key="i">
-          <SfProductCard
-            :title="product.title"
-            :image="product.image"
-            :regular-price="product.price.regular"
-            :max-rating="product.rating.max"
-            :score-rating="product.rating.score"
-            :is-on-wishlist="product.isOnWishlist"
-            class="product-card"
-            @click:wishlist="toggleWishlist(i)"
-          />
-        </SfCarouselItem>
-      </SfCarousel>
-    </SfSection>
-    <SfSection title-heading="You might also like" class="section">
-      <SfCarousel class="product-carousel">
-        <SfCarouselItem v-for="(product, i) in products" :key="i">
-          <SfProductCard
-            :title="product.title"
-            :image="product.image"
-            :regular-price="product.price.regular"
-            :max-rating="product.rating.max"
-            :score-rating="product.rating.score"
-            :is-on-wishlist="product.isOnWishlist"
-            class="product-card"
-            @click:wishlist="toggleWishlist(i)"
-          />
-        </SfCarouselItem>
-      </SfCarousel>
-    </SfSection>
-    <SfSection
-      title-heading="Share Your Look"
-      subtitle-heading="#YOURLOOK"
-      class="section"
-    >
-      <div class="images-grid">
-        <div class="images-grid__row">
-          <div class="images-grid__col">
-            <SfImage
-              src="assets/storybook/Home/imageA.jpg"
-              :width="486"
-              :height="486"
-            >
-              katherina_trn
-            </SfImage>
-          </div>
-          <div class="images-grid__col">
-            <SfImage
-              src="assets/storybook/Home/imageB.jpg"
-              :width="486"
-              :height="486"
-            >
-              katherina_trn
-            </SfImage>
-          </div>
-          <div class="images-grid__col">
-            <SfImage
-              src="assets/storybook/Home/imageC.jpg"
-              :width="486"
-              :height="486"
-            >
-              katherina_trn
-            </SfImage>
-          </div>
-        </div>
-        <div class="images-grid__row">
-          <div class="images-grid__col">
-            <SfImage
-              src="assets/storybook/Home/imageC.jpg"
-              :width="486"
-              :height="486"
-            >
-              katherina_trn
-            </SfImage>
-          </div>
-          <div class="images-grid__col">
-            <SfImage
-              src="assets/storybook/Home/imageD.jpg"
-              :width="486"
-              :height="486"
-            >
-              katherina_trn
-            </SfImage>
-          </div>
-          <div class="images-grid__col">
-            <SfImage
-              src="assets/storybook/Home/imageA.jpg"
-              :width="486"
-              :height="486"
-            >
-              katherina_trn
-            </SfImage>
-          </div>
-        </div>
-      </div>
-    </SfSection>
     <SfBanner
       title="Download our application to your mobile"
       image="/assets/storybook/Home/bannerD.png"
@@ -308,6 +186,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 import '@storefront-ui/vue/styles.scss'
 import {
   SfProperty,
@@ -319,9 +198,6 @@ import {
   SfAddToCart,
   SfTabs,
   SfGallery,
-  SfProductCard,
-  SfCarousel,
-  SfSection,
   SfImage,
   SfBanner,
   SfAlert,
@@ -342,38 +218,92 @@ export default {
     SfAddToCart,
     SfTabs,
     SfGallery,
-    SfProductCard,
-    SfCarousel,
-    SfSection,
     SfImage,
     SfBanner,
     SfSticky,
     SfReview,
     SfBreadcrumbs
   },
+  async asyncData ({ params }) {
+    const result = await axios({
+      method: 'POST',
+      url: 'https://kari-morars-store.mybigcommerce.com/graphql',
+      headers: {
+        Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
+      },
+      data: {
+        query: `
+          query LookUpUrl {
+            site {
+              route(path: "/smith-journal-13/") {
+                node {
+                  __typename
+                  ... on Product {
+                    id 
+                    entityId
+                    name
+                    description
+                    defaultImage {
+                      url640wide: url(width: 640)
+                    }
+                    images {
+                      edges {
+                        node {
+                          mobile: url(width: 400, height: 400)
+                          desktop: url(width: 600, height: 600)
+                          big: url(width: 1200, height: 1200)
+                        }
+                      }
+                    }
+                    brand {
+                      name
+                    }
+                    path
+                    prices {
+                      price {
+                        value
+                        currencyCode
+                      }
+                      salePrice {
+                        value
+                        currencyCode
+                      }
+                    }
+                    reviewSummary {
+                      numberOfReviews
+                      summationOfRatings
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `
+      }
+    })
+    const productData = result.data.data.site.route.node
+    // debugger
+    productData.imageList = productData.images.edges.map((t) => {
+      return {
+        mobile: { url: t.node.mobile },
+        desktop: { url: t.node.desktop },
+        big: { url: t.node.big }
+      }
+    })
+    return { product: productData }
+  },
   data () {
-    return {
+    const productData = {
+      product: {
+        name: null,
+        description: null
+      },
       qty: '1',
       stock: 5,
       size: '',
-      sizes: [
-        { label: 'XXS', value: 'xxs' },
-        { label: 'XS', value: 'xs' },
-        { label: 'S', value: 's' },
-        { label: 'M', value: 'm' },
-        { label: 'L', value: 'l' },
-        { label: 'XL', value: 'xl' },
-        { label: 'XXL', value: 'xxl' }
-      ],
+      sizes: [],
       color: '',
-      colors: [
-        { label: 'Red', value: 'red', color: '#990611' },
-        { label: 'Black', value: 'black', color: '#000000' },
-        { label: 'Yellow', value: 'yellow', color: '#DCA742' },
-        { label: 'Blue', value: 'blue', color: '#004F97' },
-        { label: 'Navy', value: 'navy', color: '#656466' },
-        { label: 'White', value: 'white', color: '#FFFFFF' }
-      ],
+      colors: [],
       properties: [
         {
           name: 'Product Code',
@@ -488,7 +418,72 @@ export default {
         }
       ]
     }
+    return productData
   },
+  // async mounted () {
+  //   try {
+  //     const result = await axios({
+  //       method: 'POST',
+  //       url: 'https://kari-morars-store.mybigcommerce.com/graphql',
+  //       headers: {
+  //         Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
+  //       },
+  //       data: {
+  //         query: `
+  //           query LookUpUrl {
+  //             site {
+  //               route(path: "/smith-journal-13/") {
+  //                 node {
+  //                   __typename
+  //                   ... on Product {
+  //                     id
+  //                     entityId
+  //                     name
+  //                     description
+  //                     defaultImage {
+  //                       url640wide: url(width: 640)
+  //                     }
+  //                     images {
+  //                       edges {
+  //                         node {
+  //                           url(width: 500, height: 500)
+  //                         }
+  //                       }
+  //                     }
+  //                     brand {
+  //                       name
+  //                     }
+  //                     path
+  //                     prices {
+  //                       price {
+  //                         value
+  //                         currencyCode
+  //                       }
+  //                       salePrice {
+  //                         value
+  //                         currencyCode
+  //                       }
+  //                     }
+  //                     reviewSummary {
+  //                       numberOfReviews
+  //                       summationOfRatings
+  //                     }
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         `
+  //       }
+  //     })
+  //     console.log(result)
+  //     if (!this.product) {
+  //       this.product = result.data.data.site.route.node
+  //     }
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // },
   methods: {
     addToCart (event) {
       window.location = '/cart'
