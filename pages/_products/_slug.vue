@@ -1,5 +1,27 @@
 <template>
   <div>
+    <SfHeader
+      title="BCVueNuxt"
+    >
+      <template #navigation>
+        <SfHeaderNavigationItem>
+          <a
+            href="/"
+            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
+          >
+            Home
+          </a>
+        </SfHeaderNavigationItem>
+        <SfHeaderNavigationItem>
+          <a
+            href="/products"
+            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
+          >
+            Shop All
+          </a>
+        </SfHeaderNavigationItem>
+      </template>
+    </SfHeader>
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
@@ -58,7 +80,7 @@
                 />
                 <div class="product-details__sub">
                   <SfPrice
-                    regular="$50.00"
+                    :regular="'$' + product.prices.price.value.toFixed(2)"
                     class="sf-price--big product-details__sub-price"
                   />
                   <div class="product-details__sub-rating">
@@ -99,13 +121,19 @@
                 type="warning"
                 class="product-details__alert mobile-only"
               />
-              <SfAddToCart
+              <!-- <SfAddToCart
                 v-model="qty"
                 :stock="stock"
                 :can-add-to-cart="stock > 0"
                 class="product-details__add-to-cart"
                 @click="addToCart"
-              />
+              /> -->
+              <SfButton
+                class="product-details__add-to-cart"
+                @click="buyNow"
+              >
+                Buy Now
+              </SfButton>
             </div>
             <SfTabs class="product-details__tabs" :open-tab="2">
               <SfTab v-if="product.description.length > 0 || product.customFields.edges.length > 0" title="Description">
@@ -171,13 +199,14 @@
 import axios from 'axios'
 import '@storefront-ui/vue/styles.scss'
 import {
+  SfHeader,
   SfProperty,
   SfHeading,
   SfPrice,
   SfRating,
   SfSelect,
   SfProductOption,
-  SfAddToCart,
+  // SfAddToCart,
   SfTabs,
   SfGallery,
   SfImage,
@@ -190,6 +219,7 @@ import {
 export default {
   name: 'Product',
   components: {
+    SfHeader,
     SfAlert,
     SfProperty,
     SfHeading,
@@ -197,7 +227,7 @@ export default {
     SfRating,
     SfSelect,
     SfProductOption,
-    SfAddToCart,
+    // SfAddToCart,
     SfTabs,
     SfGallery,
     SfImage,
@@ -322,19 +352,13 @@ export default {
       stock: 1,
       breadcrumbs: [
         {
-          text: 'Home',
+          text: 'Shop All',
           route: {
-            link: '#'
+            link: '/products'
           }
         },
         {
-          text: 'Category',
-          route: {
-            link: '#'
-          }
-        },
-        {
-          text: 'Pants',
+          text: 'Product Page',
           route: {
             link: '#'
           }

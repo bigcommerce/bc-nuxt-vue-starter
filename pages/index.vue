@@ -1,5 +1,27 @@
 <template>
   <div id="home">
+    <SfHeader
+      title="BCVueNuxt"
+    >
+      <template #navigation>
+        <SfHeaderNavigationItem>
+          <a
+            href="/"
+            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
+          >
+            Home
+          </a>
+        </SfHeaderNavigationItem>
+        <SfHeaderNavigationItem>
+          <a
+            href="/products"
+            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
+          >
+            Shop All
+          </a>
+        </SfHeaderNavigationItem>
+      </template>
+    </SfHeader>
     <SfHero class="section">
       <SfHeroItem
         v-for="(hero, i) in heroes"
@@ -166,6 +188,7 @@
 <script>
 import '@storefront-ui/vue/styles.scss'
 import {
+  SfHeader,
   SfHero,
   SfBanner,
   SfCallToAction,
@@ -178,6 +201,7 @@ import {
 export default {
   name: 'Home',
   components: {
+    SfHeader,
     SfHero,
     SfBanner,
     SfCallToAction,
