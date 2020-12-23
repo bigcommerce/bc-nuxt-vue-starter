@@ -1,8 +1,6 @@
 <template>
   <div id="category">
-    <SfHeader
-      title="BCVueNuxt"
-    >
+    <SfHeader title="BCVueNuxt">
       <template #navigation>
         <SfHeaderNavigationItem>
           <a
@@ -31,8 +29,12 @@
       <div class="navbar__main">
         <div class="navbar__counter">
           <span class="navbar__label desktop-only">Products found: </span>
-          <strong class="desktop-only">{{ category.products.edges.length }}</strong>
-          <span class="navbar__label mobile-only">{{ category.products.edges.length }}</span>
+          <strong class="desktop-only">{{
+            category.products.edges.length
+          }}</strong>
+          <span class="navbar__label mobile-only">{{
+            category.products.edges.length
+          }}</span>
         </div>
       </div>
     </div>
@@ -54,23 +56,21 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-import '@storefront-ui/vue/styles.scss'
-import {
-  SfProductCard,
-  SfHeader
-} from '@storefront-ui/vue'
+import axios from 'axios';
+import '@storefront-ui/vue/styles.scss';
+import { SfProductCard, SfHeader } from '@storefront-ui/vue';
 export default {
   components: {
     SfProductCard,
     SfHeader
   },
-  async asyncData ({ params }) {
+  async asyncData({ params }) {
     const result = await axios({
       method: 'POST',
       url: 'https://kari-morars-store.mybigcommerce.com/graphql',
       headers: {
-        Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
+        Authorization:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
       },
       data: {
         query: `
@@ -106,24 +106,23 @@ export default {
           }
         `
       }
-    })
-    const productsData = result.data.data.site.route.node
+    });
+    const productsData = result.data.data.site.route.node;
     // debugger
     // console.log(productsData)
 
-    return { category: productsData }
+    return { category: productsData };
   },
-  data () {
+  data() {
     return {
       category: {}
-    }
+    };
   },
-  methods: {
-  }
-}
+  methods: {}
+};
 </script>
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 @mixin for-desktop {
   @media screen and (min-width: $desktop-min) {
     @content;
@@ -156,7 +155,7 @@ export default {
     width: calc(100% - calc($spacer-big * 2));
     height: 1px;
     background-color: $c-light;
-    content: "";
+    content: '';
     @include for-desktop {
       content: none;
     }

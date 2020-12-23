@@ -1,8 +1,6 @@
 <template>
   <div>
-    <SfHeader
-      title="BCVueNuxt"
-    >
+    <SfHeader title="BCVueNuxt">
       <template #navigation>
         <SfHeaderNavigationItem>
           <a
@@ -39,7 +37,7 @@
       <div class="actions">
         <SfButton
           class="sf-button--full-width actions__button"
-          @click="window.location='/'"
+          @click="window.location = '/'"
         >
           Return to home
         </SfButton>
@@ -87,8 +85,12 @@
                     <SfRating :score="product.reviewSummary.score" :max="5" />
                     <div class="product-details__sub-reviews desktop-only">
                       {{ product.reviewSummary.numberOfReviews }}
-                      <span v-if="product.reviewSummary.numberOfReviews == 1">Review</span>
-                      <span v-if="product.reviewSummary.numberOfReviews !== 1">Reviews</span>
+                      <span v-if="product.reviewSummary.numberOfReviews == 1">
+                        Review
+                      </span>
+                      <span v-if="product.reviewSummary.numberOfReviews !== 1">
+                        Reviews
+                      </span>
                     </div>
                     <div class="product-details__sub-reviews mobile-only">
                       ({{ product.reviewSummary.numberOfReviews }})
@@ -97,7 +99,10 @@
                 </div>
               </div>
             </div>
-            <p class="product-details__description desktop-only" :v-text="product.description" />
+            <p
+              class="product-details__description desktop-only"
+              :v-text="product.description"
+            />
             <div class="product-details__section">
               <SfSelect
                 v-for="(option, i) in product.options.edges"
@@ -128,15 +133,18 @@
                 class="product-details__add-to-cart"
                 @click="addToCart"
               /> -->
-              <SfButton
-                class="product-details__add-to-cart"
-                @click="buyNow"
-              >
+              <SfButton class="product-details__add-to-cart" @click="buyNow">
                 Buy Now
               </SfButton>
             </div>
             <SfTabs class="product-details__tabs" :open-tab="2">
-              <SfTab v-if="product.description.length > 0 || product.customFields.edges.length > 0" title="Description">
+              <SfTab
+                v-if="
+                  product.description.length > 0 ||
+                    product.customFields.edges.length > 0
+                "
+                title="Description"
+              >
                 <div>
                   <p v-text="product.description" />
                 </div>
@@ -183,12 +191,12 @@
               class="banner-application__download"
               src="assets/storybook/Home/google.png"
               alt=""
-            >
+            />
             <img
               class="banner-application__download"
               src="assets/storybook/Home/apple.png"
               alt=""
-            >
+            />
           </div>
         </template>
       </SfBanner>
@@ -196,8 +204,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-import '@storefront-ui/vue/styles.scss'
+import axios from 'axios';
+import '@storefront-ui/vue/styles.scss';
 import {
   SfHeader,
   SfProperty,
@@ -215,7 +223,7 @@ import {
   SfSticky,
   SfBreadcrumbs,
   SfButton
-} from '@storefront-ui/vue'
+} from '@storefront-ui/vue';
 export default {
   name: 'Product',
   components: {
@@ -236,12 +244,13 @@ export default {
     SfBreadcrumbs,
     SfButton
   },
-  async asyncData ({ params }) {
+  async asyncData({ params }) {
     const result = await axios({
       method: 'POST',
       url: 'https://kari-morars-store.mybigcommerce.com/graphql',
       headers: {
-        Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
+        Authorization:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
       },
       data: {
         query: `
@@ -319,12 +328,12 @@ export default {
           }
         `
       }
-    })
-    const productData = result.data.data.site.route.node
+    });
+    const productData = result.data.data.site.route.node;
     // debugger
     // console.log(productData)
 
-    const optionSelections = {}
+    const optionSelections = {};
 
     if (productData != null) {
       productData.imageList = productData.images.edges.map((t) => {
@@ -332,19 +341,21 @@ export default {
           mobile: { url: t.node.mobile },
           desktop: { url: t.node.desktop },
           big: { url: t.node.big }
-        }
-      })
+        };
+      });
 
       productData.options.edges.forEach((o) => {
-        optionSelections[o.node.entityId] = null
-      })
+        optionSelections[o.node.entityId] = null;
+      });
 
-      productData.reviewSummary.score = productData.reviewSummary.summationOfRatings / productData.reviewSummary.numberOfRatings
+      productData.reviewSummary.score =
+        productData.reviewSummary.summationOfRatings /
+        productData.reviewSummary.numberOfRatings;
     }
 
-    return { product: productData, optionSelections }
+    return { product: productData, optionSelections };
   },
-  data () {
+  data() {
     const productData = {
       product: {},
       optionSelections: [],
@@ -364,21 +375,21 @@ export default {
           }
         }
       ]
-    }
-    return productData
+    };
+    return productData;
   },
   methods: {
-    addToCart (event) {
-      window.location = this.product.addToCartUrl
+    addToCart(event) {
+      window.location = this.product.addToCartUrl;
     },
-    buyNow (event) {
-      window.location = this.product.addToCartUrl.replace('add', 'buy')
+    buyNow(event) {
+      window.location = this.product.addToCartUrl.replace('add', 'buy');
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 @mixin for-desktop {
   @media screen and (min-width: $desktop-min) {
     @content;

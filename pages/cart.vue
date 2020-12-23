@@ -2,9 +2,7 @@
   <div id="cart">
     <transition name="fade" mode="out-in">
       <div v-if="totalItems" key="my-cart" class="my-cart">
-        <h3 class="my-cart__total-items">
-          Total items: {{ totalItems }}
-        </h3>
+        <h3 class="my-cart__total-items">items: {{ totalItems }}</h3>
         <div class="collected-product-list">
           <transition-group name="fade" tag="div">
             <SfCollectedProduct
@@ -59,7 +57,7 @@
             src="@storefront-ui/shared/icons/empty_cart.svg"
             alt=""
             class="empty-cart__icon"
-          >
+          />
           <h3 class="empty-cart__label">
             Your bag is empty
           </h3>
@@ -76,13 +74,13 @@
   </div>
 </template>
 <script>
-import '@storefront-ui/vue/styles.scss'
+import '@storefront-ui/vue/styles.scss';
 import {
   SfButton,
   SfProperty,
   SfPrice,
   SfCollectedProduct
-} from '@storefront-ui/vue'
+} from '@storefront-ui/vue';
 export default {
   name: 'Cart',
   components: {
@@ -94,12 +92,12 @@ export default {
   filters: {
     price: (price) => {
       if (!price) {
-        return
+        return;
       }
-      return `$${price}`
+      return `$${price}`;
     }
   },
-  data () {
+  data() {
     return {
       isCartSidebarOpen: true,
       products: [
@@ -137,37 +135,37 @@ export default {
           qty: '1'
         }
       ]
-    }
+    };
   },
   computed: {
-    totalItems () {
+    totalItems() {
       return this.products.reduce(
         (totalItems, product) => totalItems + parseInt(product.qty, 10),
         0
-      )
+      );
     },
-    totalPrice () {
+    totalPrice() {
       return this.products
         .reduce((totalPrice, product) => {
           const price = product.price.special
             ? product.price.special
-            : product.price.regular
-          const summary = parseFloat(price).toFixed(2) * product.qty
-          return totalPrice + summary
+            : product.price.regular;
+          const summary = parseFloat(price).toFixed(2) * product.qty;
+          return totalPrice + summary;
         }, 0)
-        .toFixed(2)
+        .toFixed(2);
     }
   },
   methods: {
-    removeHandler (product) {
-      const products = [...this.products]
-      this.products = products.filter(element => element.id !== product.id)
+    removeHandler(product) {
+      const products = [...this.products];
+      this.products = products.filter((element) => element.id !== product.id);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 @mixin for-desktop {
   @media screen and (min-width: $desktop-min) {
     @content;
@@ -240,7 +238,7 @@ export default {
     margin-top: $spacer-extra-big;
     font-size: $font-size-big-mobile;
     @include for-desktop {
-        font-size: $font-size-big-desktop;
+      font-size: $font-size-big-desktop;
     }
   }
   &__description {

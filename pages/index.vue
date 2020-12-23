@@ -1,8 +1,6 @@
 <template>
   <div id="home">
-    <SfHeader
-      title="BCVueNuxt"
-    >
+    <SfHeader title="BCVueNuxt">
       <template #navigation>
         <SfHeaderNavigationItem>
           <a
@@ -174,19 +172,19 @@
             class="banner-application__download"
             src="assets/storybook/Home/google.png"
             alt=""
-          >
+          />
           <img
             class="banner-application__download"
             src="assets/storybook/Home/apple.png"
             alt=""
-          >
+          />
         </div>
       </template>
     </SfBanner>
   </div>
 </template>
 <script>
-import '@storefront-ui/vue/styles.scss'
+import '@storefront-ui/vue/styles.scss';
 import {
   SfHeader,
   SfHero,
@@ -197,7 +195,7 @@ import {
   SfProductCard,
   SfImage,
   SfBannerGrid
-} from '@storefront-ui/vue'
+} from '@storefront-ui/vue';
 export default {
   name: 'Home',
   components: {
@@ -211,7 +209,7 @@ export default {
     SfImage,
     SfBannerGrid
   },
-  data () {
+  data() {
     return {
       heroes: [
         {
@@ -296,17 +294,17 @@ export default {
           isOnWishlist: false
         }
       ]
-    }
+    };
   },
   methods: {
-    toggleWishlist (index) {
-      this.products[index].isOnWishlist = !this.products[index].isOnWishlist
+    toggleWishlist(index) {
+      this.products[index].isOnWishlist = !this.products[index].isOnWishlist;
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
+@import '~@storefront-ui/vue/styles';
 @mixin for-desktop {
   @media screen and (min-width: $desktop-min) {
     @content;
