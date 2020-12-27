@@ -47,9 +47,7 @@
             <SfPrice :regular="totalPrice | price" class="sf-price--big" />
           </template>
         </SfProperty>
-        <SfButton class="sf-button--full-width">
-          Go to checkout
-        </SfButton>
+        <SfButton class="sf-button--full-width"> Go to checkout </SfButton>
       </div>
       <div v-else key="empty-cart" class="empty-cart">
         <div class="empty-cart__banner">
@@ -58,9 +56,7 @@
             alt=""
             class="empty-cart__icon"
           />
-          <h3 class="empty-cart__label">
-            Your bag is empty
-          </h3>
+          <h3 class="empty-cart__label">Your bag is empty</h3>
           <p class="empty-cart__description">
             Looks like you haven’t added any items to the bag yet. Start
             shopping to fill it in.
