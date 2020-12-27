@@ -6,25 +6,29 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
+    "dev-debug": "node --inspect node_modules/.bin/nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore . --fix"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/pwa": "^3.0.0-0",
+    "@nuxtjs/axios": "^5.12.4",
+    "@nuxtjs/pwa": "^3.3.3",
+    "@nuxtjs/toast": "^3.3.0",
     "@storefront-ui/vue": "^0.5.1",
-    "nuxt": "^2.0.0",
-    "core-js": "^2.6.5"
+    "core-js": "^2.6.12",
+    "nuxt": "^2.14.12"
   },
   "devDependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^2.0.0",
-    "@nuxtjs/eslint-module": "^1.0.0",
-    "babel-eslint": "^10.0.1",
+    "@nuxtjs/eslint-module": "^1.2.0",
+    "babel-eslint": "^10.1.0",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^7.1.0",
-    "eslint-plugin-nuxt": ">=0.4.2",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.3.0"
   }
 }

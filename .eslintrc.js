@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     semi: ["error", "always"],
     "arrow-parens": "off",
+    "require-await": "off",
     "no-console": "off",
     "vue/max-attributes-per-line": "off",
     "space-before-function-paren": "off",

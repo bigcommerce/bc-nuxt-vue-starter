@@ -74,7 +74,6 @@
   </div>
 </template>
 <script>
-import '@storefront-ui/vue/styles.scss';
 import {
   SfButton,
   SfProperty,
@@ -164,88 +163,4 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-@import '~@storefront-ui/vue/styles';
-@mixin for-desktop {
-  @media screen and (min-width: $desktop-min) {
-    @content;
-  }
-}
-#cart {
-  box-sizing: border-box;
-  @include for-desktop {
-    max-width: 1240px;
-    margin: auto;
-  }
-}
-.my-cart {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  &__total-items {
-    font-family: $body-font-family-secondary;
-    font-size: $font-size-big-mobile;
-    font-weight: $body-font-weight-secondary;
-  }
-  &__total-price {
-    margin-bottom: $spacer-big;
-  }
-}
-.collected-product-list {
-  flex: 1;
-  margin: $spacer-big - $spacer-big;
-}
-.collected-product {
-  margin: $spacer-big 0;
-  &__properties {
-    margin-top: $spacer-big;
-  }
-  &__actions {
-    opacity: 0;
-    transition: opacity 300ms ease-in-out;
-    @at-root.collected-product:hover & {
-      @include for-desktop {
-        opacity: 1;
-      }
-    }
-  }
-}
-.empty-cart {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  &__banner {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  &__icon {
-    width: 18.125rem;
-    height: 12.3125rem;
-    margin-left: 60%;
-    @include for-desktop {
-      margin-left: 50%;
-    }
-  }
-  &__label,
-  &__description {
-    line-height: 1.6;
-    text-align: center;
-  }
-  &__label {
-    margin-top: $spacer-extra-big;
-    font-size: $font-size-big-mobile;
-    @include for-desktop {
-      font-size: $font-size-big-desktop;
-    }
-  }
-  &__description {
-    margin-top: $spacer-big;
-  }
-}
-.sf-collected-product {
-  max-width: none;
-}
-</style>
+<style src="~/assets/sass/pages/cart.scss" lang="scss" scoped></style>
