@@ -1,8 +1,6 @@
-export default function(context) {
+export default function (context) {
   const {
     $axios,
-    // eslint-disable-next-line no-unused-vars
-    redirect,
     app: { $toast }
   } = context;
   $axios.onRequest((config) => {

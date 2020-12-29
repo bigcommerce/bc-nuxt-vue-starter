@@ -141,7 +141,7 @@
               <SfTab
                 v-if="
                   product.description.length > 0 ||
-                    product.customFields.edges.length > 0
+                  product.customFields.edges.length > 0
                 "
                 title="Description"
               >
@@ -176,9 +176,7 @@
         class="banner-application sf-banner--left sf-banner--center desktop-only"
       >
         <template #subtitle>
-          <div class="banner-application__subtitle">
-            Fashion to Take Away
-          </div>
+          <div class="banner-application__subtitle">Fashion to Take Away</div>
         </template>
         <template #title>
           <h1 class="banner-application__title">
@@ -259,7 +257,7 @@ export default {
                 node {
                   __typename
                   ... on Product {
-                    id 
+                    id
                     entityId
                     name
                     description

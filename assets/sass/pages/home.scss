@@ -1,6 +1,8 @@
 @import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+
 @mixin for-desktop {
-  @media screen and (min-width: $desktop-min) {
+  @media screen and (min-width: var(--desktop-min)) {
     @content;
   }
 }
@@ -12,10 +14,10 @@
   }
 }
 .call-to-action-newsletter {
-  margin: $spacer-big 0;
+  margin: var(--spacer-big) 0;
   box-sizing: border-box;
   @include for-desktop {
-    margin: calc($spacer-extra-big * 2) 0;
+    margin: calc(var(--spacer-extra-big) * 2) 0;
   }
 }
 .banner-central {
@@ -31,35 +33,35 @@
   padding-left: 2.5rem;
   line-height: 1.6;
   &__title {
-    margin: $spacer-big 0 0 0;
-    font-size: $h1-font-size-mobile;
-    font-weight: $h1-font-weight-mobile;
+    margin: var(--spacer-big) 0 0 0;
+    font-size: var(--h1-font-size-mobile);
+    font-weight: var(--h1-font-weight-mobile);
     @include for-desktop {
-      font-size: $h1-font-size-desktop;
-      font-weight: $h1-font-weight-desktop;
+      font-size: var(--h1-font-size-desktop);
+      font-weight: var(--h1-font-weight-desktop);
     }
   }
   &__subtitle {
     color: #a3a5ad;
-    font-family: $body-font-family-primary;
-    font-size: $font-size-extra-big-mobile;
-    font-weight: $body-font-weight-primary;
+    font-family: var(--body-font-family-primary);
+    font-size: var(--font-size-extra-big-mobile);
+    font-weight: var(--body-font-weight-primary);
     @include for-desktop {
-      font-size: $font-size-extra-big-desktop;
+      font-size: var(--font-size-extra-big-desktop);
     }
   }
   &__download {
     max-height: 47px;
-    margin-top: $spacer-extra-big;
+    margin-top: var(--spacer-extra-big);
     & + & {
-      margin-left: $spacer-big;
+      margin-left: var(--spacer-big);
     }
   }
 }
 .banners {
-  margin: $spacer-big 0;
+  margin: var(--spacer-big) 0;
   @include for-desktop {
-    margin: $spacer-extra-big 0;
+    margin: var(--spacer-extra-big) 0;
   }
 }
 .images-grid {
@@ -68,9 +70,9 @@
   &__row {
     display: flex;
     & + & {
-      margin-top: calc($spacer-big / 2);
+      margin-top: calc(var(--spacer-big) / 2);
       @include for-desktop {
-        margin-top: $spacer-big;
+        margin-top: var(--spacer-big);
       }
     }
   }
@@ -78,9 +80,9 @@
     margin: 0;
     flex: 1;
     & + & {
-      margin-left: calc($spacer-big / 2);
+      margin-left: calc(var(--spacer-big) / 2);
       @include for-desktop {
-        margin-left: $spacer-big;
+        margin-left: var(--spacer-big);
       }
     }
   }
@@ -107,8 +109,8 @@
   }
 }
 .section {
-  padding-left: $spacer-big;
-  padding-right: $spacer-big;
+  padding-left: var(--spacer-big);
+  padding-right: var(--spacer-big);
   @include for-desktop {
     padding-left: 0;
     padding-right: 0;

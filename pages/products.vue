@@ -22,9 +22,7 @@
     </SfHeader>
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
-        <h1 class="navbar__title">
-          Shop All
-        </h1>
+        <h1 class="navbar__title">Shop All</h1>
       </div>
       <div class="navbar__main">
         <div class="navbar__counter">

@@ -51,5 +51,5 @@ export default {
    ** Build configuration
    */
   build,
-  toast,
+  toast
 };

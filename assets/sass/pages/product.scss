@@ -1,6 +1,8 @@
 @import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+
 @mixin for-desktop {
-  @media screen and (min-width: $desktop-min) {
+  @media screen and (min-width: var(--desktop-min)) {
     @content;
   }
 }
@@ -19,33 +21,33 @@
   padding-left: 2.5rem;
   line-height: 1.6;
   &__title {
-    margin: $spacer-big 0 0 0;
-    font-size: $h1-font-size-mobile;
-    font-weight: $h1-font-weight-mobile;
+    margin: var(--spacer-big 0 0 0);
+    font-size: var(--h1-font-size-mobile);
+    font-weight: var(--h1-font-weight-mobile);
     @include for-desktop {
-      font-size: $h1-font-size-desktop;
-      font-weight: $h1-font-weight-desktop;
+      font-size: var(--h1-font-size-desktop);
+      font-weight: var(--h1-font-weight-desktop);
     }
   }
   &__subtitle {
     color: #a3a5ad;
-    font-family: $body-font-family-primary;
-    font-size: $font-size-extra-big-mobile;
-    font-weight: $body-font-weight-primary;
+    font-family: var(--body-font-family-primary);
+    font-size: var(--font-size-extra-big-mobile);
+    font-weight: var(--body-font-weight-primary);
     @include for-desktop {
-      font-size: $font-size-extra-big-desktop;
+      font-size: var(--font-size-extra-big-desktop);
     }
   }
   &__download {
     max-height: 47px;
-    margin-top: $spacer-extra-big;
+    margin-top: var(--spacer-extra-big);
     & + & {
-      margin-left: $spacer-big;
+      margin-left: var(--spacer-big);
     }
   }
 }
 .breadcrumbs {
-  padding: $spacer-big $spacer-extra-big $spacer-extra-big;
+  padding: var(--spacer-big) var(--spacer-extra-big) var(--spacer-extra-big);
 }
 .gallery-mobile {
   $height-other: 240px;
@@ -64,9 +66,9 @@
   &__row {
     display: flex;
     & + & {
-      margin-top: calc($spacer-big / 2);
+      margin-top: calc(var(--spacer-big) / 2);
       @include for-desktop {
-        margin-top: $spacer-big;
+        margin-top: var(--spacer-big);
       }
     }
   }
@@ -74,9 +76,9 @@
     margin: 0;
     flex: 1;
     & + & {
-      margin-left: calc($spacer-big / 2);
+      margin-left: calc(var(--spacer-big) / 2);
       @include for-desktop {
-        margin-left: $spacer-big;
+        margin-left: var(--spacer-big);
       }
     }
   }
@@ -90,9 +92,9 @@
     flex: 1;
   }
   &__description {
-    padding: 0 $spacer-big;
+    padding: 0 var(--spacer-big);
     @include for-desktop {
-      margin-left: calc($spacer-big * 5);
+      margin-left: calc(var(--spacer-big) * 5);
     }
   }
 }
@@ -120,7 +122,7 @@
 .product-details {
   &__action {
     display: flex;
-    margin: $spacer-big 0 calc($spacer-big / 2);
+    margin: var(--spacer-big) 0 calc(var(--spacer-big) / 2);
     @include for-desktop {
       justify-content: flex-end;
     }
@@ -128,35 +130,35 @@
   &__add-to-cart {
     margin-top: 1.5rem;
     @include for-desktop {
-      margin-top: $spacer-extra-big;
+      margin-top: var(--spacer-extra-big);
     }
   }
   &__alert {
     margin-top: 1.5rem;
   }
   &__attribute {
-    margin-bottom: $spacer-big;
+    margin-bottom: var(--spacer-big);
   }
   &__description {
-    margin: $spacer-extra-big 0 calc($spacer-big * 3) 0;
-    font-family: $body-font-family-secondary;
-    font-size: $font-size-regular-mobile;
+    margin: var(--spacer-extra-big) 0 calc(var(--spacer-big) * 3) 0;
+    font-family: var(--body-font-family-secondary);
+    font-size: var(--font-size-regular-mobile);
     line-height: 1.6;
     @include for-desktop {
-      font-size: $font-size-regular-desktop;
+      font-size: var(--font-size-regular-desktop);
     }
   }
   &__divider {
     margin-top: 30px;
   }
   &__heading {
-    margin-top: $spacer-big;
+    margin-top: var(--spacer-big);
     ::v-deep .sf-heading__title {
-      font-size: $font-size-big-mobile;
-      font-weight: $body-font-weight-primary;
+      font-size: var(--font-size-big-mobile);
+      font-weight: var(--body-font-weight-primary);
       @include for-desktop {
-        font-size: $h1-font-size-desktop;
-        font-weight: $body-font-weight-secondary;
+        font-size: var(--h1-font-size-desktop);
+        font-weight: var(--body-font-weight-secondary);
       }
     }
     @include for-desktop {
@@ -165,7 +167,7 @@
   }
   &__mobile-bar {
     display: none;
-    padding: $spacer-medium 0;
+    padding: var(--spacer-medium) 0;
     box-sizing: border-box;
     .product--is-active & {
       display: block;
@@ -185,7 +187,7 @@
     }
   }
   &__properties {
-    margin-top: $spacer-big;
+    margin-top: var(--spacer-big);
   }
   &__sub {
     display: flex;
@@ -194,15 +196,15 @@
   }
   &__sub-price {
     flex-basis: 100%;
-    margin-top: calc($spacer-big / 4);
+    margin-top: calc(var(--spacer-big) / 4);
     @include for-desktop {
       flex-basis: auto;
-      margin-top: calc($spacer-big / 2);
+      margin-top: calc(var(--spacer-big) / 2);
     }
   }
   &__sub-rating {
     display: flex;
-    margin-top: calc($spacer-big / 2);
+    margin-top: calc(var(--spacer-big) / 2);
     @include for-desktop {
       margin-left: auto;
     }
@@ -220,36 +222,36 @@
     }
   }
   &__tabs {
-    margin-top: $spacer-big;
+    margin-top: var(--spacer-big);
     @include for-desktop {
-      margin-top: calc(5 * $spacer-big);
+      margin-top: calc(5 * var(--spacer-big));
     }
     p {
       margin: 0;
     }
   }
   &__review {
-    padding-bottom: $spacer-big;
+    padding-bottom: var(--spacer-big);
     @include for-desktop {
-      padding-bottom: $spacer-extra-big;
-      border-bottom: 1px solid $c-light;
+      padding-bottom: var(--spacer-extra-big);
+      border-bottom: 1px solid var(--c-light);
     }
     & + & {
-      padding-top: $spacer-extra-big;
-      border-top: 1px solid $c-light;
+      padding-top: var(--spacer-extra-big);
+      border-top: 1px solid var(--c-light);
       @include for-desktop {
         border-top: 0;
-        padding-top: $spacer-extra-big;
+        padding-top: var(--spacer-extra-big);
       }
     }
   }
 }
 .product-property {
-  padding: $spacer-small 0;
+  padding: var(--spacer-small) 0;
 }
 .section {
-  padding-left: $spacer-big;
-  padding-right: $spacer-big;
+  padding-left: var(--spacer-big);
+  padding-right: var(--spacer-big);
   @include for-desktop {
     padding-left: 0;
     padding-right: 0;
@@ -261,33 +263,33 @@
   border: 0;
   outline: none;
   background-color: transparent;
-  color: $c-text;
-  font-family: $body-font-family-secondary;
-  font-size: $font-size-regular-mobile;
-  font-weight: $body-font-weight-secondary;
+  color: var(--c-text);
+  font-family: var(--body-font-family-secondary);
+  font-size: var(--font-size-regular-mobile);
+  font-weight: var(--body-font-weight-secondary);
   line-height: 1.6;
   text-decoration: underline;
   cursor: pointer;
   @include for-desktop {
-    font-size: $font-size-regular-desktop;
+    font-size: var(--font-size-regular-desktop);
   }
 }
 
 #error {
   box-sizing: border-box;
-  padding: 0 $spacer-big;
+  padding: 0 var(--spacer-big);
   @include for-desktop {
     max-width: 1240px;
     margin: auto;
   }
 }
 .image {
-  padding: $spacer-extra-big;
+  padding: var(--spacer-extra-big);
   display: flex;
   justify-content: center;
 }
 .heading {
-  --heading-subtitle-margin: $spacer-big 0 0 0;
+  --heading-subtitle-margin: var(--spacer-big) 0 0 0;
   text-align: center;
 }
 .actions {
@@ -295,7 +297,7 @@
   max-width: 250px;
   &__button {
     &:last-child {
-      margin: $spacer-big 0;
+      margin: var(--spacer-big) 0;
     }
   }
 }

@@ -157,9 +157,7 @@
       class="banner-application desktop-only"
     >
       <template #subtitle>
-        <div class="banner-application__subtitle">
-          Fashion to Take Away
-        </div>
+        <div class="banner-application__subtitle">Fashion to Take Away</div>
       </template>
       <template #title>
         <h1 class="banner-application__title">

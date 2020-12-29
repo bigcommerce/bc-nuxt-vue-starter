@@ -10,21 +10,18 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:vue/strongly-recommended',
-    'plugin:prettier/recommended',
     '@nuxtjs',
+    'prettier',
+    'prettier/vue',
+    'plugin:prettier/recommended',
     'plugin:nuxt/recommended'
   ],
-  plugins: ['vue'],
+  plugins: ['prettier'],
   rules: {
     semi: ['error', 'always'],
-    'arrow-parens': 'off',
     'require-await': 'off',
     'no-console': 'off',
-    'vue/max-attributes-per-line': 'off',
-    'space-before-function-paren': 'off',
-    'vue/html-self-closing': 0,
     'no-debugger': 'off',
-    'vue/singleline-html-element-content-newline': 'off',
     'vue/order-in-components': [
       'error',
       {
