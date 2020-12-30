@@ -1,33 +1,39 @@
 <template>
   <SfHeader title="BCVueNuxt">
     <template #navigation>
-      <SfHeaderNavigationItem>
-        <a
-          href="/"
-          :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
-        >
-          Home
-        </a>
-      </SfHeaderNavigationItem>
-      <SfHeaderNavigationItem>
-        <a
-          href="/products"
-          :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
-        >
-          Shop All
-        </a>
+      <SfHeaderNavigationItem v-for="item in menu" :key="item.link">
+        <template slot="desktop-navigation-item">
+          <SfLink
+            :link="item.link"
+            :style="{
+              outline: 'none',
+              display: 'inline-block',
+              'white-space': 'nowrap'
+            }"
+          >
+            {{ item.name }}
+          </SfLink>
+        </template>
       </SfHeaderNavigationItem>
     </template>
   </SfHeader>
 </template>
 
 <script>
-import { SfHeader, Sf } from '@storefront-ui/vue';
+import { SfHeader, SfLink } from '@storefront-ui/vue';
 export default {
   name: 'Home',
   components: {
     SfHeader,
     SfLink
+  },
+  props: {
+    menu: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
   }
 };
 </script>

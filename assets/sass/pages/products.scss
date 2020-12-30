@@ -2,7 +2,7 @@
 @import '@/assets/sass/_variables.scss';
 
 @mixin for-desktop {
-  @media screen and (min-width: var(--desktop-min)) {
+  @media screen and (min-width: $desktop-min) {
     @content;
   }
 }
@@ -14,7 +14,7 @@
   }
 }
 .breadcrumbs {
-  padding: var(--spacer-big) var(--spacer-extra-big) var(--spacer-extra-big);
+  padding: var(--spacer-xl) var(--spacer-extra-big) var(--spacer-extra-big);
 }
 .main {
   display: flex;
@@ -29,8 +29,8 @@
   &::after {
     position: absolute;
     bottom: 0;
-    left: var(--spacer-big);
-    width: calc(100% - calc(var(--spacer-big) * 2));
+    left: var(--spacer-xl);
+    width: calc(100% - calc(var(--spacer-xl) * 2));
     height: 1px;
     background-color: var(--c-light);
     content: '';
@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     flex: 0 0 15%;
-    padding: var(--spacer-big) var(--spacer-extra-big);
+    padding: var(--spacer-xl) var(--spacer-extra-big);
     border-right: 1px solid var(--c-light);
   }
   &__main {
@@ -52,7 +52,7 @@
     padding: var(--spacer-medium) 0;
     font-size: var(--font-size-small-mobile);
     @include for-desktop {
-      padding: var(--spacer-big) 0;
+      padding: var(--spacer-xl) 0;
       font-size: var(--font-size-small-desktop);
     }
   }
@@ -120,7 +120,7 @@
   flex: 1;
   margin: 0 - var(--spacer);
   @include for-desktop {
-    margin: var(--spacer-big);
+    margin: var(--spacer-xl);
   }
   &__list {
     display: flex;
@@ -131,7 +131,7 @@
     padding: var(--spacer);
     @include for-desktop {
       flex: 0 0 25%;
-      padding: var(--spacer-big);
+      padding: var(--spacer-xl);
     }
   }
   &__pagination {
@@ -143,8 +143,8 @@
   }
 }
 .section {
-  padding-left: var(--spacer-big);
-  padding-right: var(--spacer-big);
+  padding-left: var(--spacer-xl);
+  padding-right: var(--spacer-xl);
   @include for-desktop {
     padding-left: 0;
     padding-right: 0;
@@ -166,13 +166,13 @@
   }
 }
 .filters {
-  padding: var(--spacer-big);
+  padding: var(--spacer-xl);
   &__title {
-    margin: calc(var(--spacer-big) * 3) 0 var(--spacer-big);
+    margin: calc(var(--spacer-xl) * 3) 0 var(--spacer-xl);
     font-size: var(--font-size-big-mobile);
     line-height: 1.6;
     &:first-child {
-      margin: 0 0 var(--spacer-big) 0;
+      margin: 0 0 var(--spacer-xl) 0;
     }
     @include for-desktop {
       font-size: var(--font-size-big-desktop);
@@ -185,7 +185,7 @@
     }
   }
   &__buttons {
-    margin: calc(var(--spacer-big) * 3) 0 0 0;
+    margin: calc(var(--spacer-xl) * 3) 0 0 0;
   }
   &__button-clear {
     color: #a3a5ad;

@@ -2,7 +2,7 @@
 @import '@/assets/sass/_variables.scss';
 
 @mixin for-desktop {
-  @media screen and (min-width: var(--desktop-min)) {
+  @media screen and (min-width: $desktop-min) {
     @content;
   }
 }
@@ -23,17 +23,17 @@
     font-weight: var(--body-font-weight-secondary);
   }
   &__total-price {
-    margin-bottom: var(--spacer-big);
+    margin-bottom: var(--spacer-xl);
   }
 }
 .collected-product-list {
   flex: 1;
-  margin: var(--spacer-big) - var(--spacer-big);
+  margin: var(--spacer-xl) - var(--spacer-xl);
 }
 .collected-product {
-  margin: var(--spacer-big) 0;
+  margin: var(--spacer-xl) 0;
   &__properties {
-    margin-top: var(--spacer-big);
+    margin-top: var(--spacer-xl);
   }
   &__actions {
     opacity: 0;
@@ -77,7 +77,7 @@
     }
   }
   &__description {
-    margin-top: var(--spacer-big);
+    margin-top: var(--spacer-xl);
   }
 }
 .sf-collected-product {
