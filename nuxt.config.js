@@ -7,6 +7,7 @@ import modules from './config/modules';
 import axios from './config/axios';
 import toast from './config/toast';
 import env from './config/env';
+import proxy from './config/proxy';
 
 export default {
   ssr: true,
@@ -51,5 +52,6 @@ export default {
    ** Build configuration
    */
   build,
-  toast
+  toast,
+  proxy
 };

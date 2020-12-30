@@ -1,5 +1,5 @@
 <template>
-  <div id="category">
+  <div v-if="category.products" id="category">
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <h1 class="navbar__title">Shop All</h1>
@@ -7,12 +7,12 @@
       <div class="navbar__main">
         <div class="navbar__counter">
           <span class="navbar__label desktop-only">Products found: </span>
-          <strong class="desktop-only">{{
-            category.products.edges.length
-          }}</strong>
-          <span class="navbar__label mobile-only">{{
-            category.products.edges.length
-          }}</span>
+          <strong class="desktop-only">
+            {{ category.products.edges.length }}
+          </strong>
+          <span class="navbar__label mobile-only">
+            {{ category.products.edges.length }}
+          </span>
         </div>
       </div>
     </div>
@@ -39,9 +39,10 @@ export default {
   components: {
     SfProductCard
   },
+  layout: 'Default',
   async asyncData({ params, $api, $queries }) {
     const result = await $api.product.list({ query: $queries.shopAll });
-    const productsData = result.data.site.route.node;
+    const productsData = result?.data?.site?.route?.node ?? {};
     return { category: productsData };
   },
   data() {

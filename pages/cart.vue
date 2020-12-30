@@ -92,6 +92,7 @@ export default {
       return `$${price}`;
     }
   },
+  layout: 'Default',
   data() {
     return {
       isCartSidebarOpen: true,

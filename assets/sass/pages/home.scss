@@ -1,11 +1,6 @@
 @import '~@storefront-ui/vue/styles';
 @import '@/assets/sass/_variables.scss';
-
-@mixin for-desktop {
-  @media screen and (min-width: $desktop-min) {
-    @content;
-  }
-}
+@import '@/assets/sass/_mixins.scss';
 
 #home {
   box-sizing: border-box;
