@@ -12,6 +12,7 @@ export default function (context) {
     ) {
       config.headers.common.timezoneOffset = -new Date().getTimezoneOffset();
       config.headers.Authorization = `Bearer ${process.env.storeFrontApiToken}`;
+      config.headers['Content-Type'] = 'application/json';
     }
   });
 
