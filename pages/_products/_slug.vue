@@ -219,7 +219,7 @@ export default {
     SfButton
   },
   async asyncData({ params, $queries, $api }) {
-    const result = await $api.product.byId({
+    const result = await $api.product.bySlug({
       query: $queries.productBySlug(params)
     });
     const productData = result.data.site.route.node;

@@ -1,4 +1,5 @@
-export default `
+export const shopAll = () => {
+  return `
   query CategoryByUrl {
     site {
       route(path: "/shop-all/") {
@@ -30,3 +31,4 @@ export default `
     }
   }
 `;
+};

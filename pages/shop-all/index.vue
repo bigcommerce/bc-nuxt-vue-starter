@@ -41,7 +41,7 @@ export default {
   },
   layout: 'Default',
   async asyncData({ params, $api, $queries }) {
-    const result = await $api.product.list({ query: $queries.shopAll });
+    const result = await $api.product.list({ query: $queries.shopAll() });
     const productsData = result?.data?.site?.route?.node ?? {};
     return { category: productsData };
   },
