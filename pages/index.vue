@@ -157,7 +157,7 @@ export default {
           subtitle: 'SUMMER COLLECTION 2019',
           buttonText: 'Learn more',
           background: '#eceff1',
-          image: 'assets/storybook/Home/bannerH.jpg'
+          image: '/assets/storybook/Home/bannerH.jpg'
         },
         {
           title: 'Colorful summer dresses are already in store',
@@ -173,7 +173,7 @@ export default {
           subtitle: 'SUMMER COLLECTION 2019',
           buttonText: 'Learn more',
           background: '#fce4ec',
-          image: 'assets/storybook/Home/bannerH.jpg'
+          image: '/assets/storybook/Home/bannerH.jpg'
         }
       ],
       products: [
