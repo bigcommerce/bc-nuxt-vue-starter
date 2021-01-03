@@ -1,25 +1,5 @@
 <template>
   <div>
-    <SfHeader title="BCVueNuxt">
-      <template #navigation>
-        <SfHeaderNavigationItem>
-          <a
-            href="/"
-            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
-          >
-            Home
-          </a>
-        </SfHeaderNavigationItem>
-        <SfHeaderNavigationItem>
-          <a
-            href="/products"
-            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
-          >
-            Shop All
-          </a>
-        </SfHeaderNavigationItem>
-      </template>
-    </SfHeader>
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
@@ -187,12 +167,12 @@
           <div>
             <img
               class="banner-application__download"
-              src="assets/storybook/Home/google.png"
+              src="/assets/storybook/Home/google.png"
               alt=""
             />
             <img
               class="banner-application__download"
-              src="assets/storybook/Home/apple.png"
+              src="/assets/storybook/Home/apple.png"
               alt=""
             />
           </div>
@@ -202,9 +182,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 import {
-  SfHeader,
   SfProperty,
   SfHeading,
   SfPrice,
@@ -224,7 +202,6 @@ import {
 export default {
   name: 'Product',
   components: {
-    SfHeader,
     SfAlert,
     SfProperty,
     SfHeading,
@@ -241,95 +218,11 @@ export default {
     SfBreadcrumbs,
     SfButton
   },
-  async asyncData({ params }) {
-    const result = await axios({
-      method: 'POST',
-      url: 'https://kari-morars-store.mybigcommerce.com/graphql',
-      headers: {
-        Authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJlYXQiOjIxMzM0NDM2NjEsInN1Yl90eXBlIjoyLCJ0b2tlbl90eXBlIjoxLCJjb3JzIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJjaWQiOjEsImlhdCI6MTU4MjYxNTM2Mywic3ViIjoidGl5N3Fncm54NWIxbzAzcTRzcmJ2MXR6aXltNTlrZiIsInNpZCI6MTAwMDk5MDM1OSwiaXNzIjoiQkMifQ.GoN-AmBQXWGS_xA6GUaKI_OcxPH8mPIQLhbElBaH4gTBv4o1jb_xTKl3D1dwZZsSO8QKspPjlSE-ousLRnX2tA'
-      },
-      data: {
-        query: `
-          query LookUpUrl {
-            site {
-              route(path: "/${params.slug}/") {
-                node {
-                  __typename
-                  ... on Product {
-                    id
-                    entityId
-                    name
-                    description
-                    addToCartUrl
-                    defaultImage {
-                      url640wide: url(width: 640)
-                    }
-                    images {
-                      edges {
-                        node {
-                          mobile: url(width: 400, height: 400)
-                          desktop: url(width: 600, height: 600)
-                          big: url(width: 1200, height: 1200)
-                        }
-                      }
-                    }
-                    brand {
-                      name
-                      metaDesc
-                    }
-                    path
-                    prices {
-                      price {
-                        value
-                        currencyCode
-                      }
-                      salePrice {
-                        value
-                        currencyCode
-                      }
-                    }
-                    reviewSummary {
-                      numberOfReviews
-                      summationOfRatings
-                    }
-                    options {
-                      edges {
-                        node {
-                          entityId
-                          isRequired
-                          displayName
-                          values {
-                            edges {
-                              node {
-                                entityId
-                                label
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                    customFields {
-                      edges {
-                        node {
-                          name
-                          value
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `
-      }
+  async asyncData({ params, $queries, $api }) {
+    const result = await $api.product.byId({
+      query: $queries.productBySlug(params)
     });
-    const productData = result.data.data.site.route.node;
-    // debugger
-    // console.log(productData)
-
+    const productData = result.data.site.route.node;
     const optionSelections = {};
 
     if (productData != null) {

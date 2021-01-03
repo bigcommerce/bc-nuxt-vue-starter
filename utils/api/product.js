@@ -4,5 +4,6 @@ export default ($axios) => ({
    *
    * @param {string} query GraphQL Query
    */
-  list: (query) => $axios.$post('/graphql', query)
+  list: (query) => $axios.$post('/graphql', query),
+  byId: (query) => $axios.$post('/graphql', query)
 });
