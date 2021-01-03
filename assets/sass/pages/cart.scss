@@ -1,0 +1,81 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+
+#cart {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1240px;
+    margin: auto;
+  }
+}
+.my-cart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  &__total-items {
+    font-family: var(--body-font-family-secondary);
+    font-size: var(--font-size-big-mobile);
+    font-weight: var(--body-font-weight-secondary);
+  }
+  &__total-price {
+    margin-bottom: var(--spacer-xl);
+  }
+}
+.collected-product-list {
+  flex: 1;
+  margin: var(--spacer-xl) - var(--spacer-xl);
+}
+.collected-product {
+  margin: var(--spacer-xl) 0;
+  &__properties {
+    margin-top: var(--spacer-xl);
+  }
+  &__actions {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+    @at-root.collected-product:hover & {
+      @include for-desktop {
+        opacity: 1;
+      }
+    }
+  }
+}
+.empty-cart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  &__banner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  &__icon {
+    width: 18.125rem;
+    height: 12.3125rem;
+    margin-left: 60%;
+    @include for-desktop {
+      margin-left: 50%;
+    }
+  }
+  &__label,
+  &__description {
+    line-height: 1.6;
+    text-align: center;
+  }
+  &__label {
+    margin-top: var(--spacer-extra-big);
+    font-size: var(--font-size-big-mobile);
+    @include for-desktop {
+      font-size: var(--font-size-big-desktop);
+    }
+  }
+  &__description {
+    margin-top: var(--spacer-xl);
+  }
+}
+.sf-collected-product {
+  max-width: none;
+}

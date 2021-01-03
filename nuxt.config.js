@@ -1,64 +1,57 @@
+import build from './config/build';
+import buildModules from './config/buildModules';
+import head from './config/head';
+import css from './config/css';
+import plugins from './config/plugins';
+import modules from './config/modules';
+import axios from './config/axios';
+import toast from './config/toast';
+import env from './config/env';
+import proxy from './config/proxy';
 
 export default {
-  mode: 'universal',
+  ssr: true,
+  loading: false,
+  components: false,
+  parallel: true,
+  cache: true,
+  hardSource: true,
+  target: 'server',
+  /**
+   ** Global Env Varialbes
+   */
+  env,
   /*
-  ** Headers of the page
-  */
-  head: {
-    title: process.env.npm_package_name || '',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
-  },
+   ** Headers of the page
+   */
+  head,
   /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
+   ** Global CSS
+   */
+  css,
   /*
-  ** Global CSS
-  */
-  css: [
-  ],
+   ** Plugins to load before mounting the App
+   */
+  plugins,
   /*
-  ** Plugins to load before mounting the App
-  */
-  plugins: [
-  ],
+   ** Nuxt.js dev-modules
+   */
+  // Doc: https://github.com/nuxt-community/eslint-module
+  buildModules,
   /*
-  ** Nuxt.js dev-modules
-  */
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-  ],
+   ** Nuxt.js modules
+   */
+  // Doc: https://axios.nuxtjs.org/usage
+  modules,
   /*
-  ** Nuxt.js modules
-  */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-  ],
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
+  axios,
   /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
-  axios: {
-  },
-  /*
-  ** Build configuration
-  */
-  build: {
-    /*
-    ** You can extend webpack config here
-    */
-    transpile: [/^@storefront-ui/],
-    extend (config, ctx) {
-    }
-  }
-}
+   ** Build configuration
+   */
+  build,
+  toast,
+  proxy
+};

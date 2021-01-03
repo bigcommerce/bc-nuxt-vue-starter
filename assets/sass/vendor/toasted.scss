@@ -1,0 +1,38 @@
+.toasted {
+    &.custom {
+        border-radius: $border-radius-lg;
+        min-height: 5rem;
+        line-height: 1.2rem;
+        background-color: #353535;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 400;
+        color: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+        &.success {
+            background: #4CAF50;
+        }
+
+        &.error {
+            background: #F44336;
+        }
+
+        &.info {
+            background: $brand-secondary;
+        }
+
+        .action {
+            color: #a1c2fa;
+        }
+    }
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+    .toasted {
+        &.custom {
+            min-height: 3rem;
+        }
+    }
+}

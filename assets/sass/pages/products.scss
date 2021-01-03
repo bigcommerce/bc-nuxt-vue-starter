@@ -1,0 +1,191 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+
+#category {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1240px;
+    margin: auto;
+  }
+}
+.breadcrumbs {
+  padding: var(--spacer-xl) var(--spacer-extra-big) var(--spacer-extra-big);
+}
+.main {
+  display: flex;
+}
+.navbar {
+  position: relative;
+  display: flex;
+  @include for-desktop {
+    border-top: 1px solid var(--c-light);
+    border-bottom: 1px solid var(--c-light);
+  }
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: var(--spacer-xl);
+    width: calc(100% - calc(var(--spacer-xl) * 2));
+    height: 1px;
+    background-color: var(--c-light);
+    content: '';
+    @include for-desktop {
+      content: none;
+    }
+  }
+  &__aside {
+    display: flex;
+    align-items: center;
+    flex: 0 0 15%;
+    padding: var(--spacer-xl) var(--spacer-extra-big);
+    border-right: 1px solid var(--c-light);
+  }
+  &__main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: var(--spacer-medium) 0;
+    font-size: var(--font-size-small-mobile);
+    @include for-desktop {
+      padding: var(--spacer-xl) 0;
+      font-size: var(--font-size-small-desktop);
+    }
+  }
+  &__title {
+    padding: 0;
+    font-size: var(--font-size-big-mobile);
+    line-height: 2.23;
+    @include for-desktop {
+      font-size: var(--font-size-big-desktop);
+    }
+  }
+  &__filters-button {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    @include for-desktop {
+      margin: 0 0 0 var(--spacer-extra-big);
+      font-weight: 400;
+      text-transform: none;
+    }
+    svg {
+      fill: var(--c-dark);
+      @include for-desktop {
+        fill: var(--c-gray-variant);
+      }
+    }
+    &:hover {
+      color: var(--c-primary);
+      svg {
+        fill: var(--c-primary);
+      }
+    }
+  }
+  &__label {
+    color: var(--c-gray-variant);
+  }
+  &__sort {
+    display: flex;
+    align-items: center;
+    margin-left: var(--spacer-extra-big);
+    margin-right: auto;
+  }
+  &__counter {
+    margin: auto;
+    @include for-desktop {
+      margin-right: 0;
+    }
+  }
+  &__view {
+    display: flex;
+    align-items: center;
+    margin: 0 var(--spacer-extra-big);
+    &-icon {
+      margin-left: 10px;
+    }
+  }
+}
+.products {
+  box-sizing: border-box;
+  flex: 1;
+  margin: 0 - var(--spacer);
+  @include for-desktop {
+    margin: var(--spacer-xl);
+  }
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__product-card {
+    flex: 0 0 50%;
+    padding: var(--spacer);
+    @include for-desktop {
+      flex: 0 0 25%;
+      padding: var(--spacer-xl);
+    }
+  }
+  &__pagination {
+    @include for-desktop {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--spacer-extra-big);
+    }
+  }
+}
+.section {
+  padding-left: var(--spacer-xl);
+  padding-right: var(--spacer-xl);
+  @include for-desktop {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+.sidebar {
+  flex: 0 0 15%;
+  padding: var(--spacer-extra-big);
+  border-right: 1px solid var(--c-light);
+}
+.sort-by {
+  flex: unset;
+  width: 190px;
+  padding: 0 10px;
+  font-size: inherit;
+  &__option {
+    padding: 10px;
+    font-size: inherit;
+  }
+}
+.filters {
+  padding: var(--spacer-xl);
+  &__title {
+    margin: calc(var(--spacer-xl) * 3) 0 var(--spacer-xl);
+    font-size: var(--font-size-big-mobile);
+    line-height: 1.6;
+    &:first-child {
+      margin: 0 0 var(--spacer-xl) 0;
+    }
+    @include for-desktop {
+      font-size: var(--font-size-big-desktop);
+    }
+  }
+  &__item {
+    padding: var(--spacer-small) 0;
+    &--color {
+      margin: 0 var(--spacer);
+    }
+  }
+  &__buttons {
+    margin: calc(var(--spacer-xl) * 3) 0 0 0;
+  }
+  &__button-clear {
+    color: #a3a5ad;
+    margin-top: 10px;
+    background-color: var(--c-light);
+  }
+}

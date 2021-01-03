@@ -1,27 +1,5 @@
 <template>
   <div id="home">
-    <SfHeader
-      title="BCVueNuxt"
-    >
-      <template #navigation>
-        <SfHeaderNavigationItem>
-          <a
-            href="/"
-            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
-          >
-            Home
-          </a>
-        </SfHeaderNavigationItem>
-        <SfHeaderNavigationItem>
-          <a
-            href="/products"
-            :style="{ display: 'flex', alignItems: 'center', height: '100%' }"
-          >
-            Shop All
-          </a>
-        </SfHeaderNavigationItem>
-      </template>
-    </SfHeader>
     <SfHero class="section">
       <SfHeroItem
         v-for="(hero, i) in heroes"
@@ -34,53 +12,17 @@
         :class="hero.className"
       />
     </SfHero>
-    <SfBannerGrid :banner-grid="1" class="banners section">
-      <template #bannerA>
-        <a href="/products">
-          <SfBanner
-            subtitle="Dresses"
-            title="COCKTAIL PARTY"
-            description="Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands."
-            button-text="SHOP NOW"
-            :image="{
-              mobile: '/assets/storybook/Home/bannerB.jpg',
-              desktop: '/assets/storybook/Home/bannerF.jpg'
-            }"
-            class="sf-banner--slim banner-custom"
-          />
-        </a>
-      </template>
-      <template #bannerB>
-        <a href="/products">
-          <SfBanner
-            subtitle="Dresses"
-            title="LINEN DRESSES"
-            description="Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands."
-            button-text="SHOP NOW"
-            image="/assets/storybook/Home/bannerE.jpg"
-            class="sf-banner--slim banner-central"
-          />
-        </a>
-      </template>
-      <template #bannerC>
-        <a href="/products">
-          <SfBanner
-            subtitle="T-Shirts"
-            title="THE OFFICE LIFE"
-            image="/assets/storybook/Home/bannerC.jpg"
-            class="sf-banner--slim"
-          />
-        </a>
-      </template>
-      <template #bannerD>
-        <a href="/products">
-          <SfBanner
-            subtitle="Summer shoes"
-            title="ECO SANDALS"
-            image="/assets/storybook/Home/bannerG.jpg"
-            class="sf-banner--slim"
-          />
-        </a>
+    <SfBannerGrid class="banners" :banner-grid="bannerGrid">
+      <template v-for="item in banners" #[item.slot]>
+        <SfBanner
+          :key="item.slot"
+          :title="item.title"
+          :subtitle="item.subtitle"
+          :description="item.description"
+          :button-text="item.buttonText"
+          :image="item.image"
+          :class="item.class"
+        />
       </template>
     </SfBannerGrid>
     <SfCallToAction
@@ -159,9 +101,7 @@
       class="banner-application desktop-only"
     >
       <template #subtitle>
-        <div class="banner-application__subtitle">
-          Fashion to Take Away
-        </div>
+        <div class="banner-application__subtitle">Fashion to Take Away</div>
       </template>
       <template #title>
         <h1 class="banner-application__title">
@@ -174,21 +114,19 @@
             class="banner-application__download"
             src="assets/storybook/Home/google.png"
             alt=""
-          >
+          />
           <img
             class="banner-application__download"
             src="assets/storybook/Home/apple.png"
             alt=""
-          >
+          />
         </div>
       </template>
     </SfBanner>
   </div>
 </template>
 <script>
-import '@storefront-ui/vue/styles.scss'
 import {
-  SfHeader,
   SfHero,
   SfBanner,
   SfCallToAction,
@@ -197,11 +135,10 @@ import {
   SfProductCard,
   SfImage,
   SfBannerGrid
-} from '@storefront-ui/vue'
+} from '@storefront-ui/vue';
 export default {
   name: 'Home',
   components: {
-    SfHeader,
     SfHero,
     SfBanner,
     SfCallToAction,
@@ -211,7 +148,8 @@ export default {
     SfImage,
     SfBannerGrid
   },
-  data () {
+  layout: 'Default',
+  data() {
     return {
       heroes: [
         {
@@ -219,7 +157,7 @@ export default {
           subtitle: 'SUMMER COLLECTION 2019',
           buttonText: 'Learn more',
           background: '#eceff1',
-          image: 'assets/storybook/Home/bannerH.jpg'
+          image: '/assets/storybook/Home/bannerH.jpg'
         },
         {
           title: 'Colorful summer dresses are already in store',
@@ -235,7 +173,7 @@ export default {
           subtitle: 'SUMMER COLLECTION 2019',
           buttonText: 'Learn more',
           background: '#fce4ec',
-          image: 'assets/storybook/Home/bannerH.jpg'
+          image: '/assets/storybook/Home/bannerH.jpg'
         }
       ],
       products: [
@@ -295,131 +233,54 @@ export default {
           rating: { max: 5, score: 4 },
           isOnWishlist: false
         }
-      ]
-    }
+      ],
+      banners: [
+        {
+          slot: 'banner-A',
+          subtitle: 'Dresses',
+          title: 'Cocktail & Party',
+          description:
+            "Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands.",
+          buttonText: 'Shop now',
+          image: '/assets/storybook/Home/bannerF.jpg',
+          class: 'sf-banner--slim'
+        },
+        {
+          slot: 'banner-B',
+          subtitle: 'Dresses',
+          title: 'Linen Dresses',
+          description:
+            "Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses from all your favorite brands.",
+          buttonText: 'Shop now',
+          image: '/assets/storybook/Home/bannerE.jpg',
+          class: 'sf-banner--slim',
+          style: 'padding-right: 20%'
+        },
+        {
+          slot: 'banner-C',
+          subtitle: 'T-Shirts',
+          title: 'The Office Life',
+          buttonText: 'Shop now',
+          image: '/assets/storybook/Home/bannerJ.jpg',
+          class: 'sf-banner--slim'
+        },
+        {
+          slot: 'banner-D',
+          subtitle: 'Summer Sandals',
+          title: 'Eco Sandals',
+          buttonText: 'Shop now',
+          image: '/assets/storybook/Home/bannerG.jpg',
+          class: 'sf-banner--slim'
+        }
+      ],
+      bannerGrid: 1
+    };
   },
   methods: {
-    toggleWishlist (index) {
-      this.products[index].isOnWishlist = !this.products[index].isOnWishlist
+    toggleWishlist(index) {
+      this.products[index].isOnWishlist = !this.products[index].isOnWishlist;
     }
   }
-}
+};
 </script>
-<style lang="scss" scoped>
-@import "~@storefront-ui/vue/styles";
-@mixin for-desktop {
-  @media screen and (min-width: $desktop-min) {
-    @content;
-  }
-}
-#home {
-  box-sizing: border-box;
-  @include for-desktop {
-    max-width: 1240px;
-    margin: auto;
-  }
-}
-.call-to-action-newsletter {
-  margin: $spacer-big 0;
-  box-sizing: border-box;
-  @include for-desktop {
-    margin: calc($spacer-extra-big * 2) 0;
-  }
-}
-.banner-central {
-  @include for-desktop {
-    padding-right: 30%;
-  }
-}
-.banner-application {
-  min-height: 420px;
-  max-width: 1040px;
-  margin: auto;
-  padding-right: calc(25% + 5rem);
-  padding-left: 2.5rem;
-  line-height: 1.6;
-  &__title {
-    margin: $spacer-big 0 0 0;
-    font-size: $h1-font-size-mobile;
-    font-weight: $h1-font-weight-mobile;
-    @include for-desktop {
-      font-size: $h1-font-size-desktop;
-      font-weight: $h1-font-weight-desktop;
-    }
-  }
-  &__subtitle {
-    color: #a3a5ad;
-    font-family: $body-font-family-primary;
-    font-size: $font-size-extra-big-mobile;
-    font-weight: $body-font-weight-primary;
-    @include for-desktop {
-      font-size: $font-size-extra-big-desktop;
-    }
-  }
-  &__download {
-    max-height: 47px;
-    margin-top: $spacer-extra-big;
-    & + & {
-      margin-left: $spacer-big;
-    }
-  }
-}
-.banners {
-  margin: $spacer-big 0;
-  @include for-desktop {
-    margin: $spacer-extra-big 0;
-  }
-}
-.images-grid {
-  max-width: 960px;
-  margin: auto;
-  &__row {
-    display: flex;
-    & + & {
-      margin-top: calc($spacer-big / 2);
-      @include for-desktop {
-        margin-top: $spacer-big;
-      }
-    }
-  }
-  &__col {
-    margin: 0;
-    flex: 1;
-    & + & {
-      margin-left: calc($spacer-big / 2);
-      @include for-desktop {
-        margin-left: $spacer-big;
-      }
-    }
-  }
-}
-.product-card {
-  max-width: unset;
-  &:hover {
-    @include for-desktop {
-      box-shadow: 0 4px 20px rgba(168, 172, 176, 0.19);
-    }
-  }
-}
-.product-carousel {
-  margin: -20px -20px -20px 0;
-  @include for-desktop {
-    margin: -20px 0;
-  }
-  ::v-deep .sf-carousel__wrapper {
-    padding: 20px 0;
-    @include for-desktop {
-      padding: 20px;
-      max-width: calc(100% - 216px);
-    }
-  }
-}
-.section {
-  padding-left: $spacer-big;
-  padding-right: $spacer-big;
-  @include for-desktop {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-</style>
+<style src="~/assets/sass/pages/home.scss" lang="scss" scoped></style>

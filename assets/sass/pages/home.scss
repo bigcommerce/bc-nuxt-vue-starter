@@ -1,0 +1,114 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+
+#home {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1240px;
+    margin: auto;
+  }
+}
+.call-to-action-newsletter {
+  margin: var(--spacer-lg) 0;
+  box-sizing: border-box;
+  @include for-desktop {
+    margin: calc(var(--spacer-xl) * 2) 0;
+  }
+}
+.banner-central {
+  @include for-desktop {
+    padding-right: 30%;
+  }
+}
+.banner-application {
+  min-height: 420px;
+  max-width: 1040px;
+  margin: auto;
+  padding-right: calc(25% + 5rem);
+  padding-left: 2.5rem;
+  line-height: 1.6;
+  &__title {
+    margin: var(--spacer-lg) 0 0 0;
+    font-size: var(--h1-font-size-mobile);
+    font-weight: var(--h1-font-weight-mobile);
+    @include for-desktop {
+      font-size: var(--h1-font-size-desktop);
+      font-weight: var(--h1-font-weight-desktop);
+    }
+  }
+  &__subtitle {
+    color: #a3a5ad;
+    font-family: var(--body-font-family-primary);
+    font-size: var(--font-size-extra-big-mobile);
+    font-weight: var(--body-font-weight-primary);
+    @include for-desktop {
+      font-size: var(--font-size-extra-big-desktop);
+    }
+  }
+  &__download {
+    max-height: 47px;
+    margin-top: var(--spacer-xl);
+    & + & {
+      margin-left: var(--spacer-lg);
+    }
+  }
+}
+.banners {
+  margin: var(--spacer-lg) 0;
+  @include for-desktop {
+    margin: var(--spacer-xl) 0;
+  }
+}
+.images-grid {
+  max-width: 960px;
+  margin: auto;
+  &__row {
+    display: flex;
+    & + & {
+      margin-top: calc(var(--spacer-lg) / 2);
+      @include for-desktop {
+        margin-top: var(--spacer-lg);
+      }
+    }
+  }
+  &__col {
+    margin: 0;
+    flex: 1;
+    & + & {
+      margin-left: calc(var(--spacer-lg) / 2);
+      @include for-desktop {
+        margin-left: var(--spacer-lg);
+      }
+    }
+  }
+}
+.product-card {
+  max-width: unset;
+  &:hover {
+    @include for-desktop {
+      box-shadow: 0 4px 20px rgba(168, 172, 176, 0.19);
+    }
+  }
+}
+.product-carousel {
+  margin: -20px -20px -20px 0;
+  @include for-desktop {
+    margin: -20px 0;
+  }
+  ::v-deep .sf-carousel__wrapper {
+    padding: 20px 0;
+    @include for-desktop {
+      padding: 20px;
+      max-width: calc(100% - 216px);
+    }
+  }
+}
+.section {
+  padding-left: var(--spacer-lg);
+  padding-right: var(--spacer-lg);
+  @include for-desktop {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

@@ -1,0 +1,299 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+
+#product {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 1240px;
+    margin: auto;
+  }
+}
+.banner-application {
+  min-height: 420px;
+  max-width: 1040px;
+  margin: auto;
+  padding-right: calc(25% + 5rem);
+  padding-left: 2.5rem;
+  line-height: 1.6;
+  &__title {
+    margin: var(--spacer-xl 0 0 0);
+    font-size: var(--h1-font-size-mobile);
+    font-weight: var(--h1-font-weight-mobile);
+    @include for-desktop {
+      font-size: var(--h1-font-size-desktop);
+      font-weight: var(--h1-font-weight-desktop);
+    }
+  }
+  &__subtitle {
+    color: #a3a5ad;
+    font-family: var(--body-font-family-primary);
+    font-size: var(--font-size-extra-big-mobile);
+    font-weight: var(--body-font-weight-primary);
+    @include for-desktop {
+      font-size: var(--font-size-extra-big-desktop);
+    }
+  }
+  &__download {
+    max-height: 47px;
+    margin-top: var(--spacer-extra-big);
+    & + & {
+      margin-left: var(--spacer-xl);
+    }
+  }
+}
+.breadcrumbs {
+  padding: var(--spacer-lg) var(--spacer-lg) var(--spacer-lg);
+}
+.gallery-mobile {
+  $height-other: 240px;
+  $height-iOS: 265px;
+  height: calc(100vh - #{$height-other});
+  @supports (-webkit-overflow-scrolling: touch) {
+    height: calc(100vh - #{$height-iOS});
+  }
+  ::v-deep .sf-image {
+    img {
+      width: 100%;
+    }
+  }
+}
+.images-grid {
+  &__row {
+    display: flex;
+    & + & {
+      margin-top: calc(var(--spacer-xl) / 2);
+      @include for-desktop {
+        margin-top: var(--spacer-xl);
+      }
+    }
+  }
+  &__col {
+    margin: 0;
+    flex: 1;
+    & + & {
+      margin-left: calc(var(--spacer-xl) / 2);
+      @include for-desktop {
+        margin-left: var(--spacer-xl);
+      }
+    }
+  }
+}
+.product {
+  @include for-desktop {
+    display: flex;
+  }
+  &__gallery,
+  &__description {
+    flex: 1;
+  }
+  &__description {
+    padding: 0 var(--spacer-xl);
+    @include for-desktop {
+      margin-left: calc(var(--spacer-xl) * 5);
+    }
+  }
+}
+.product-card {
+  max-width: unset; // ?
+  &:hover {
+    @include for-desktop {
+      box-shadow: 0 4px 20px rgba(168, 172, 176, 0.19);
+    }
+  }
+}
+.product-carousel {
+  margin: -20px -20px -20px 0;
+  @include for-desktop {
+    margin: -20px 0;
+  }
+  ::v-deep .sf-carousel__wrapper {
+    padding: 20px 0;
+    @include for-desktop {
+      padding: 20px;
+      max-width: calc(100% - 216px);
+    }
+  }
+}
+.product-details {
+  &__action {
+    display: flex;
+    margin: var(--spacer-xl) 0 calc(var(--spacer-xl) / 2);
+    @include for-desktop {
+      justify-content: flex-end;
+    }
+  }
+  &__add-to-cart {
+    margin-top: 1.5rem;
+    @include for-desktop {
+      margin-top: var(--spacer-extra-big);
+    }
+  }
+  &__alert {
+    margin-top: 1.5rem;
+  }
+  &__attribute {
+    margin-bottom: var(--spacer-xl);
+  }
+  &__description {
+    margin: var(--spacer-extra-big) 0 calc(var(--spacer-xl) * 3) 0;
+    font-family: var(--body-font-family-secondary);
+    font-size: var(--font-size-regular-mobile);
+    line-height: 1.6;
+    @include for-desktop {
+      font-size: var(--font-size-regular-desktop);
+    }
+  }
+  &__divider {
+    margin-top: 30px;
+  }
+  &__heading {
+    margin-top: var(--spacer-xl);
+    ::v-deep .sf-heading__title {
+      font-size: var(--font-size-big-mobile);
+      font-weight: var(--body-font-weight-primary);
+      @include for-desktop {
+        font-size: var(--h1-font-size-desktop);
+        font-weight: var(--body-font-weight-secondary);
+      }
+    }
+    @include for-desktop {
+      margin-top: 0;
+    }
+  }
+  &__mobile-bar {
+    display: none;
+    padding: var(--spacer-medium) 0;
+    box-sizing: border-box;
+    .product--is-active & {
+      display: block;
+      @include for-desktop {
+        display: none;
+      }
+    }
+    @include for-desktop {
+      display: none;
+    }
+  }
+  &__mobile-top {
+    display: flex;
+    align-items: center;
+    @include for-desktop {
+      display: block;
+    }
+  }
+  &__properties {
+    margin-top: var(--spacer-xl);
+  }
+  &__sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  &__sub-price {
+    flex-basis: 100%;
+    margin-top: calc(var(--spacer-xl) / 4);
+    @include for-desktop {
+      flex-basis: auto;
+      margin-top: calc(var(--spacer-xl) / 2);
+    }
+  }
+  &__sub-rating {
+    display: flex;
+    margin-top: calc(var(--spacer-xl) / 2);
+    @include for-desktop {
+      margin-left: auto;
+    }
+  }
+  &__sub-reviews {
+    margin-left: 10px;
+    font-size: 0.75rem;
+  }
+  &__section {
+    border-bottom: 1px solid #f1f2f3;
+    padding-bottom: 10px;
+    @include for-desktop {
+      border: 0;
+      padding-bottom: 0;
+    }
+  }
+  &__tabs {
+    margin-top: var(--spacer-xl);
+    @include for-desktop {
+      margin-top: calc(5 * var(--spacer-xl));
+    }
+    p {
+      margin: 0;
+    }
+  }
+  &__review {
+    padding-bottom: var(--spacer-xl);
+    @include for-desktop {
+      padding-bottom: var(--spacer-extra-big);
+      border-bottom: 1px solid var(--c-light);
+    }
+    & + & {
+      padding-top: var(--spacer-extra-big);
+      border-top: 1px solid var(--c-light);
+      @include for-desktop {
+        border-top: 0;
+        padding-top: var(--spacer-extra-big);
+      }
+    }
+  }
+}
+.product-property {
+  padding: var(--spacer-small) 0;
+}
+.section {
+  padding-left: var(--spacer-xl);
+  padding-right: var(--spacer-xl);
+  @include for-desktop {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+/* SfAction or SfButton modifier */
+.sf-action {
+  padding: 0;
+  border: 0;
+  outline: none;
+  background-color: transparent;
+  color: var(--c-text);
+  font-family: var(--body-font-family-secondary);
+  font-size: var(--font-size-regular-mobile);
+  font-weight: var(--body-font-weight-secondary);
+  line-height: 1.6;
+  text-decoration: underline;
+  cursor: pointer;
+  @include for-desktop {
+    font-size: var(--font-size-regular-desktop);
+  }
+}
+
+#error {
+  box-sizing: border-box;
+  padding: 0 var(--spacer-xl);
+  @include for-desktop {
+    max-width: 1240px;
+    margin: auto;
+  }
+}
+.image {
+  padding: var(--spacer-extra-big);
+  display: flex;
+  justify-content: center;
+}
+.heading {
+  --heading-subtitle-margin: var(--spacer-xl) 0 0 0;
+  text-align: center;
+}
+.actions {
+  margin: 6.25rem auto 0;
+  max-width: 250px;
+  &__button {
+    &:last-child {
+      margin: var(--spacer-xl) 0;
+    }
+  }
+}
