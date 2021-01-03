@@ -96,7 +96,8 @@
                   :key="x"
                   :value="value.node.entityId"
                 >
-                  <SfProductOption :label="value.node.label" />
+                  {{ value.node.label }}
+                  <!-- <SfProductOption :label="value.node.label" /> -->
                 </SfSelectOption>
               </SfSelect>
             </div>
@@ -117,7 +118,10 @@
                 Buy Now
               </SfButton>
             </div>
-            <SfTabs class="product-details__tabs" :open-tab="2">
+            <SfTabs
+              class="product-details__tabs"
+              :open-tab="product.description ? 1 : 2"
+            >
               <SfTab
                 v-if="
                   product.description.length > 0 ||
@@ -126,7 +130,8 @@
                 title="Description"
               >
                 <div>
-                  <p v-text="product.description" />
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <p v-html="product.description" />
                 </div>
                 <div class="product-details__properties">
                   <SfProperty
@@ -188,7 +193,7 @@ import {
   SfPrice,
   SfRating,
   SfSelect,
-  SfProductOption,
+  // SfProductOption,
   // SfAddToCart,
   SfTabs,
   SfGallery,
@@ -208,7 +213,7 @@ export default {
     SfPrice,
     SfRating,
     SfSelect,
-    SfProductOption,
+    // SfProductOption,
     // SfAddToCart,
     SfTabs,
     SfGallery,
@@ -248,21 +253,17 @@ export default {
   data() {
     const productData = {
       product: {},
-      optionSelections: [],
+      optionSelections: {},
       qty: '1',
       stock: 1,
       breadcrumbs: [
         {
           text: 'Shop All',
-          route: {
-            link: '/products'
-          }
+          link: '/shop-all'
         },
         {
           text: 'Product Page',
-          route: {
-            link: '#'
-          }
+          link: '#'
         }
       ]
     };
