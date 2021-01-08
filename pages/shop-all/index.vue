@@ -26,6 +26,7 @@
             :image="product.node.defaultImage.url"
             :link="'/products' + product.node.path"
             :regular-price="'$' + product.node.prices.price.value.toFixed(2)"
+            :show-add-to-cart-button="true"
             class="products__product-card"
           />
         </div>

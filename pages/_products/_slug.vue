@@ -107,13 +107,13 @@
                 type="warning"
                 class="product-details__alert mobile-only"
               />
-              <!-- <SfAddToCart
+              <SfAddToCart
                 v-model="qty"
                 :stock="stock"
                 :can-add-to-cart="stock > 0"
                 class="product-details__add-to-cart"
                 @click="addToCart"
-              /> -->
+              />
               <SfButton class="product-details__add-to-cart" @click="buyNow">
                 Buy Now
               </SfButton>
@@ -194,7 +194,7 @@ import {
   SfRating,
   SfSelect,
   // SfProductOption,
-  // SfAddToCart,
+  SfAddToCart,
   SfTabs,
   SfGallery,
   SfImage,
@@ -214,7 +214,7 @@ export default {
     SfRating,
     SfSelect,
     // SfProductOption,
-    // SfAddToCart,
+    SfAddToCart,
     SfTabs,
     SfGallery,
     SfImage,
