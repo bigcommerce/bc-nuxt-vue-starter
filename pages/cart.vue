@@ -8,13 +8,13 @@
             <SfCollectedProduct
               v-for="product in products"
               :key="product.id"
-              v-model="product.qty"
+              :qty="product.qty"
               :image="product.image"
               :title="product.title"
               :regular-price="product.price.regular | price"
               :special-price="product.price.special | price"
-              class="collected-product"
-              @click:remove="removeHandler(product)"
+              @click:remove="updateCart(0, product)"
+              @input="(e, value) => updateCart(e, product, value)"
             >
               <template #configuration>
                 <div class="collected-product__properties">
@@ -76,6 +76,7 @@ import {
   SfPrice,
   SfCollectedProduct
 } from '@storefront-ui/vue';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Cart',
   components: {
@@ -95,45 +96,11 @@ export default {
   layout: 'Default',
   data() {
     return {
-      isCartSidebarOpen: true,
-      products: [
-        {
-          title: 'Cream Beach Bag',
-          id: 'CBB1',
-          image: 'assets/storybook/Home/productA.jpg',
-          price: { regular: '50.00' },
-          configuration: [
-            { name: 'Size', value: 'XS' },
-            { name: 'Color', value: 'White' }
-          ],
-          qty: '1'
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 'CBB2',
-          image: 'assets/storybook/Home/productB.jpg',
-          price: { regular: '50.00', special: '20.05' },
-          configuration: [
-            { name: 'Size', value: 'XS' },
-            { name: 'Color', value: 'White' }
-          ],
-          qty: '2'
-        },
-        {
-          title: 'Cream Beach Bag',
-          id: 'CBB3',
-          image: 'assets/storybook/Home/productC.jpg',
-          price: { regular: '50.00', special: '20.50' },
-          configuration: [
-            { name: 'Size', value: 'XS' },
-            { name: 'Color', value: 'White' }
-          ],
-          qty: '1'
-        }
-      ]
+      isCartSidebarOpen: true
     };
   },
   computed: {
+    ...mapGetters('carts', ['products']),
     totalItems() {
       return this.products.reduce(
         (totalItems, product) => totalItems + parseInt(product.qty, 10),
@@ -152,11 +119,25 @@ export default {
         .toFixed(2);
     }
   },
+  mounted() {
+    this.getCart();
+  },
   methods: {
-    removeHandler(product) {
-      const products = [...this.products];
-      this.products = products.filter((element) => element.id !== product.id);
-    }
+    ...mapActions({
+      getCart: 'carts/getCart',
+      updateCartItem: 'carts/updateCartItem',
+      deleteCartItem: 'carts/deleteCartItem',
+      updateCart(_e, value, product) {
+        value
+          ? this.updateCartItem({
+              quantity: value,
+              product_id: product.id,
+              item_id: product.itemId,
+              variant_id: product.variant_id
+            })
+          : this.deleteCartItem(product.itemId);
+      }
+    })
   }
 };
 </script>

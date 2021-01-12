@@ -28,6 +28,7 @@
             :regular-price="'$' + product.node.prices.price.value.toFixed(2)"
             :show-add-to-cart-button="true"
             class="products__product-card"
+            @click:add-to-cart="addCart(product)"
           />
         </div>
       </div>
@@ -36,6 +37,7 @@
 </template>
 <script>
 import { SfProductCard } from '@storefront-ui/vue';
+import { mapActions } from 'vuex';
 export default {
   components: {
     SfProductCard
@@ -51,7 +53,17 @@ export default {
       category: {}
     };
   },
-  methods: {}
+  methods: {
+    ...mapActions({
+      addToCart: 'carts/addToCart'
+    }),
+    addCart(product) {
+      this.addToCart({
+        quantity: 1,
+        product_id: product.node.entityId
+      });
+    }
+  }
 };
 </script>
 <style src="~/assets/sass/pages/products.scss" lang="scss" scoped></style>

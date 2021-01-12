@@ -1,7 +1,7 @@
 export default {
   position: 'bottom-left',
   theme: 'custom',
-  duration: 5000,
+  duration: 2500,
   register: [
     {
       // Register custom toasts

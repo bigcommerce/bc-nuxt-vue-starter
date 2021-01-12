@@ -11,6 +11,7 @@ export const shopAll = () => {
             products {
               edges {
                 node {
+                  entityId
                   name
                   path
                   defaultImage {

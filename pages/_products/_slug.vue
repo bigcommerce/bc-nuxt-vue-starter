@@ -112,7 +112,7 @@
                 :stock="stock"
                 :can-add-to-cart="stock > 0"
                 class="product-details__add-to-cart"
-                @click="addToCart"
+                @click="addCart"
               />
               <SfButton class="product-details__add-to-cart" @click="buyNow">
                 Buy Now
@@ -270,8 +270,11 @@ export default {
     return productData;
   },
   methods: {
-    addToCart(event) {
-      window.location = this.product.addToCartUrl;
+    addCart() {
+      this.$store.dispatch('carts/addToCart', {
+        quantity: this.qty,
+        product_id: this.product.entityId
+      });
     },
     buyNow(event) {
       window.location = this.product.addToCartUrl.replace('add', 'buy');
