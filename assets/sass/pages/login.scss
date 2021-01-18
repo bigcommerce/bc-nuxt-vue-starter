@@ -1,0 +1,16 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+
+#login {
+  box-sizing: border-box;
+  @include for-desktop {
+    max-width: 600px;
+    margin: auto;
+  }
+  & .login-form {
+    & .title {
+      margin-bottom: 10px;
+    }
+  }
+}

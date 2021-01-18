@@ -35,7 +35,7 @@ export const mutations = {
 
 export const actions = {
   async addToCart({ dispatch }, data) {
-    const cartId = localStorage.getItem('cartId');
+    const cartId = window.localStorage.getItem('cartId');
     if (cartId && cartId !== 'null') dispatch('addCartItem', data);
     else dispatch('createCart', data);
   },
@@ -49,12 +49,12 @@ export const actions = {
       }
     );
     const cartId = cart.data.id;
-    localStorage.setItem('cartId', cartId);
+    window.localStorage.setItem('cartId', cartId);
     commit('SET_CART', productFilter(cart));
     this.$toast.info('Successfully created cart!');
   },
   async addCartItem({ commit }, addData) {
-    const cartId = localStorage.getItem('cartId');
+    const cartId = window.localStorage.getItem('cartId');
     const data = {
       line_items: [
         { quantity: addData.quantity, product_id: addData.product_id }
@@ -68,7 +68,7 @@ export const actions = {
     this.$toast.info('Successfully added a item to cart!');
   },
   async updateCartItem({ commit }, updateData) {
-    const cartId = localStorage.getItem('cartId');
+    const cartId = window.localStorage.getItem('cartId');
     const data = {
       line_item: {
         quantity: updateData.quantity,
@@ -84,7 +84,7 @@ export const actions = {
     this.$toast.info('Successfully updated cart item!');
   },
   async deleteCartItem({ dispatch }, itemId) {
-    const cartId = localStorage.getItem('cartId');
+    const cartId = window.localStorage.getItem('cartId');
     await this.$axios.$delete(
       `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${itemId}`
     );
@@ -92,7 +92,7 @@ export const actions = {
     dispatch('getCart');
   },
   async getCart({ commit }) {
-    const cartId = localStorage.getItem('cartId');
+    const cartId = window.localStorage.getItem('cartId');
     if (cartId && cartId !== 'null')
       this.$axios
         .$get(`/api/stores/${process.env.storeHash}/v3/carts/${cartId}`)
@@ -100,7 +100,7 @@ export const actions = {
           commit('SET_CART', productFilter(cart));
         })
         .catch(() => {
-          localStorage.setItem('cartId', null);
+          window.localStorage.setItem('cartId', null);
           commit('SET_CART', productFilter(null));
         });
   }
