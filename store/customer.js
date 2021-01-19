@@ -1,3 +1,4 @@
+import { bigCommerceAxios } from '~/helpers/axios';
 import { setUser, getUser, removeUserAndCookie } from '~/helpers/customer';
 
 export const state = () => ({
@@ -25,7 +26,7 @@ export const mutations = {
 
 export const actions = {
   async login({ dispatch }, variables) {
-    await this.$axios.$post('/graphql', {
+    await bigCommerceAxios.post(null, {
       query: this.$queries.customerLogin(),
       variables
     });

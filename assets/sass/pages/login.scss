@@ -8,6 +8,10 @@
     max-width: 600px;
     margin: auto;
   }
+  @media screen and (max-width: 1024px) {
+    width: 300px;
+    margin: auto;
+  }
   & .login-form {
     & .title {
       margin-bottom: 10px;
