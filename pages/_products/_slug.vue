@@ -223,11 +223,11 @@ export default {
     SfBreadcrumbs,
     SfButton
   },
-  async asyncData({ params, $queries, $api }) {
-    const result = await $api.product.bySlug({
+  async asyncData({ params, $queries, $axios }) {
+    const result = await $axios.$post('/graphql', {
       query: $queries.productBySlug(params)
     });
-    const productData = result.data.site.route.node;
+    const productData = result.data?.site?.route?.node;
     const optionSelections = {};
 
     if (productData != null) {

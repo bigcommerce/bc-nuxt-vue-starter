@@ -36,7 +36,7 @@ export const mutations = {
 export const actions = {
   async addToCart({ dispatch }, data) {
     const cartId = window.localStorage.getItem('cartId');
-    if (cartId && cartId !== 'null') dispatch('addCartItem', data);
+    if (cartId) dispatch('addCartItem', data);
     else dispatch('createCart', data);
   },
   async createCart({ commit }, createData) {
@@ -93,14 +93,14 @@ export const actions = {
   },
   async getCart({ commit }) {
     const cartId = window.localStorage.getItem('cartId');
-    if (cartId && cartId !== 'null')
+    if (cartId)
       this.$axios
         .$get(`/api/stores/${process.env.storeHash}/v3/carts/${cartId}`)
         .then((cart) => {
           commit('SET_CART', productFilter(cart));
         })
         .catch(() => {
-          window.localStorage.setItem('cartId', null);
+          window.localStorage.removeItem('cartId');
           commit('SET_CART', productFilter(null));
         });
   }

@@ -12,7 +12,3 @@ export const removeUserAndCookie = () => {
   window.document.cookie = null;
   window.localStorage.removeItem('bigcommerceCustomer');
 };
-
-export const setCookie = (shopToken) => {
-  window.document.cookie = shopToken;
-};

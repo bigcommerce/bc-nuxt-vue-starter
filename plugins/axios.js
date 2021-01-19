@@ -21,8 +21,6 @@ export default function (context) {
     }
   });
 
-  $axios.onResponse((response) => {});
-
   $axios.onError(async (error) => {
     const code = parseInt(error.response && error.response.status);
     if (code === 401) {
@@ -30,7 +28,7 @@ export default function (context) {
     } else if (code === 403) {
       $toast.error('You do not have permission to do that.');
     } else if (code === 404) {
-      $toast.error('Data Not Found');
+      $toast.error('You do not have data.');
     } else {
       const errorMessage =
         error?.response?.data?.error ??
@@ -40,9 +38,8 @@ export default function (context) {
         error?.response?.data?.errors?.variant;
       if (errorMessage) {
         $toast.error(errorMessage);
-      } else {
-        $toast.error('Undefined Error!!!');
       }
+      console.log(error);
     }
     throw error;
   });

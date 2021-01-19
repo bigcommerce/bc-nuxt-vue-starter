@@ -1,5 +1,5 @@
-import { bigCommerceAxios } from '~/helpers/axios';
-import { setUser, getUser, removeUserAndCookie } from '~/helpers/customer';
+import { customerAxios } from '~/helpers/axios';
+import { setUser, getUser, removeUserAndCookie } from '~/helpers/auth';
 
 export const state = () => ({
   customer: null,
@@ -26,18 +26,18 @@ export const mutations = {
 
 export const actions = {
   async login({ dispatch }, variables) {
-    await bigCommerceAxios.post(null, {
+    await customerAxios.post(null, {
       query: this.$queries.customerLogin(),
       variables
     });
     dispatch('getCustomer');
   },
   async getCustomer({ commit, dispatch }) {
-    const result = await this.$axios.$post('/graphql', {
+    const result = await customerAxios.post(null, {
       query: this.$queries.getCustomer()
     });
-    setUser(JSON.stringify(result.data.customer));
-    commit('SET_CUSTOMER', result.data.customer);
+    setUser(JSON.stringify(result.data.data.customer));
+    commit('SET_CUSTOMER', result.data.data.customer);
     dispatch('isLoggedIn');
   },
   async logOut({ commit }) {

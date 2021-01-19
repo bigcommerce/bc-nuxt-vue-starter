@@ -43,8 +43,10 @@ export default {
     SfProductCard
   },
   layout: 'Default',
-  async asyncData({ params, $api, $queries }) {
-    const result = await $api.product.list({ query: $queries.shopAll() });
+  async asyncData({ $queries, $axios }) {
+    const result = await $axios.$post('/graphql', {
+      query: $queries.shopAll()
+    });
     const productsData = result?.data?.site?.route?.node ?? {};
     return { category: productsData };
   },

@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const bigCommerceAxios = axios.create({
+export const customerAxios = axios.create({
   baseURL: `${process.env.baseUrl}/graphql`,
   headers: {
     'Content-Type': 'application/json',
