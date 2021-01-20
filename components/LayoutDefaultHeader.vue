@@ -1,5 +1,9 @@
 <template>
-  <SfHeader title="BCVueNuxt" @click:cart="handleClickCart">
+  <SfHeader
+    title="BCVueNuxt"
+    @click:cart="handleClickCart"
+    @click:account="handleClickAccount"
+  >
     <template #navigation>
       <SfHeaderNavigationItem v-for="item in menu" :key="item.link">
         <template slot="desktop-navigation-item">
@@ -38,6 +42,9 @@ export default {
   methods: {
     handleClickCart() {
       this.$router.push({ name: 'cart' });
+    },
+    handleClickAccount() {
+      this.$router.push({ name: 'login' });
     }
   }
 };

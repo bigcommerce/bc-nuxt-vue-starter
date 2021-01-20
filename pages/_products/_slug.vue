@@ -107,13 +107,13 @@
                 type="warning"
                 class="product-details__alert mobile-only"
               />
-              <!-- <SfAddToCart
+              <SfAddToCart
                 v-model="qty"
                 :stock="stock"
                 :can-add-to-cart="stock > 0"
                 class="product-details__add-to-cart"
-                @click="addToCart"
-              /> -->
+                @click="addCart"
+              />
               <SfButton class="product-details__add-to-cart" @click="buyNow">
                 Buy Now
               </SfButton>
@@ -194,7 +194,7 @@ import {
   SfRating,
   SfSelect,
   // SfProductOption,
-  // SfAddToCart,
+  SfAddToCart,
   SfTabs,
   SfGallery,
   SfImage,
@@ -214,7 +214,7 @@ export default {
     SfRating,
     SfSelect,
     // SfProductOption,
-    // SfAddToCart,
+    SfAddToCart,
     SfTabs,
     SfGallery,
     SfImage,
@@ -223,11 +223,11 @@ export default {
     SfBreadcrumbs,
     SfButton
   },
-  async asyncData({ params, $queries, $api }) {
-    const result = await $api.product.bySlug({
+  async asyncData({ params, $queries, $axios }) {
+    const result = await $axios.$post('/graphql', {
       query: $queries.productBySlug(params)
     });
-    const productData = result.data.site.route.node;
+    const productData = result.data?.site?.route?.node;
     const optionSelections = {};
 
     if (productData != null) {
@@ -270,8 +270,11 @@ export default {
     return productData;
   },
   methods: {
-    addToCart(event) {
-      window.location = this.product.addToCartUrl;
+    addCart() {
+      this.$store.dispatch('carts/addToCart', {
+        quantity: this.qty,
+        product_id: this.product.entityId
+      });
     },
     buyNow(event) {
       window.location = this.product.addToCartUrl.replace('add', 'buy');

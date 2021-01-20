@@ -13,6 +13,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore . --fix"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/axios": "^5.12.4",
     "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/pwa": "^3.3.3",
@@ -22,7 +23,6 @@
     "nuxt": "^2.14.12"
   },
   "devDependencies": {
-    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "babel-eslint": "^10.1.0",

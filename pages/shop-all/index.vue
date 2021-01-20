@@ -26,7 +26,9 @@
             :image="product.node.defaultImage.url"
             :link="'/products' + product.node.path"
             :regular-price="'$' + product.node.prices.price.value.toFixed(2)"
+            :show-add-to-cart-button="true"
             class="products__product-card"
+            @click:add-to-cart="addCart(product)"
           />
         </div>
       </div>
@@ -35,13 +37,16 @@
 </template>
 <script>
 import { SfProductCard } from '@storefront-ui/vue';
+import { mapActions } from 'vuex';
 export default {
   components: {
     SfProductCard
   },
   layout: 'Default',
-  async asyncData({ params, $api, $queries }) {
-    const result = await $api.product.list({ query: $queries.shopAll() });
+  async asyncData({ $queries, $axios }) {
+    const result = await $axios.$post('/graphql', {
+      query: $queries.shopAll()
+    });
     const productsData = result?.data?.site?.route?.node ?? {};
     return { category: productsData };
   },
@@ -50,7 +55,17 @@ export default {
       category: {}
     };
   },
-  methods: {}
+  methods: {
+    ...mapActions({
+      addToCart: 'carts/addToCart'
+    }),
+    addCart(product) {
+      this.addToCart({
+        quantity: 1,
+        product_id: product.node.entityId
+      });
+    }
+  }
 };
 </script>
 <style src="~/assets/sass/pages/products.scss" lang="scss" scoped></style>
