@@ -1,4 +1,3 @@
-import { customerAxios } from '~/helpers/axios';
 import { setUser, getUser, removeUserAndCookie } from '~/helpers/auth';
 
 export const state = () => ({
@@ -26,14 +25,14 @@ export const mutations = {
 
 export const actions = {
   async login({ dispatch }, variables) {
-    await customerAxios.post(null, {
+    await this.$axios.post('/graphql', {
       query: this.$queries.customerLogin(),
       variables
     });
     dispatch('getCustomer');
   },
   async getCustomer({ commit, dispatch }) {
-    const result = await customerAxios.post(null, {
+    const result = await this.$axios.post('/graphql', {
       query: this.$queries.getCustomer()
     });
     setUser(JSON.stringify(result.data.data.customer));
