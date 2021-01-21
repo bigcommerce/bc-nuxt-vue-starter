@@ -1,5 +1,21 @@
+import jwt from 'jsonwebtoken';
+
 export const setUser = (user) => {
-  window.localStorage.setItem('bigcommerceCustomer', user);
+  if (user) {
+    const secureData = jwt.sign(
+      {
+        id: user.id,
+        groupId: user.groupId
+      },
+      process.env.jwtSecret
+    );
+    user = {
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+      secureData
+    };
+  }
+  window.localStorage.setItem('bigcommerceCustomer', JSON.stringify(user));
 };
 
 export const getUser = () =>
@@ -9,6 +25,6 @@ export const getUser = () =>
     : null;
 
 export const removeUserAndCookie = () => {
-  window.document.cookie = null;
+  // window.document.cookie = null;
   window.localStorage.removeItem('bigcommerceCustomer');
 };

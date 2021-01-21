@@ -4,5 +4,6 @@ export default {
   storeFrontApiToken: process.env.STOREFRONT_API_TOKEN || '',
   apiToken: process.env.API_TOKEN || '',
   bcApiUrl: process.env.BC_API_URL || '',
-  storeHash: process.env.STORE_HASH || ''
+  storeHash: process.env.STORE_HASH || '',
+  jwtSecret: process.env.JWT_SECRET || ''
 };

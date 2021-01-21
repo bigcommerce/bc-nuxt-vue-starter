@@ -35,7 +35,7 @@ export const actions = {
     const result = await this.$axios.post('/graphql', {
       query: this.$queries.getCustomer()
     });
-    setUser(JSON.stringify(result.data.data.customer));
+    setUser(result.data.data.customer);
     commit('SET_CUSTOMER', result.data.data.customer);
     dispatch('isLoggedIn');
   },
