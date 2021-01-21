@@ -1,3 +1,4 @@
+import { getCartCheckoutRedirectUrl } from '~/helpers/auth';
 const productFilter = (cart) => {
   return cart
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -103,5 +104,20 @@ export const actions = {
           window.localStorage.removeItem('cartId');
           commit('SET_CART', productFilter(null));
         });
+  },
+  async cartCheckout() {
+    const cartId = window.localStorage.getItem('cartId');
+    this.$axios
+      .$post(
+        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/redirect_urls`
+      )
+      .then((response) => {
+        const redirectUrl = getCartCheckoutRedirectUrl(response);
+        window.location.href = redirectUrl;
+      })
+      .catch((err) => {
+        console.log(err);
+        this.$toast.error('You can not checkout this cart');
+      });
   }
 };

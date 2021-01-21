@@ -47,7 +47,9 @@
             <SfPrice :regular="totalPrice | price" class="sf-price--big" />
           </template>
         </SfProperty>
-        <SfButton class="sf-button--full-width"> Go to checkout </SfButton>
+        <SfButton class="sf-button--full-width" @click="cartCheckout">
+          Go to checkout
+        </SfButton>
       </div>
       <div v-else key="empty-cart" class="empty-cart">
         <div class="empty-cart__banner">
@@ -127,6 +129,7 @@ export default {
       getCart: 'carts/getCart',
       updateCartItem: 'carts/updateCartItem',
       deleteCartItem: 'carts/deleteCartItem',
+      cartCheckout: 'carts/cartCheckout',
       updateCart(_e, value, product) {
         value
           ? this.updateCartItem({
