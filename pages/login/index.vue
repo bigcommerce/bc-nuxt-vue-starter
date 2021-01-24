@@ -2,7 +2,7 @@
   <div id="login">
     <Loader :loading="isLoading" />
     <div v-if="loggedIn" class="profile-form">
-      <div>User Name: {{ `${customer.firstName} ${customer.lastName}` }}</div>
+      <div>User Name: {{ `${customer.name}` }}</div>
       <div>User Email: {{ `${customer.email}` }}</div>
       <SfButton @click="handleLogOut">Log Out</SfButton>
     </div>

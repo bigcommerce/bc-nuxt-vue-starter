@@ -53,9 +53,10 @@ export const actions = {
         query: this.$queries.getCustomer()
       })
       .then((response) => {
-        setUser(response.data.data.customer);
+        const user = setUser(response.data.data.customer);
         commit('SET_LOADING', false);
-        commit('SET_CUSTOMER', response.data.data.customer);
+        console.log(response);
+        commit('SET_CUSTOMER', user);
         dispatch('isLoggedIn');
       })
       .catch(() => {

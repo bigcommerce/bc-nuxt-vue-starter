@@ -17,6 +17,7 @@ export const setUser = (user) => {
     };
   }
   window.localStorage.setItem('bigcommerceCustomer', JSON.stringify(user));
+  return user;
 };
 
 export const getUser = () =>
@@ -26,7 +27,7 @@ export const getUser = () =>
     : null;
 
 export const removeUserAndCookie = () => {
-  window.document.cookie = null;
+  window.document.cookie = 'SHOP_TOKEN=null';
   window.localStorage.removeItem('bigcommerceCustomer');
 };
 
@@ -53,7 +54,7 @@ export const getCartCheckoutRedirectUrl = (response) => {
       redirect_to: Buffer.from(response.data.checkout_url, 'base64').toString()
     };
 
-    // The JWT token must be signed by the BC API Secret, which should be different than the Gatsby app's JWT secret
+    // The JWT token must be signed by the BC API Secret
     const token = jwt.sign(payload, process.env.apiSecret, {
       algorithm: 'HS256'
     });
