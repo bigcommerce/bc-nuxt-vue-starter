@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loader :loading="isLoading" />
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
@@ -204,6 +205,8 @@ import {
   SfBreadcrumbs,
   SfButton
 } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
+import Loader from '~/components/Loader.vue';
 export default {
   name: 'Product',
   components: {
@@ -221,7 +224,8 @@ export default {
     SfBanner,
     SfSticky,
     SfBreadcrumbs,
-    SfButton
+    SfButton,
+    Loader
   },
   async asyncData({ params, $queries, $axios }) {
     const result = await $axios.$post('/graphql', {
@@ -268,6 +272,9 @@ export default {
       ]
     };
     return productData;
+  },
+  computed: {
+    ...mapGetters('carts', ['isLoading'])
   },
   methods: {
     addCart() {

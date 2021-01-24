@@ -1,5 +1,6 @@
 <template>
   <div id="login">
+    <Loader :loading="isLoading" />
     <div v-if="loggedIn" class="profile-form">
       <div>User Name: {{ `${customer.firstName} ${customer.lastName}` }}</div>
       <div>User Email: {{ `${customer.email}` }}</div>
@@ -34,10 +35,12 @@
 <script>
 import { SfInput, SfButton } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
+import Loader from '~/components/Loader.vue';
 export default {
   components: {
     SfInput,
-    SfButton
+    SfButton,
+    Loader
   },
   layout: 'Default',
   data() {
@@ -49,7 +52,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('customer', ['loggedIn', 'customer']),
+    ...mapGetters('customer', ['loggedIn', 'customer', 'isLoading']),
     btnDisabled() {
       return !(this.emailValid && this.pwdValid);
     }

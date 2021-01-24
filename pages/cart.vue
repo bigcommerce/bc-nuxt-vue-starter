@@ -1,5 +1,6 @@
 <template>
   <div id="cart">
+    <Loader :loading="isLoading" />
     <transition name="fade" mode="out-in">
       <div v-if="totalItems" key="my-cart" class="my-cart">
         <h3 class="my-cart__total-items">items: {{ totalItems }}</h3>
@@ -79,13 +80,15 @@ import {
   SfCollectedProduct
 } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
+import Loader from '~/components/Loader.vue';
 export default {
   name: 'Cart',
   components: {
     SfButton,
     SfProperty,
     SfPrice,
-    SfCollectedProduct
+    SfCollectedProduct,
+    Loader
   },
   filters: {
     price: (price) => {
@@ -102,7 +105,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('carts', ['products']),
+    ...mapGetters('carts', ['products', 'isLoading']),
     totalItems() {
       return this.products.reduce(
         (totalItems, product) => totalItems + parseInt(product.qty, 10),
