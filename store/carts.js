@@ -62,7 +62,7 @@ export const actions = {
         this.$toast.info('Successfully created cart!');
         commit('SET_LOADING', false);
       })
-      .then(() => {
+      .catch(() => {
         commit('SET_LOADING', false);
         this.$toast.error('Can not create cart');
       });
@@ -123,9 +123,11 @@ export const actions = {
         `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${itemId}`
       )
       .then((response) => {
+        const cart = productFilter(response);
         this.$toast.info('Successfully deleted a item from cart');
         commit('SET_LOADING', false);
-        commit('SET_CART', productFilter(response));
+        commit('SET_CART', cart);
+        if (cart.length === 0) window.localStorage.removeItem('cartId');
       })
       .catch(() => {
         this.$toast.error('Can not delete the cart');
@@ -156,8 +158,7 @@ export const actions = {
         const redirectUrl = getCartCheckoutRedirectUrl(response);
         window.location.href = redirectUrl;
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         this.$toast.error('You can not checkout this cart');
       });
   }

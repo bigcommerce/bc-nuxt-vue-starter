@@ -27,8 +27,6 @@ export default function (context) {
       $toast.error('Token is expired or incorrect.');
     } else if (code === 403) {
       $toast.error('You do not have permission to do that.');
-    } else if (code === 404) {
-      $toast.error('You do not have data.');
     } else {
       const errorMessage =
         error?.response?.data?.error ??
