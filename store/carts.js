@@ -1,3 +1,4 @@
+import { getCartCheckoutRedirectUrl } from '~/utils/auth';
 const productFilter = (cart) => {
   return cart
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -18,56 +19,76 @@ const productFilter = (cart) => {
 };
 
 export const state = () => ({
-  products: []
+  products: [],
+  isLoading: false
 });
 
 export const getters = {
   products(state) {
     return state.products;
+  },
+  isLoading(state) {
+    return state.isLoading;
   }
 };
 
 export const mutations = {
   SET_CART(state, products) {
     state.products = products;
+  },
+  SET_LOADING(state, isLoading) {
+    state.isLoading = isLoading;
   }
 };
 
 export const actions = {
-  async addToCart({ dispatch }, data) {
+  addToCart({ dispatch }, data) {
     const cartId = window.localStorage.getItem('cartId');
     if (cartId) dispatch('addCartItem', data);
     else dispatch('createCart', data);
   },
-  async createCart({ commit }, createData) {
-    const cart = await this.$axios.$post(
-      `/api/stores/${process.env.storeHash}/v3/carts`,
-      {
+  createCart({ commit }, createData) {
+    commit('SET_LOADING', true);
+    this.$axios
+      .$post(`/api/stores/${process.env.storeHash}/v3/carts`, {
         line_items: [
           { quantity: createData.quantity, product_id: createData.product_id }
         ]
-      }
-    );
-    const cartId = cart.data.id;
-    window.localStorage.setItem('cartId', cartId);
-    commit('SET_CART', productFilter(cart));
-    this.$toast.info('Successfully created cart!');
+      })
+      .then((response) => {
+        const cartId = response.data.id;
+        window.localStorage.setItem('cartId', cartId);
+        commit('SET_CART', productFilter(response));
+        this.$toast.info('Successfully created cart!');
+        commit('SET_LOADING', false);
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+      });
   },
-  async addCartItem({ commit }, addData) {
+  addCartItem({ commit }, addData) {
     const cartId = window.localStorage.getItem('cartId');
     const data = {
       line_items: [
         { quantity: addData.quantity, product_id: addData.product_id }
       ]
     };
-    const cart = await this.$axios.$post(
-      `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items`,
-      data
-    );
-    commit('SET_CART', productFilter(cart));
-    this.$toast.info('Successfully added a item to cart!');
+    commit('SET_LOADING', true);
+    this.$axios
+      .$post(
+        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items`,
+        data
+      )
+      .then((response) => {
+        commit('SET_LOADING', false);
+        commit('SET_CART', productFilter(response));
+        this.$toast.info('Successfully added a item to cart!');
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+      });
   },
-  async updateCartItem({ commit }, updateData) {
+  updateCartItem({ commit }, updateData) {
     const cartId = window.localStorage.getItem('cartId');
     const data = {
       line_item: {
@@ -76,22 +97,41 @@ export const actions = {
         variant_id: updateData.variant_id
       }
     };
-    const cart = await this.$axios.$put(
-      `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${updateData.item_id}`,
-      data
-    );
-    commit('SET_CART', productFilter(cart));
-    this.$toast.info('Successfully updated cart item!');
+    commit('SET_LOADING', true);
+    this.$axios
+      .$put(
+        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${updateData.item_id}`,
+        data
+      )
+      .then((response) => {
+        commit('SET_CART', productFilter(response));
+        this.$toast.info('Successfully updated cart item!');
+        commit('SET_LOADING', false);
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+      });
   },
-  async deleteCartItem({ dispatch }, itemId) {
+  deleteCartItem({ dispatch, commit }, itemId) {
     const cartId = window.localStorage.getItem('cartId');
-    await this.$axios.$delete(
-      `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${itemId}`
-    );
-    this.$toast.error('Successfully deleted a item from cart!');
+    commit('SET_LOADING', true);
+    this.$axios
+      .$delete(
+        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${itemId}`
+      )
+      .then((response) => {
+        const cart = productFilter(response);
+        this.$toast.info('Successfully deleted a item from cart');
+        commit('SET_LOADING', false);
+        commit('SET_CART', cart);
+        if (cart.length === 0) window.localStorage.removeItem('cartId');
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+      });
     dispatch('getCart');
   },
-  async getCart({ commit }) {
+  getCart({ commit }) {
     const cartId = window.localStorage.getItem('cartId');
     if (cartId)
       this.$axios
@@ -103,5 +143,16 @@ export const actions = {
           window.localStorage.removeItem('cartId');
           commit('SET_CART', productFilter(null));
         });
+  },
+  cartCheckout() {
+    const cartId = window.localStorage.getItem('cartId');
+    this.$axios
+      .$post(
+        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/redirect_urls`
+      )
+      .then((response) => {
+        const redirectUrl = getCartCheckoutRedirectUrl(response);
+        window.location.href = redirectUrl;
+      });
   }
 };

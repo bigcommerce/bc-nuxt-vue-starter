@@ -1,2 +1,8 @@
 @import 'variables';
 @import './vendor/toasted';
+
+.sf-loader {
+  &__overlay {
+    background: rgba($color: #ffffff, $alpha: 0.2) !important;
+  }
+}

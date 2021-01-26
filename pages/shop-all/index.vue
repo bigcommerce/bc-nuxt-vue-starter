@@ -1,5 +1,6 @@
 <template>
   <div v-if="category.products" id="category">
+    <Loader :loading="isLoading" />
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <h1 class="navbar__title">Shop All</h1>
@@ -37,10 +38,12 @@
 </template>
 <script>
 import { SfProductCard } from '@storefront-ui/vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import Loader from '~/components/Loader.vue';
 export default {
   components: {
-    SfProductCard
+    SfProductCard,
+    Loader
   },
   layout: 'Default',
   async asyncData({ $queries, $axios }) {
@@ -54,6 +57,9 @@ export default {
     return {
       category: {}
     };
+  },
+  computed: {
+    ...mapGetters('carts', ['isLoading'])
   },
   methods: {
     ...mapActions({

@@ -1,8 +1,9 @@
-import { setUser, getUser, removeUserAndCookie } from '~/helpers/auth';
+import { setUser, getUser, removeUserAndCookie } from '~/utils/auth';
 
 export const state = () => ({
   customer: null,
-  loggedIn: false
+  loggedIn: false,
+  isLoading: false
 });
 
 export const getters = {
@@ -11,6 +12,9 @@ export const getters = {
   },
   loggedIn(state) {
     return state.loggedIn;
+  },
+  isLoading(state) {
+    return state.isLoading;
   }
 };
 
@@ -20,24 +24,45 @@ export const mutations = {
   },
   SET_LOGGEDIN(state, loggedIn) {
     state.loggedIn = loggedIn;
+  },
+  SET_LOADING(state, isLoading) {
+    state.isLoading = isLoading;
   }
 };
 
 export const actions = {
-  async login({ dispatch }, variables) {
-    await this.$axios.post('/graphql', {
-      query: this.$queries.customerLogin(),
-      variables
-    });
+  login({ dispatch, commit }, variables) {
+    commit('SET_LOADING', true);
+    this.$axios
+      .post('/graphql', {
+        query: this.$queries.customerLogin(),
+        variables
+      })
+      .then(() => {
+        this.$toast.info('Successfully logged in!.');
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+        this.$toast.error('Invalide credentials');
+      });
     dispatch('getCustomer');
   },
-  async getCustomer({ commit, dispatch }) {
-    const result = await this.$axios.post('/graphql', {
-      query: this.$queries.getCustomer()
-    });
-    setUser(JSON.stringify(result.data.data.customer));
-    commit('SET_CUSTOMER', result.data.data.customer);
-    dispatch('isLoggedIn');
+  getCustomer({ commit, dispatch }) {
+    this.$axios
+      .post('/graphql', {
+        query: this.$queries.getCustomer()
+      })
+      .then((response) => {
+        const user = setUser(response.data.data.customer);
+        commit('SET_LOADING', false);
+        console.log(response);
+        commit('SET_CUSTOMER', user);
+        dispatch('isLoggedIn');
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+        this.$toast.error('Can not get customer info');
+      });
   },
   async logOut({ commit }) {
     removeUserAndCookie();

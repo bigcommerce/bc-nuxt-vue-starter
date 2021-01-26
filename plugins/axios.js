@@ -1,3 +1,5 @@
+import { checkApiAccessPermission } from '~/utils/permission';
+
 export default function (context) {
   const {
     $axios,
@@ -15,6 +17,11 @@ export default function (context) {
       config.headers.Authorization = `Bearer ${process.env.storeFrontApiToken}`;
       config.headers['Content-Type'] = 'application/json';
     } else {
+      const permissionDenied = checkApiAccessPermission(
+        config.url,
+        config.method
+      );
+      if (permissionDenied) throw permissionDenied;
       config.headers['Content-Type'] = 'application/json';
       config.headers.Accept = 'application/json';
       config.headers['X-Auth-Token'] = `${process.env.apiToken}`;
@@ -27,8 +34,6 @@ export default function (context) {
       $toast.error('Token is expired or incorrect.');
     } else if (code === 403) {
       $toast.error('You do not have permission to do that.');
-    } else if (code === 404) {
-      $toast.error('You do not have data.');
     } else {
       const errorMessage =
         error?.response?.data?.error ??
