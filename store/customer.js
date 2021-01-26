@@ -1,4 +1,4 @@
-import { setUser, getUser, removeUserAndCookie } from '~/helpers/auth';
+import { setUser, getUser, removeUserAndCookie } from '~/utils/auth';
 
 export const state = () => ({
   customer: null,

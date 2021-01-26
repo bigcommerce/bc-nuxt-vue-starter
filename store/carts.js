@@ -1,4 +1,4 @@
-import { getCartCheckoutRedirectUrl } from '~/helpers/auth';
+import { getCartCheckoutRedirectUrl } from '~/utils/auth';
 const productFilter = (cart) => {
   return cart
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -64,7 +64,6 @@ export const actions = {
       })
       .catch(() => {
         commit('SET_LOADING', false);
-        this.$toast.error('Can not create cart');
       });
   },
   addCartItem({ commit }, addData) {
@@ -87,7 +86,6 @@ export const actions = {
       })
       .catch(() => {
         commit('SET_LOADING', false);
-        this.$toast.error('Can not add this item to cart');
       });
   },
   updateCartItem({ commit }, updateData) {
@@ -112,7 +110,6 @@ export const actions = {
       })
       .catch(() => {
         commit('SET_LOADING', false);
-        this.$toast.error('Can not update this item on cart');
       });
   },
   deleteCartItem({ dispatch, commit }, itemId) {
@@ -130,7 +127,6 @@ export const actions = {
         if (cart.length === 0) window.localStorage.removeItem('cartId');
       })
       .catch(() => {
-        this.$toast.error('Can not delete the cart');
         commit('SET_LOADING', false);
       });
     dispatch('getCart');
@@ -157,9 +153,6 @@ export const actions = {
       .then((response) => {
         const redirectUrl = getCartCheckoutRedirectUrl(response);
         window.location.href = redirectUrl;
-      })
-      .catch(() => {
-        this.$toast.error('You can not checkout this cart');
       });
   }
 };
