@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 const { v4: uuidv4 } = require('uuid');
 
 export const setUser = (user) => {
@@ -64,3 +65,13 @@ export const getCartCheckoutRedirectUrl = (response) => {
     return loginUrl;
   }
 };
+
+export const customerApi = axios.create({
+  baseURL: `${process.env.baseUrl}/graphql`,
+  headers: {
+    'Content-Type': 'application/json',
+    accept: 'application/json',
+    authorization: 'Bearer ' + process.env.storeFrontApiToken
+  },
+  withCredentials: true
+});
