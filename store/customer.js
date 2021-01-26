@@ -1,9 +1,4 @@
-import {
-  setUser,
-  getUser,
-  removeUserAndCookie,
-  customerApi
-} from '~/utils/auth';
+import { setUser, getUser, removeUserAndCookie } from '~/utils/auth';
 
 export const state = () => ({
   customer: null,
@@ -38,8 +33,8 @@ export const mutations = {
 export const actions = {
   login({ dispatch, commit }, variables) {
     commit('SET_LOADING', true);
-    customerApi
-      .post(null, {
+    this.$axios
+      .post('/graphql', {
         query: this.$queries.customerLogin(),
         variables
       })
@@ -52,12 +47,11 @@ export const actions = {
       });
   },
   getCustomer({ commit, dispatch }) {
-    customerApi
-      .post(null, {
+    this.$axios
+      .post('/graphql', {
         query: this.$queries.getCustomer()
       })
       .then((response) => {
-        console.log(response);
         const user = setUser(response.data.data.customer);
         commit('SET_LOADING', false);
         commit('SET_CUSTOMER', user);
