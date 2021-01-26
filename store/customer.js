@@ -44,13 +44,12 @@ export const actions = {
         variables
       })
       .then(() => {
-        this.$toast.info('Successfully logged in!.');
+        dispatch('getCustomer');
       })
       .catch(() => {
         commit('SET_LOADING', false);
         this.$toast.error('Invalide credentials');
       });
-    dispatch('getCustomer');
   },
   getCustomer({ commit, dispatch }) {
     customerApi
@@ -58,9 +57,9 @@ export const actions = {
         query: this.$queries.getCustomer()
       })
       .then((response) => {
+        console.log(response);
         const user = setUser(response.data.data.customer);
         commit('SET_LOADING', false);
-        console.log(response);
         commit('SET_CUSTOMER', user);
         dispatch('isLoggedIn');
       })
