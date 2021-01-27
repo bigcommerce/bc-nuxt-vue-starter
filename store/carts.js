@@ -56,6 +56,7 @@ export const actions = {
     commit('SET_LOADING', true);
     this.$axios
       .$post(`/api/stores/${process.env.storeHash}/v3/carts`, {
+        customer_id: 1,
         line_items: [
           { quantity: createData.quantity, product_id: createData.product_id }
         ]
