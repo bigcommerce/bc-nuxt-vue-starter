@@ -1,5 +1,6 @@
 const ACCESSIBLE_API_ENDPOINTS = [
   'POST_carts',
+  'PUT_carts',
   'GET_carts',
   'POST_carts/items',
   'GET_carts/items',

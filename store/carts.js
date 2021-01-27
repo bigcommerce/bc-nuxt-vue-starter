@@ -1,4 +1,8 @@
-import { getCartCheckoutRedirectUrl } from '~/utils/auth';
+import {
+  getCartCheckoutRedirectUrl,
+  getSecuredData,
+  getUser
+} from '~/utils/auth';
 const productFilter = (cart) => {
   return cart
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -47,6 +51,7 @@ export const actions = {
     if (cartId) dispatch('addCartItem', data);
     else dispatch('createCart', data);
   },
+
   createCart({ commit }, createData) {
     commit('SET_LOADING', true);
     this.$axios
@@ -66,6 +71,7 @@ export const actions = {
         commit('SET_LOADING', false);
       });
   },
+
   addCartItem({ commit }, addData) {
     const cartId = window.localStorage.getItem('cartId');
     const data = {
@@ -88,6 +94,7 @@ export const actions = {
         commit('SET_LOADING', false);
       });
   },
+
   updateCartItem({ commit }, updateData) {
     const cartId = window.localStorage.getItem('cartId');
     const data = {
@@ -112,6 +119,7 @@ export const actions = {
         commit('SET_LOADING', false);
       });
   },
+
   deleteCartItem({ dispatch, commit }, itemId) {
     const cartId = window.localStorage.getItem('cartId');
     commit('SET_LOADING', true);
@@ -121,6 +129,7 @@ export const actions = {
       )
       .then((response) => {
         const cart = productFilter(response);
+        console.log(cart);
         this.$toast.info('Successfully deleted a item from cart');
         commit('SET_LOADING', false);
         commit('SET_CART', cart);
@@ -131,6 +140,7 @@ export const actions = {
       });
     dispatch('getCart');
   },
+
   getCart({ commit }) {
     const cartId = window.localStorage.getItem('cartId');
     if (cartId)
@@ -144,15 +154,22 @@ export const actions = {
           commit('SET_CART', productFilter(null));
         });
   },
-  cartCheckout() {
+
+  async cartCheckout() {
     const cartId = window.localStorage.getItem('cartId');
-    this.$axios
-      .$post(
-        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/redirect_urls`
-      )
-      .then((response) => {
-        const redirectUrl = getCartCheckoutRedirectUrl(response);
-        window.location.href = redirectUrl;
-      });
+    const user = getUser();
+    let secData = null;
+    if (user) secData = getSecuredData(user.secureData);
+    const data = {
+      customer_id: secData ? secData.id : 0
+    };
+    const response = await this.$axios.$put(
+      `/api/stores/${process.env.storeHash}/v3/carts/${cartId}?include=redirect_urls`,
+      data
+    );
+    debugger;
+    window.location = getCartCheckoutRedirectUrl(
+      response.data.redirect_urls.checkout_url
+    );
   }
 };

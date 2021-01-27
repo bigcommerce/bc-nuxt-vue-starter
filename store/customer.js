@@ -34,7 +34,7 @@ export const actions = {
   login({ dispatch, commit }, variables) {
     commit('SET_LOADING', true);
     this.$axios
-      .post('/graphql', {
+      .$post('/graphql', {
         query: this.$queries.customerLogin(),
         variables
       })
@@ -48,11 +48,11 @@ export const actions = {
   },
   getCustomer({ commit, dispatch }) {
     this.$axios
-      .post('/graphql', {
+      .$post('/graphql', {
         query: this.$queries.getCustomer()
       })
       .then((response) => {
-        const user = setUser(response.data.data.customer);
+        const user = setUser(response.data.customer);
         commit('SET_LOADING', false);
         commit('SET_CUSTOMER', user);
         dispatch('isLoggedIn');

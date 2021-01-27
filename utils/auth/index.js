@@ -19,27 +19,29 @@ export const setUser = (user) => {
   window.localStorage.setItem('bigcommerceCustomer', JSON.stringify(user));
   return user;
 };
+export const getUser = () => {
+  const user = window.localStorage.getItem('bigcommerceCustomer');
+  if (typeof window !== 'undefined' && user && user !== 'null') {
+    return JSON.parse(user);
+  }
+  return null;
+};
 
-export const getUser = () =>
-  typeof window !== 'undefined' &&
-  window.localStorage.getItem('bigcommerceCustomer')
-    ? JSON.parse(window.localStorage.getItem('bigcommerceCustomer'))
-    : null;
+export const getSecuredData = (secureData) => {
+  const data = jwt.verify(secureData, process.env.jwtSecret);
+  return data;
+};
 
 export const removeUserAndCookie = () => {
-  window.document.cookie = 'SHOP_TOKEN=null';
   window.localStorage.removeItem('bigcommerceCustomer');
 };
 
-export const getCartCheckoutRedirectUrl = (response) => {
+export const getCartCheckoutRedirectUrl = (url) => {
   const user = getUser();
   if (!user || typeof user?.secureData === 'undefined') {
-    return response.data.checkout_url;
+    return url;
   } else {
-    const loggedInCustomerData = jwt.verify(
-      user.secureData,
-      process.env.jwtSecret
-    );
+    const loggedInCustomerData = getSecuredData(user.secureData);
     const dateCreated = Math.round(new Date().getTime() / 1000);
     const payload = {
       iss: process.env.apiClientId,
@@ -50,10 +52,7 @@ export const getCartCheckoutRedirectUrl = (response) => {
       customer_id: loggedInCustomerData.id,
       // The redirect param is base64 encoded to simplify transfering the url within a GET request,
       // so we need to convert it back into a string here
-      redirect_to: Buffer.from(
-        btoa(response.data.checkout_url),
-        'base64'
-      ).toString()
+      redirect_to: Buffer.from(btoa(url), 'base64').toString()
     };
 
     // The JWT token must be signed by the BC API Secret
