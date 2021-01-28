@@ -169,8 +169,15 @@ export const actions = {
   async cartCheckout({ state }) {
     const user = getUser();
     let url = null;
-    if (user) url = getCartCheckoutRedirectUrl(state.redirectUrls.checkout_url);
-    else url = state.redirectUrls.checkout_url;
+    if (user) {
+      const res = await this.$axios.$get(
+        `/api/stores/${process.env.storeHash}/v2/time`
+      );
+      url = getCartCheckoutRedirectUrl(
+        state.redirectUrls.checkout_url,
+        res.time
+      );
+    } else url = state.redirectUrls.checkout_url;
     window.location = url;
   }
 };

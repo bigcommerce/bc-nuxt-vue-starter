@@ -36,16 +36,16 @@ export const removeUserAndCookie = () => {
   window.localStorage.removeItem('bigcommerceCustomer');
 };
 
-export const getCartCheckoutRedirectUrl = (url) => {
+export const getCartCheckoutRedirectUrl = (url, time) => {
   const user = getUser();
   if (!user || typeof user?.secureData === 'undefined') {
     return url;
   } else {
     const loggedInCustomerData = getSecuredData(user.secureData);
-    const dateCreated = Math.round(new Date().getTime() / 1000);
+    // const dateCreated = Math.round(new Date().getTime() / 1000);
     const payload = {
       iss: process.env.apiClientId,
-      iat: dateCreated,
+      iat: time,
       jti: uuidv4(),
       operation: 'customer_login',
       store_hash: process.env.storeHash,
