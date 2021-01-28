@@ -33,18 +33,19 @@ export const mutations = {
 export const actions = {
   login({ dispatch, commit }, variables) {
     commit('SET_LOADING', true);
-    this.$axios
-      .$post('/graphql', {
-        query: this.$queries.customerLogin(),
-        variables
-      })
-      .then(() => {
-        dispatch('getCustomer');
-      })
-      .catch(() => {
-        commit('SET_LOADING', false);
-        this.$toast.error('Invalide credentials');
-      });
+    // this.$axios
+    //   .$post('/graphql', {
+    //     query: this.$queries.customerLogin(),
+    //     variables
+    //   })
+    //   .then(() => {
+    //     dispatch('getCustomer');
+    //   })
+    //   .catch(() => {
+    //     commit('SET_LOADING', false);
+    //     this.$toast.error('Invalide credentials');
+    //   });
+    dispatch('getCustomer');
   },
   getCustomer({ commit, dispatch }) {
     this.$axios

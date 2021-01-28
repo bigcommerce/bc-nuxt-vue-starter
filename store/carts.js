@@ -11,8 +11,8 @@ const productFilter = (cart) => {
         price: { regular: item.sale_price },
         configuration: [
           /* { name: 'Size', value: 'XS' },
-    { name: 'Color', value: 'White' } */
-          // Example configuration
+            { name: 'Color', value: 'White' }
+            Example configuration */
         ],
         qty: item.quantity
       }))
@@ -56,14 +56,13 @@ export const actions = {
     else dispatch('createCart', data);
   },
 
-  createCart({ commit }, { quantity, product_id }) {
+  createCart({ commit }, createData) {
     commit('SET_LOADING', true);
+    const data = { line_items: [{ ...createData }] };
     this.$axios
       .$post(
         `/api/stores/${process.env.storeHash}/v3/carts?include=redirect_urls`,
-        {
-          line_items: [{ quantity, product_id }]
-        }
+        data
       )
       .then((response) => {
         const cartId = response.data.id;
@@ -78,11 +77,9 @@ export const actions = {
       });
   },
 
-  addCartItem({ commit }, { quantity, product_id }) {
+  addCartItem({ commit }, addData) {
     const cartId = window.localStorage.getItem('cartId');
-    const data = {
-      line_items: [{ quantity, product_id }]
-    };
+    const data = { line_items: [{ ...addData }] };
     commit('SET_LOADING', true);
     this.$axios
       .$post(
@@ -100,15 +97,9 @@ export const actions = {
       });
   },
 
-  updateCartItem({ commit }, { quantity, product_id, variant_id, item_id }) {
+  updateCartItem({ commit }, { updateData, item_id }) {
     const cartId = window.localStorage.getItem('cartId');
-    const data = {
-      line_item: {
-        quantity,
-        product_id,
-        variant_id
-      }
-    };
+    const data = { line_item: { ...updateData } };
     commit('SET_LOADING', true);
     this.$axios
       .$put(
@@ -168,16 +159,16 @@ export const actions = {
 
   async cartCheckout({ state }) {
     const user = getUser();
-    let url = null;
     if (user) {
-      const res = await this.$axios.$get(
-        `/api/stores/${process.env.storeHash}/v2/time`
-      );
-      url = getCartCheckoutRedirectUrl(
-        state.redirectUrls.checkout_url,
-        res.time
-      );
-    } else url = state.redirectUrls.checkout_url;
-    window.location = url;
+      this.$axios
+        .$get(`/api/stores/${process.env.storeHash}/v2/time`)
+        .then((res) => {
+          const url = getCartCheckoutRedirectUrl(
+            state.redirectUrls.checkout_url,
+            res.time
+          );
+          window.location = url;
+        });
+    } else window.location = state.redirectUrls.checkout_url;
   }
 };

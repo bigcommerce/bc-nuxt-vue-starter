@@ -6,16 +6,19 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_carts/items',
   'PUT_carts/items',
   'DELETE_carts/items',
-  'POST_pricing/products'
+  'POST_pricing/products',
+  'GET_time'
 ];
 
 export const checkApiAccessPermission = (url, method) => {
   let prefix = '';
   if (url.includes('carts')) {
+    prefix = 'carts';
     if (url.includes('items')) prefix = 'carts/items';
-    else prefix = 'carts';
-  } else if (url.includes('pricing') && url.includes('pricing')) {
+  } else if (url.includes('pricing') && url.includes('products')) {
     prefix = 'pricing/products';
+  } else if (url.includes('time')) {
+    prefix = 'time';
   }
   const queryString = `${method.toUpperCase()}_${prefix}`;
   if (ACCESSIBLE_API_ENDPOINTS.includes(queryString)) return null;

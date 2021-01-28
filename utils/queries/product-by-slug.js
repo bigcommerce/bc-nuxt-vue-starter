@@ -7,6 +7,14 @@ export const productBySlug = (params) => {
           ... on Product {
             id
             entityId
+            variants {
+              edges {
+                node {
+                  id
+                  entityId
+                }
+              }
+            }
             name
             description
             addToCartUrl

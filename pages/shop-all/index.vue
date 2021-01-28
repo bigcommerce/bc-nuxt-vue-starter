@@ -66,10 +66,13 @@ export default {
       addToCart: 'carts/addToCart'
     }),
     addCart(product) {
-      this.addToCart({
+      const variants = product.node.variants.edges;
+      const addData = {
         quantity: 1,
         product_id: product.node.entityId
-      });
+      };
+      if (variants.length > 0) addData.variant_id = variants[0].node.entityId;
+      this.addToCart(addData);
     }
   }
 };

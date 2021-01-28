@@ -1,4 +1,4 @@
-// import { checkApiAccessPermission } from '~/utils/permission';
+import { checkApiAccessPermission } from '~/utils/permission';
 
 export default function (context) {
   const {
@@ -17,11 +17,11 @@ export default function (context) {
       config.headers.Authorization = `Bearer ${process.env.storeFrontApiToken}`;
       config.headers['Content-Type'] = 'application/json';
     } else {
-      // const permissionDenied = checkApiAccessPermission(
-      //   config.url,
-      //   config.method
-      // );
-      // if (permissionDenied) throw permissionDenied;
+      const permissionDenied = checkApiAccessPermission(
+        config.url,
+        config.method
+      );
+      if (permissionDenied) throw permissionDenied;
       config.headers['Content-Type'] = 'application/json';
       config.headers.Accept = 'application/json';
       config.headers['X-Auth-Token'] = `${process.env.apiToken}`;
