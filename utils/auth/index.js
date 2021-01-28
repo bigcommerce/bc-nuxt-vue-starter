@@ -50,9 +50,7 @@ export const getCartCheckoutRedirectUrl = (url) => {
       operation: 'customer_login',
       store_hash: process.env.storeHash,
       customer_id: loggedInCustomerData.id,
-      // The redirect param is base64 encoded to simplify transfering the url within a GET request,
-      // so we need to convert it back into a string here
-      redirect_to: Buffer.from(btoa(url), 'base64').toString()
+      redirect_to: url
     };
 
     // The JWT token must be signed by the BC API Secret
