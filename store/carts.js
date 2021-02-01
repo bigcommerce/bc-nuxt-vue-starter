@@ -160,15 +160,9 @@ export const actions = {
   async cartCheckout({ state }) {
     const user = getUser();
     if (user) {
-      this.$axios
-        .$get(`/api/stores/${process.env.storeHash}/v2/time`)
-        .then((res) => {
-          const url = getCartCheckoutRedirectUrl(
-            state.redirectUrls.checkout_url,
-            res.time
-          );
-          window.location = url;
-        });
+      window.location = getCartCheckoutRedirectUrl(
+        state.redirectUrls.checkout_url
+      );
     } else window.location = state.redirectUrls.checkout_url;
   }
 };
