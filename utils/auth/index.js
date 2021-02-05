@@ -3,16 +3,38 @@ const { v4: uuidv4 } = require('uuid');
 
 export const setUser = (user) => {
   if (user) {
+    const {
+      id,
+      groupId,
+      email,
+      firstName,
+      lastName,
+      company,
+      notes,
+      phone,
+      taxExemptCategory,
+      addressCount,
+      attributeCount,
+      storeCredit
+    } = user;
     const secureData = jwt.sign(
       {
-        id: user.id,
-        groupId: user.groupId
+        id,
+        groupId
       },
       process.env.jwtSecret
     );
     user = {
-      email: user.email,
-      name: `${user.firstName} ${user.lastName}`,
+      email,
+      firstName,
+      lastName,
+      company,
+      notes,
+      phone,
+      taxExemptCategory,
+      addressCount: addressCount !== 0 ? addressCount : '',
+      attributeCount: attributeCount !== 0 ? attributeCount : '',
+      storeCredit: storeCredit[0],
       secureData
     };
   }

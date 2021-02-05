@@ -7,6 +7,16 @@ export const getCustomer = () => {
         email
         id: entityId
         groupId: customerGroupId
+        company
+        notes
+        phone
+        taxExemptCategory
+        addressCount
+        attributeCount
+        storeCredit {
+          currencyCode
+          value
+        }
       }
     }
   `;

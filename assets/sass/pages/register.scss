@@ -1,0 +1,20 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+
+#register-page {
+  .register-modal-header {
+    text-align: center;
+  }
+  .register-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .sf-button {
+      margin-top: 1rem;
+    }
+  }
+  .sf-input {
+    margin-top: 2rem !important;
+  }
+}

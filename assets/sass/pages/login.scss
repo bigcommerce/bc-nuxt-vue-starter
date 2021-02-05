@@ -2,19 +2,79 @@
 @import '@/assets/sass/_variables.scss';
 @import '@/assets/sass/_mixins.scss';
 
-#login {
+#login-page {
+  margin: 3rem auto 6rem;
+  max-width: 65rem;
   box-sizing: border-box;
-  @include for-desktop {
-    max-width: 600px;
-    margin: auto;
+
+  .page-header {
+    text-align: center;
   }
-  @media screen and (max-width: 1024px) {
-    width: 300px;
-    margin: auto;
-  }
-  & .login-form {
-    & .title {
-      margin-bottom: 10px;
+
+  .login-row {
+    margin: 0 auto;
+    max-width: 85rem;
+    width: 100%;
+
+    .login-form {
+      padding-left: .75rem;
+      padding-right: .75rem;
+      width: 100%;
+      float: left;
+      margin-top: 2rem;
+
+      @media (min-width: 801px)
+      {
+        padding-left: .75rem;
+        padding-right: .75rem;
+        width: 50%;
+        float: left;
+        margin-top: 5rem;
+      }
+    }
+
+    .new-customer-form {
+      padding-left: .75rem;
+      padding-right: .75rem;
+      width: 100%;
+      float: left;
+      margin-top: 3rem;
+
+      @media (min-width: 801px)
+      {
+        padding-left: .75rem;
+        padding-right: .75rem;
+        width: 50%;
+        float: left;
+      }
+
+      .panel {
+        position: relative;
+        .panel-header {
+          background-color: #e5e5e5;
+          margin: 0;
+          padding: 1rem 1rem 0;
+          .panel-title {
+            line-height: 1.5;
+            margin: 0;
+            font-size: 20px;
+          }
+        }
+        .panel-body {
+          margin-bottom: 1.5rem;
+          padding: 1rem 2rem 1.5rem;
+          background: #e5e5e5;
+          .new-customer-fact-list {
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+            font-size: 15px;
+            color: gray;
+            >li {
+              line-height: 20px;
+            }
+          }
+        }
+      }
     }
   }
 }
