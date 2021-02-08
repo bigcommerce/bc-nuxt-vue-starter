@@ -6,7 +6,8 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_carts/items',
   'PUT_carts/items',
   'DELETE_carts/items',
-  'POST_pricing/products'
+  'POST_pricing/products',
+  'POST_customers'
 ];
 
 export const checkApiAccessPermission = (url, method) => {
@@ -16,6 +17,8 @@ export const checkApiAccessPermission = (url, method) => {
     if (url.includes('items')) prefix = 'carts/items';
   } else if (url.includes('pricing') && url.includes('products')) {
     prefix = 'pricing/products';
+  } else if (url.includes('customers')) {
+    prefix = 'customers';
   }
   const queryString = `${method.toUpperCase()}_${prefix}`;
   if (ACCESSIBLE_API_ENDPOINTS.includes(queryString)) return null;

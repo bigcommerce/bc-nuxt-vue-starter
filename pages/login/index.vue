@@ -84,7 +84,7 @@ export default {
   computed: {
     ...mapGetters('customer', ['loggedIn', 'isLoading']),
     btnDisabled() {
-      return !(this.$v.email.required && this.$v.password.required);
+      return this.$v.$invalid;
     }
   },
   watch: {},
@@ -97,7 +97,7 @@ export default {
       checkLogin: 'customer/isLoggedIn'
     }),
     async handleLogin() {
-      await this.login({ email: this.emailValue, password: this.pwdValue });
+      await this.login({ email: this.email, password: this.password });
     }
   }
 };

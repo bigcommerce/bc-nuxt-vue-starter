@@ -62,6 +62,22 @@ export const actions = {
         this.$toast.error('Can not get customer info');
       });
   },
+  createCustomer({ commit }, data) {
+    commit('SET_LOADING', true);
+    this.$axios
+      .$post(`/api/stores/${process.env.storeHash}/v2/customers`, {
+        ...data
+      })
+      .then(() => {
+        commit('SET_LOADING', false);
+        this.$toast.info('Successfully registered.');
+        this.$router.push('/login');
+      })
+      .catch(() => {
+        this.$toast.error('Customer create error.');
+        commit('SET_LOADING', false);
+      });
+  },
   async logOut({ commit }) {
     removeUserAndCookie();
     commit('SET_LOGGEDIN', false);

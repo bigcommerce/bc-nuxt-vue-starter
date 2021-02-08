@@ -1,5 +1,6 @@
 <template>
   <div id="register-page">
+    <Loader :loading="isLoading" />
     <SfModal title="Customer Register" visible cross overlay>
       <h1 class="register-modal-header">Register</h1>
       <SfInput
@@ -79,13 +80,17 @@
 <script>
 import { SfModal, SfInput, SfButton } from '@storefront-ui/vue';
 import { required, email, sameAs, minLength } from 'vuelidate/lib/validators';
+import { mapGetters, mapActions } from 'vuex';
+import Loader from '~/components/Loader.vue';
 import { passwordRegexValidate } from '~/utils/validation';
 
 export default {
+  name: 'RegisterPage',
   components: {
     SfModal,
     SfInput,
-    SfButton
+    SfButton,
+    Loader
   },
   layout: 'Default',
   data() {
@@ -123,20 +128,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('customer', ['isLoading']),
     btnDisabled() {
-      const v = this.$v;
-      return (
-        v.firstName.required &&
-        v.lastName.required &&
-        v.email.required &&
-        v.email.email &&
-        v.phone.required &&
-        v.password.required &&
-        v.password.minLength &&
-        this.pwdValidate(this.password) &&
-        v.cpassword.required &&
-        v.cpassword.sameAsPassword
-      );
+      return !this.$v.$invalid;
     }
   },
   watch: {
@@ -154,10 +148,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      createCustomer: 'customer/createCustomer'
+    }),
     pwdValidate(val) {
       return passwordRegexValidate(val);
     },
-    handleCreateCustomer() {}
+    handleCreateCustomer() {
+      this.createCustomer({
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        phone: this.phone,
+        _authentication: {
+          password: this.password,
+          password_confirmation: this.password
+        }
+      });
+    }
   }
 };
 </script>
