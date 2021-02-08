@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 const { v4: uuidv4 } = require('uuid');
 
 export const setUser = (user) => {
@@ -84,3 +85,13 @@ export const getCartCheckoutRedirectUrl = (url) => {
     return loginUrl;
   }
 };
+
+export const bigCommerce = axios.create({
+  baseURL: `${process.env.baseUrl}`,
+  headers: {
+    'Content-Type': 'application/json',
+    accept: 'application/json',
+    authorization: 'Bearer ' + process.env.storeFrontApiToken
+  },
+  withCredentials: true
+});
