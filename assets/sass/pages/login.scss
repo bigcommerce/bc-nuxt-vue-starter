@@ -15,62 +15,56 @@
     margin: 0 auto;
     max-width: 85rem;
     width: 100%;
+    .customer-form {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: row;
 
-    .login-form {
-      padding-left: .75rem;
-      padding-right: .75rem;
-      width: 100%;
-      float: left;
-      margin-top: 2rem;
-
-      @media (min-width: 801px)
+      @media (max-width: 801px)
       {
-        padding-left: .75rem;
-        padding-right: .75rem;
-        width: 50%;
-        float: left;
-        margin-top: 5rem;
-      }
-    }
-
-    .new-customer-form {
-      padding-left: .75rem;
-      padding-right: .75rem;
-      width: 100%;
-      float: left;
-      margin-top: 3rem;
-
-      @media (min-width: 801px)
-      {
-        padding-left: .75rem;
-        padding-right: .75rem;
-        width: 50%;
-        float: left;
+        flex-direction: column;
       }
 
-      .panel {
-        position: relative;
-        .panel-header {
-          background-color: #e5e5e5;
-          margin: 0;
-          padding: 1rem 1rem 0;
-          .panel-title {
-            line-height: 1.5;
-            margin: 0;
-            font-size: 20px;
-          }
+      .login-form {
+        padding-left: .75rem;
+        padding-right: .75rem;
+        width: 100%;
+
+        @media (max-width: 801px)
+        {
+          margin-bottom: 1rem;
         }
-        .panel-body {
-          margin-bottom: 1.5rem;
-          padding: 1rem 2rem 1.5rem;
-          background: #e5e5e5;
-          .new-customer-fact-list {
-            margin-left: 1rem;
-            margin-bottom: 1rem;
-            font-size: 15px;
-            color: gray;
-            >li {
-              line-height: 20px;
+      }
+
+      .new-customer-form {
+        padding-left: .75rem;
+        padding-right: .75rem;
+        width: 100%;
+
+        .panel {
+          position: relative;
+          .panel-header {
+            background-color: #e5e5e5;
+            margin: 0;
+            padding: 1rem 1rem 0;
+            .panel-title {
+              line-height: 1.5;
+              margin: 0;
+              font-size: 20px;
+            }
+          }
+          .panel-body {
+            margin-bottom: 1.5rem;
+            padding: 1rem 2rem 1.5rem;
+            background: #e5e5e5;
+            .new-customer-fact-list {
+              margin-left: 1rem;
+              margin-bottom: 1rem;
+              font-size: 15px;
+              color: gray;
+              >li {
+                line-height: 20px;
+              }
             }
           }
         }
