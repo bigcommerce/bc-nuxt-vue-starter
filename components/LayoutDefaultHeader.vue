@@ -1,35 +1,30 @@
 <template>
   <SfHeader
+    :style="{ 'margin-bottom': '20px' }"
     title="BCVueNuxt"
-    @click:cart="handleClickCart"
-    @click:account="handleClickAccount"
+    class="sf-header--has-mobile-navigation sf-header--has-mobile-search"
+    :cart-icon="false"
+    :account-icon="false"
   >
     <template #navigation>
-      <SfHeaderNavigationItem v-for="item in menu" :key="item.link">
-        <template slot="desktop-navigation-item">
-          <SfLink
-            :link="item.link"
-            :style="{
-              outline: 'none',
-              display: 'inline-block',
-              'white-space': 'nowrap'
-            }"
-          >
-            {{ item.name }}
-          </SfLink>
-        </template>
-      </SfHeaderNavigationItem>
+      <SfHeaderNavigationItem
+        v-for="item in menu"
+        :key="item.link"
+        :label="item.name"
+        :link="item.link"
+        @click="handleClick"
+      />
     </template>
   </SfHeader>
 </template>
 
 <script>
-import { SfHeader, SfLink } from '@storefront-ui/vue';
+import { SfHeader } from '@storefront-ui/vue';
+import { menu } from '~/constants';
 export default {
   name: 'Home',
   components: {
-    SfHeader,
-    SfLink
+    SfHeader
   },
   props: {
     menu: {
@@ -40,11 +35,12 @@ export default {
     }
   },
   methods: {
-    handleClickCart() {
-      this.$router.push({ name: 'cart' });
-    },
-    handleClickAccount() {
-      this.$router.push({ name: 'login' });
+    handleClick(e) {
+      const menuItem = e.target.getAttribute('data-testid');
+      if (menuItem) {
+        const route = menu.find((item) => item.name === menuItem).link;
+        this.$router.push(route);
+      }
     }
   }
 };

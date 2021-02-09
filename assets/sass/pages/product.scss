@@ -7,6 +7,7 @@
   @include for-desktop {
     max-width: 1240px;
     margin: auto;
+    padding: 1rem;
   }
 }
 .banner-application {
@@ -80,18 +81,18 @@
   }
 }
 .product {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   @include for-desktop {
-    display: flex;
+    flex-direction: row;
+    padding: 2rem;
   }
-  &__gallery,
-  &__description {
-    flex: 1;
+  &__gallery {
+    padding: 2rem;
   }
   &__description {
-    padding: 0 var(--spacer-xl);
-    @include for-desktop {
-      margin-left: calc(var(--spacer-xl) * 5);
-    }
+    padding: 2rem;
   }
 }
 .product-card {

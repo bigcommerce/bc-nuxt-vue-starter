@@ -9,6 +9,7 @@
       <SfImage
         class="image"
         :src="require('../../static/assets/not-found.svg')"
+        alt=""
       />
       <SfHeading
         title="Page not found"
@@ -45,6 +46,7 @@
               :width="590"
               :height="700"
               class="desktop-only"
+              alt=""
             />
           </div>
         </div>
@@ -239,7 +241,8 @@ export default {
         return {
           mobile: { url: t.node.mobile },
           desktop: { url: t.node.desktop },
-          big: { url: t.node.big }
+          big: { url: t.node.big },
+          alt: ''
         };
       });
 

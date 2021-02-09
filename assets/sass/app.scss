@@ -1,8 +1,25 @@
 @import 'variables';
 @import './vendor/toasted';
+@import './mixins';
 
 .sf-loader {
   &__overlay {
     background: rgba($color: #ffffff, $alpha: 0.2) !important;
+  }
+}
+
+.images-grid__col {
+  img {
+    width: 100% !important;
+  }
+}
+
+.sf-header__navigation {
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  white-space: nowrap;
+  @include for-desktop {
+    flex-direction: row;
   }
 }

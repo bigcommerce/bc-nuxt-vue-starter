@@ -121,10 +121,11 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
   &__product-card {
     flex: 0 0 50%;
-    padding: var(--spacer);
+    padding: var(--spacer-lg  );
     @include for-desktop {
       flex: 0 0 25%;
       padding: var(--spacer-xl);
@@ -142,8 +143,8 @@
   padding-left: var(--spacer-xl);
   padding-right: var(--spacer-xl);
   @include for-desktop {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: var(--spacer-xl);
+    padding-right: var(--spacer-xl);
   }
 }
 .sidebar {
