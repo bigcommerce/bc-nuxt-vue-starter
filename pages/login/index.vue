@@ -1,84 +1,107 @@
 <template>
-  <div id="login">
+  <div id="login-page">
     <Loader :loading="isLoading" />
-    <div v-if="loggedIn" class="profile-form">
-      <div>User Name: {{ `${customer.name}` }}</div>
-      <div>User Email: {{ `${customer.email}` }}</div>
-      <SfButton @click="handleLogOut">Log Out</SfButton>
+    <div v-if="loggedIn">
+      <CustomerProfile />
     </div>
-    <div v-else class="login-form">
-      <h1 class="title">Log In</h1>
-      <SfInput
-        ref="email"
-        v-model="emailValue"
-        :type="'text'"
-        :label="'Email'"
-        :name="'email'"
-        :valid="emailValid"
-        :required="true"
-        :disabled="false"
-        :placeholder="'Input Email Address'"
-      />
-      <SfInput
-        v-model="pwdValue"
-        :type="'password'"
-        :label="'Password'"
-        :name="'password'"
-        :valid="pwdValid"
-        :disabled="false"
-        :placeholder="'Input Password'"
-      />
-      <SfButton :disabled="btnDisabled" @click="handleLogin">Log In</SfButton>
+    <div v-else class="login-row">
+      <h1 class="page-header">Log In</h1>
+      <div class="customer-form">
+        <div class="login-form">
+          <SfInput
+            ref="email"
+            v-model="email"
+            :type="'text'"
+            :label="'Email'"
+            :name="'email'"
+            :valid="$v.email.required"
+            :placeholder="'Input Email Address'"
+            :error-message="'Email is required'"
+          />
+          <SfInput
+            v-model="password"
+            :type="'password'"
+            :label="'Password'"
+            :name="'password'"
+            :valid="$v.password.required"
+            :placeholder="'Input Password'"
+            :error-message="'Password is required'"
+          />
+          <SfButton :disabled="btnDisabled" @click="handleLogin"
+            >Log In</SfButton
+          >
+        </div>
+        <div class="new-customer-form">
+          <div class="new-customer">
+            <div class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">New Customer?</h2>
+              </div>
+              <div class="panel-body">
+                <p class="new-customer-intro">
+                  Create an account with us and you'll be able to:
+                </p>
+                <ul class="new-customer-fact-list">
+                  <li>Check out faster</li>
+                  <li>Save multiple shipping addresses</li>
+                  <li>Access your order history</li>
+                  <li>Track new orders</li>
+                  <li>Save items to your Wish List</li>
+                </ul>
+                <SfButton link="/register">Create</SfButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { SfInput, SfButton } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
+import { required } from 'vuelidate/lib/validators';
 import Loader from '~/components/Loader.vue';
+import CustomerProfile from '~/components/CustomerProfile.vue';
 export default {
   components: {
     SfInput,
     SfButton,
-    Loader
+    Loader,
+    CustomerProfile
   },
   layout: 'Default',
   data() {
     return {
-      emailValue: '',
-      emailValid: false,
-      pwdValue: '',
-      pwdValid: false
+      email: '',
+      password: ''
     };
   },
-  computed: {
-    ...mapGetters('customer', ['loggedIn', 'customer', 'isLoading']),
-    btnDisabled() {
-      return !(this.emailValid && this.pwdValid);
-    }
-  },
-  watch: {
-    emailValue(val) {
-      val ? (this.emailValid = true) : (this.emailValid = false);
+  validations: {
+    email: {
+      required
     },
-    pwdValue(val) {
-      val ? (this.pwdValid = true) : (this.pwdValid = false);
+    password: {
+      required
     }
   },
+  computed: {
+    ...mapGetters('customer', ['loggedIn', 'isLoading']),
+    btnDisabled() {
+      return this.$v.$invalid;
+    }
+  },
+  watch: {},
   mounted() {
     this.checkLogin();
   },
   methods: {
     ...mapActions({
       login: 'customer/login',
-      checkLogin: 'customer/isLoggedIn',
-      logOut: 'customer/logOut'
+      checkLogin: 'customer/isLoggedIn'
     }),
     async handleLogin() {
-      await this.login({ email: this.emailValue, password: this.pwdValue });
-    },
-    handleLogOut() {
-      this.logOut();
+      await this.login({ email: this.email, password: this.password });
     }
   }
 };

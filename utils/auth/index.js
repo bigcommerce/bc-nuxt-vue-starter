@@ -1,47 +1,72 @@
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 const { v4: uuidv4 } = require('uuid');
 
 export const setUser = (user) => {
   if (user) {
+    const {
+      id,
+      groupId,
+      email,
+      firstName,
+      lastName,
+      company,
+      notes,
+      phone,
+      taxExemptCategory,
+      addressCount,
+      attributeCount,
+      storeCredit
+    } = user;
     const secureData = jwt.sign(
       {
-        id: user.id,
-        groupId: user.groupId
+        id,
+        groupId
       },
       process.env.jwtSecret
     );
     user = {
-      email: user.email,
-      name: `${user.firstName} ${user.lastName}`,
+      email,
+      firstName,
+      lastName,
+      company,
+      notes,
+      phone,
+      taxExemptCategory,
+      addressCount: addressCount !== 0 ? addressCount : '',
+      attributeCount: attributeCount !== 0 ? attributeCount : '',
+      storeCredit: storeCredit[0],
       secureData
     };
   }
   window.localStorage.setItem('bigcommerceCustomer', JSON.stringify(user));
   return user;
 };
+export const getUser = () => {
+  const user = window.localStorage.getItem('bigcommerceCustomer');
+  if (typeof window !== 'undefined' && user && user !== 'null') {
+    return JSON.parse(user);
+  }
+  return null;
+};
 
-export const getUser = () =>
-  typeof window !== 'undefined' &&
-  window.localStorage.getItem('bigcommerceCustomer')
-    ? JSON.parse(window.localStorage.getItem('bigcommerceCustomer'))
-    : null;
+export const getSecuredData = (secureData) => {
+  const data = jwt.verify(secureData, process.env.jwtSecret);
+  return data;
+};
 
 export const removeUserAndCookie = () => {
-  window.document.cookie = 'SHOP_TOKEN=null';
   window.localStorage.removeItem('bigcommerceCustomer');
 };
 
-export const getCartCheckoutRedirectUrl = (response) => {
+export const getCartCheckoutRedirectUrl = (url) => {
   const user = getUser();
   if (!user || typeof user?.secureData === 'undefined') {
-    return response.data.checkout_url;
+    return url;
   } else {
-    const loggedInCustomerData = jwt.verify(
-      user.secureData,
-      process.env.jwtSecret
-    );
+    const loggedInCustomerData = getSecuredData(user.secureData);
+    const dateCreated = Date.parse(new Date().toGMTString()) / 1000;
 
-    const dateCreated = Math.round(new Date().getTime() / 1000);
     const payload = {
       iss: process.env.apiClientId,
       iat: dateCreated,
@@ -49,9 +74,7 @@ export const getCartCheckoutRedirectUrl = (response) => {
       operation: 'customer_login',
       store_hash: process.env.storeHash,
       customer_id: loggedInCustomerData.id,
-      // The redirect param is base64 encoded to simplify transfering the url within a GET request,
-      // so we need to convert it back into a string here
-      redirect_to: Buffer.from(response.data.checkout_url, 'base64').toString()
+      redirect_to: url
     };
 
     // The JWT token must be signed by the BC API Secret
@@ -62,3 +85,13 @@ export const getCartCheckoutRedirectUrl = (response) => {
     return loginUrl;
   }
 };
+
+export const bigCommerce = axios.create({
+  baseURL: `${process.env.baseUrl}`,
+  headers: {
+    'Content-Type': 'application/json',
+    accept: 'application/json',
+    authorization: 'Bearer ' + process.env.storeFrontApiToken
+  },
+  withCredentials: true
+});

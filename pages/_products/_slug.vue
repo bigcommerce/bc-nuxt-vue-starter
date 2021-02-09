@@ -278,10 +278,13 @@ export default {
   },
   methods: {
     addCart() {
-      this.$store.dispatch('carts/addToCart', {
+      const variants = this.product.variants.edges;
+      const addData = {
         quantity: this.qty,
         product_id: this.product.entityId
-      });
+      };
+      if (variants.length > 0) addData.variant_id = variants[0].node.entityId;
+      this.$store.dispatch('carts/addToCart', addData);
     },
     buyNow(event) {
       window.location = this.product.addToCartUrl.replace('add', 'buy');

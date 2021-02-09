@@ -11,6 +11,14 @@ export const shopAll = () => {
             products {
               edges {
                 node {
+                  variants {
+                    edges {
+                      node {
+                        id
+                        entityId
+                      }
+                    }
+                  }
                   entityId
                   name
                   path

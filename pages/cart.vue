@@ -136,10 +136,12 @@ export default {
       updateCart(_e, value, product) {
         value
           ? this.updateCartItem({
-              quantity: value,
-              product_id: product.id,
-              item_id: product.itemId,
-              variant_id: product.variant_id
+              updateData: {
+                quantity: value,
+                product_id: product.id,
+                variant_id: product.variant_id
+              },
+              item_id: product.itemId
             })
           : this.deleteCartItem(product.itemId);
       }

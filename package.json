@@ -22,7 +22,7 @@
     "core-js": "^3.8.1",
     "jsonwebtoken": "^8.5.1",
     "nuxt": "^2.14.12",
-    "uppercamelcase": "^3.0.0"
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",

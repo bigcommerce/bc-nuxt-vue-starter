@@ -1,4 +1,9 @@
-import { setUser, getUser, removeUserAndCookie } from '~/utils/auth';
+import {
+  setUser,
+  getUser,
+  removeUserAndCookie,
+  bigCommerce
+} from '~/utils/auth';
 
 export const state = () => ({
   customer: null,
@@ -33,35 +38,49 @@ export const mutations = {
 export const actions = {
   login({ dispatch, commit }, variables) {
     commit('SET_LOADING', true);
-    this.$axios
+    bigCommerce
       .post('/graphql', {
         query: this.$queries.customerLogin(),
         variables
       })
       .then(() => {
-        this.$toast.info('Successfully logged in!.');
+        dispatch('getCustomer');
       })
       .catch(() => {
         commit('SET_LOADING', false);
         this.$toast.error('Invalide credentials');
       });
-    dispatch('getCustomer');
   },
   getCustomer({ commit, dispatch }) {
-    this.$axios
+    bigCommerce
       .post('/graphql', {
         query: this.$queries.getCustomer()
       })
       .then((response) => {
         const user = setUser(response.data.data.customer);
         commit('SET_LOADING', false);
-        console.log(response);
         commit('SET_CUSTOMER', user);
         dispatch('isLoggedIn');
       })
       .catch(() => {
         commit('SET_LOADING', false);
         this.$toast.error('Can not get customer info');
+      });
+  },
+  createCustomer({ commit }, data) {
+    commit('SET_LOADING', true);
+    this.$axios
+      .$post(`/api/stores/${process.env.storeHash}/v2/customers`, {
+        ...data
+      })
+      .then(() => {
+        commit('SET_LOADING', false);
+        this.$toast.info('Successfully registered.');
+        this.$router.push('/login');
+      })
+      .catch(() => {
+        this.$toast.error('Customer create error.');
+        commit('SET_LOADING', false);
       });
   },
   async logOut({ commit }) {
