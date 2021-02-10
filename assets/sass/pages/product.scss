@@ -82,17 +82,18 @@
 }
 .product {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   @include for-desktop {
     flex-direction: row;
-    padding: 2rem;
   }
-  &__gallery {
-    padding: 2rem;
+  flex-direction: column;
+  &__gallery,
+  &__description {
+    flex: 1;
   }
   &__description {
-    padding: 2rem;
+    padding: 0 var(--spacer-xl);
+    margin-top: 10rem;
   }
 }
 .product-card {
