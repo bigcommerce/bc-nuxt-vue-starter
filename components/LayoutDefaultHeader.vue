@@ -5,6 +5,7 @@
     class="sf-header--has-mobile-navigation sf-header--has-mobile-search"
     :cart-icon="false"
     :account-icon="false"
+    :wishlist-icon="false"
   >
     <template #navigation>
       <SfHeaderNavigationItem

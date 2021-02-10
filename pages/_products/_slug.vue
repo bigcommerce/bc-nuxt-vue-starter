@@ -39,6 +39,7 @@
             :image-width="375"
             :image-height="490"
             :images="product.imageList"
+            :current="1"
           />
           <div v-for="(image, index) in product.imageList" :key="index">
             <SfImage
@@ -241,7 +242,7 @@ export default {
         return {
           mobile: { url: t.node.mobile },
           desktop: { url: t.node.desktop },
-          big: { url: t.node.big },
+          zoom: { url: t.node.big },
           alt: ''
         };
       });
