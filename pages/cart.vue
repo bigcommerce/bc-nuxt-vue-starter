@@ -65,7 +65,11 @@
             shopping to fill it in.
           </p>
         </div>
-        <SfButton class="sf-button--full-width color-secondary">
+        <SfButton
+          style="width: 100%"
+          link="/shop-all"
+          class="sf-button--full-width color-secondary"
+        >
           Start shopping
         </SfButton>
       </div>
