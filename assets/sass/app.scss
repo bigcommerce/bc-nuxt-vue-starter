@@ -23,3 +23,9 @@
     flex-direction: row;
   }
 }
+
+#product .product .sf-image {
+  &:not(.sf-image-loaded) {
+    position: relative !important;
+  }
+}
