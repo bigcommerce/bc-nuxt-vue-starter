@@ -305,7 +305,7 @@ export default {
         quantity: this.qty,
         product_id: this.product.entityId
       };
-      if (this.product.sizes.length && this.product.colors.length) {
+      if (variants.length) {
         if (!this.selectedSize) {
           this.$toast.error('Please select size');
           return;
