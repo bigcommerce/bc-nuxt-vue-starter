@@ -10,7 +10,8 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore . --fix"
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore . --fix",
+    "create-token": "node ./utils/script/create-token.mjs --host_url"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.4",

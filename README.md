@@ -36,6 +36,10 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/storefront/api-token
   "expires_at": 2133443661,
   "allowed_cors_origins": ["http://localhost:3000"]
 }
+
+Or you can just run a CLI.
+$ npm run create-token {host_url}
+i.e -> npm run create-token http://localhost:3000
 ````
 
 If you're new to BigCommerce, that's ok! You can create a free developer sandbox store here: https://developer.bigcommerce.com/sandbox/vue
