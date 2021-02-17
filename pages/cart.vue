@@ -7,8 +7,8 @@
         <div class="collected-product-list">
           <transition-group name="fade" tag="div">
             <SfCollectedProduct
-              v-for="product in products"
-              :key="product.id"
+              v-for="(product, i) in products"
+              :key="'product' + i"
               :qty="product.qty"
               :image="product.image"
               :title="product.title"
@@ -21,7 +21,7 @@
                 <div class="collected-product__properties">
                   <SfProperty
                     v-for="(property, key) in product.configuration"
-                    :key="key"
+                    :key="'property' + key"
                     :name="property.name"
                     :value="property.value"
                   />
@@ -56,7 +56,7 @@
         <div class="empty-cart__banner">
           <img
             src="@storefront-ui/shared/icons/empty_cart.svg"
-            alt=""
+            alt="empty_cart"
             class="empty-cart__icon"
           />
           <h3 class="empty-cart__label">Your bag is empty</h3>

@@ -4,7 +4,7 @@
       <SfImage
         class="image"
         :src="require('../../static/assets/not-found.svg')"
-        alt=""
+        alt="not_found"
       />
     </div>
     <SfHeading
@@ -28,6 +28,7 @@
     </div>
   </div>
   <div v-else id="product">
+    <Loader :loading="isLoading" />
     <div>
       <SfBreadcrumbs
         class="breadcrumbs desktop-only"
@@ -168,12 +169,12 @@
             <img
               class="banner-application__download"
               src="/assets/storybook/Home/google.png"
-              alt=""
+              alt="google"
             />
             <img
               class="banner-application__download"
               src="/assets/storybook/Home/apple.png"
-              alt=""
+              alt="apple"
             />
           </div>
         </template>
@@ -199,6 +200,8 @@ import {
   SfImage,
   SfBanner
 } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
+import Loader from '~/components/Loader.vue';
 import { color } from '~/constants';
 export default {
   name: 'Product',
@@ -217,7 +220,8 @@ export default {
     SfSelect,
     SfProductOption,
     SfBreadcrumbs,
-    SfBanner
+    SfBanner,
+    Loader
   },
   async asyncData({ params, $queries, $axios }) {
     const result = await $axios.$post('/graphql', {
@@ -243,7 +247,7 @@ export default {
           mobile: { url: t.node.mobile },
           desktop: { url: t.node.desktop },
           big: { url: t.node.big },
-          alt: ''
+          alt: t.node.altText
         };
       });
       product.price = `$${product.prices?.price?.value.toFixed(2)}`;
@@ -290,6 +294,9 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapGetters('carts', ['isLoading'])
+  },
   methods: {
     /* eslint-disable array-callback-return */
     addToCart() {
@@ -298,8 +305,43 @@ export default {
         quantity: this.qty,
         product_id: this.product.entityId
       };
-      if (variants.length > 0) addData.variant_id = variants[0].node.entityId;
-      this.$store.dispatch('carts/addToCart', addData);
+      if (this.product.sizes.length && this.product.colors.length) {
+        if (!this.selectedSize) {
+          this.$toast.error('Please select size');
+          return;
+        }
+        if (!this.selectedColor) {
+          this.$toast.error('Please select color');
+          return;
+        }
+        if (this.selectedColor && this.selectedSize) {
+          const pairOptions = variants.map(({ node }) => ({
+            id: node?.entityId,
+            options: node?.options?.edges?.map(
+              ({ node }) => node?.values?.edges
+            )
+          }));
+          const selectedVariant = pairOptions.find(
+            ({ options }) =>
+              options.find((option) =>
+                option.find(({ node }) => node?.entityId === this.selectedColor)
+              ) &&
+              options.find((option) =>
+                option.find(
+                  ({ node }) => node?.entityId === parseInt(this.selectedSize)
+                )
+              )
+          );
+          if (selectedVariant) {
+            addData.variant_id = selectedVariant.id;
+            this.$store.dispatch('carts/addToCart', addData);
+          } else {
+            this.$toast.error(
+              'We do not have the product which matches to the options'
+            );
+          }
+        }
+      }
     },
     selectColor(colorIndex) {
       this.product.colors.map((el) => {

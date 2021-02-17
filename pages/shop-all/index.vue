@@ -1,6 +1,5 @@
 <template>
   <div v-if="category.products" id="category">
-    <Loader :loading="isLoading" />
     <div class="navbar section">
       <div class="navbar__aside desktop-only">
         <h1 class="navbar__title">Shop All</h1>
@@ -30,20 +29,26 @@
             :show-add-to-cart-button="true"
             class="products__product-card"
             @click:add-to-cart="addCart(product)"
-          />
+          >
+            <template #add-to-cart
+              ><SfButton
+                :link="'/products' + product.node.path"
+                class="products__choose-options"
+                >Choose Options</SfButton
+              ></template
+            >
+          </SfProductCard>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { SfProductCard } from '@storefront-ui/vue';
-import { mapActions, mapGetters } from 'vuex';
-import Loader from '~/components/Loader.vue';
+import { SfProductCard, SfButton } from '@storefront-ui/vue';
 export default {
   components: {
     SfProductCard,
-    Loader
+    SfButton
   },
   layout: 'Default',
   async asyncData({ $queries, $axios }) {
@@ -57,23 +62,6 @@ export default {
     return {
       category: {}
     };
-  },
-  computed: {
-    ...mapGetters('carts', ['isLoading'])
-  },
-  methods: {
-    ...mapActions({
-      addToCart: 'carts/addToCart'
-    }),
-    addCart(product) {
-      const variants = product.node.variants.edges;
-      const addData = {
-        quantity: 1,
-        product_id: product.node.entityId
-      };
-      if (variants.length > 0) addData.variant_id = variants[0].node.entityId;
-      this.addToCart(addData);
-    }
   }
 };
 </script>

@@ -138,6 +138,14 @@
       margin-top: var(--spacer-extra-big);
     }
   }
+  &__choose-options {
+    width: 100%;
+    font-size: 0.8rem;
+    border-radius: 1rem;
+    @include for-mobile {
+      display: none;
+    }
+  }
 }
 .section {
   padding-left: var(--spacer-xl);

@@ -57,28 +57,28 @@
         <SfImage
           class="images-grid__col"
           src="assets/storybook/Home/imageA.jpg"
-          alt=""
+          alt="imageA"
         >
           katherina_trn
         </SfImage>
         <SfImage
           class="images-grid__col"
           src="assets/storybook/Home/imageB.jpg"
-          alt=""
+          alt="imageB"
         >
           katherina_trn
         </SfImage>
         <SfImage
           class="images-grid__col"
           src="assets/storybook/Home/imageC.jpg"
-          alt=""
+          alt="imageC"
         >
           katherina_trn
         </SfImage>
         <SfImage
           class="images-grid__col"
           src="assets/storybook/Home/imageD.jpg"
-          alt=""
+          alt="imageD"
         >
           katherina_trn
         </SfImage>
@@ -101,12 +101,12 @@
           <img
             class="banner-application__download"
             src="assets/storybook/Home/google.png"
-            alt=""
+            alt="google"
           />
           <img
             class="banner-application__download"
             src="assets/storybook/Home/apple.png"
-            alt=""
+            alt="apple"
           />
         </div>
       </template>
