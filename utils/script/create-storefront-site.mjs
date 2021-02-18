@@ -3,14 +3,14 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 dotenv.config();
 
-const hostUrl = args.argv.host_url;
+const channelId = args.argv._[0];
+const siteUrl = args.argv._[1];
 axios
   .post(
-    `${process.env.BC_API_URL}/stores/${process.env.STORE_HASH}/v3/storefront/api-token`,
+    `${process.env.BC_API_URL}/stores/${process.env.STORE_HASH}/v3/channels/${channelId}/site`,
     {
-      channel_id: 1,
-      expires_at: 2133443661,
-      allowed_cors_origins: [hostUrl]
+      channel_id: channelId,
+      url: siteUrl
     },
     {
       headers: {
@@ -23,9 +23,9 @@ axios
     if (response.status === 200) {
       console.log(response.data.data);
     } else {
-      console.log('There was an issue in creating token');
+      console.log('There was an issue in creating site');
     }
   })
   .catch((error) => {
-    console.log('ERROR: ', error);
+    console.log('ERROR: ', error.response.data);
   });

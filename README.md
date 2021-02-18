@@ -27,6 +27,24 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 ## Requirements
 
+You will need a channel.
+
+````json
+POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/channels
+{
+  "is_listable_from_ui": false,
+  "is_visible": true,
+  "name": {channel_name},
+  "status": "active",
+  "type": "storefront",
+  "platform": "custom"
+}
+
+Or you can just run a CLI.
+$ npm run create-storefront-channel {channel_name}
+i.e -> npm run create-storefront-channel "mychannel"
+````
+
 You'll need a BigCommerce store and a token for our GraphQL Storefront API, which you can create in the API Account section of the control panel. Once you have your BC API credentials, here's a sample request to create a token:
 
 ````json
@@ -38,8 +56,38 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/storefront/api-token
 }
 
 Or you can just run a CLI.
-$ npm run create-token {host_url}
-i.e -> npm run create-token http://localhost:3000
+$ npm run create-storefront-token {channel_id} {host_url}
+channel_id - you will get this id from above command.
+i.e -> npm run create-storefront-token http://localhost:3000 123455
+````
+
+You will need a site.
+
+````json
+POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/channels/{{channelId}}/site
+{
+  "channel_id": 123456,
+  "url": "http://store.example.com"
+}
+
+Or you can just run a CLI.
+$ npm run create-storefront-site {channel_id} {site_url}
+i.e -> npm run create-storefront-site 123456 "http://store.example.com"
+````
+
+You will need a route.
+
+````json
+POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/sites/{{siteId}}/routes
+{
+  "type": "product",
+  "route": "/product/book",
+  "matching": "*"
+}
+
+Or you can just run a CLI.
+$ npm run create-storefront-route {site_id} {type} {route}
+i.e -> npm run create-storefront-route 123456 "product" "/product/book"
 ````
 
 If you're new to BigCommerce, that's ok! You can create a free developer sandbox store here: https://developer.bigcommerce.com/sandbox/vue
