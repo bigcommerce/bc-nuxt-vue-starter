@@ -88,6 +88,44 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/sites/{{siteId}}/route
 Or you can just run a CLI.
 $ npm run create-storefront-route {site_id} {type} {route}
 i.e -> npm run create-storefront-route 123456 "product" "/product/book"
+If you don't input these params, default routes will be added.
+[
+  {
+    "type": "cart",
+    "matching": "*",
+    "route": "/cart"
+  },
+  {
+    "type": "product",
+    "matching": "*",
+    "route": "/products/{slug}"
+  },
+  {
+    "type": "category",
+    "matching": "*",
+    "route": "/{slug}"
+  },
+  {
+    "type": "home",
+    "matching": "*",
+    "route": "/"
+  },
+  {
+    "type": "account_order_status",
+    "matching": "*",
+    "route": "/login?action=view_order_status"
+  },
+  {
+    "type": "create_account",
+    "matching": "*",
+    "route": "/register"
+  },
+  {
+    "type": "login",
+    "matching": "*",
+    "route": "/login"
+  }
+]
 ````
 
 If you're new to BigCommerce, that's ok! You can create a free developer sandbox store here: https://developer.bigcommerce.com/sandbox/vue
