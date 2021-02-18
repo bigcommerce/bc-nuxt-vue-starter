@@ -1,8 +1,8 @@
 <template>
   <div id="register-page">
     <Loader :loading="isLoading" />
-    <SfModal title="Customer Register" visible cross overlay>
-      <h1 class="register-modal-header">Register</h1>
+    <div class="register-form">
+      <h3 class="register-header">Register</h3>
       <SfInput
         ref="first_name"
         v-model="firstName"
@@ -74,11 +74,11 @@
           >or Log In To Your Account</SfButton
         >
       </div>
-    </SfModal>
+    </div>
   </div>
 </template>
 <script>
-import { SfModal, SfInput, SfButton } from '@storefront-ui/vue';
+import { SfInput, SfButton } from '@storefront-ui/vue';
 import { required, email, sameAs, minLength } from 'vuelidate/lib/validators';
 import { mapGetters, mapActions } from 'vuex';
 import Loader from '~/components/Loader.vue';
@@ -87,7 +87,6 @@ import { passwordRegexValidate } from '~/utils/validation';
 export default {
   name: 'RegisterPage',
   components: {
-    SfModal,
     SfInput,
     SfButton,
     Loader

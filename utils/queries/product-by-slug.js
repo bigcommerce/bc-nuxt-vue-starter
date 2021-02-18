@@ -12,6 +12,20 @@ export const productBySlug = (params) => {
                 node {
                   id
                   entityId
+                  options {
+                    edges {
+                      node {
+                        values {
+                          edges {
+                            node {
+                              entityId
+                              label
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -24,6 +38,7 @@ export const productBySlug = (params) => {
             images {
               edges {
                 node {
+                  altText
                   mobile: url(width: 400, height: 400)
                   desktop: url(width: 600, height: 600)
                   big: url(width: 1200, height: 1200)

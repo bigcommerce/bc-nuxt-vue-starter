@@ -60,26 +60,20 @@
     margin: var(--spacer-xl) 0;
   }
 }
-.images-grid {
-  max-width: 960px;
-  margin: auto;
-  &__row {
-    display: flex;
-    & + & {
-      margin-top: calc(var(--spacer-lg) / 2);
-      @include for-desktop {
-        margin-top: var(--spacer-lg);
-      }
-    }
-  }
+
+.images-grid{
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
   &__col {
-    margin: 0;
-    flex: 1;
-    & + & {
-      margin-left: calc(var(--spacer-lg) / 2);
-      @include for-desktop {
-        margin-left: var(--spacer-lg);
-      }
+    flex-basis: 45%;
+    padding: 1rem;
+
+    @include for-mobile {
+      padding-top: 1rem;
+      flex-basis: 100%;
     }
   }
 }

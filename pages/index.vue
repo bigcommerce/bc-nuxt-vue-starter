@@ -1,131 +1,117 @@
 <template>
-  <client-only>
-    <div id="home">
-      <SfHero class="section">
-        <SfHeroItem
-          v-for="(hero, i) in heroes"
-          :key="i"
-          :title="hero.title"
-          :subtitle="hero.subtitle"
-          :button-text="hero.buttonText"
-          :background="hero.background"
-          :image="hero.image"
-          :class="hero.className"
-        />
-      </SfHero>
-      <SfBannerGrid class="banners" :banner-grid="bannerGrid">
-        <template v-for="item in banners" #[item.slot]>
-          <SfBanner
-            :key="item.slot"
-            :title="item.title"
-            :subtitle="item.subtitle"
-            :description="item.description"
-            :button-text="item.buttonText"
-            :image="item.image"
-            :class="item.class"
-          />
-        </template>
-      </SfBannerGrid>
-      <SfCallToAction
-        title="Subscribe to Newsletters"
-        button-text="Subscribe"
-        description="Be aware of upcoming sales and events. Receive gifts and special offers!"
-        class="call-to-action-newsletter"
-        image="assets/storybook/Home/newsletter.jpg"
+  <div id="home">
+    <SfHero class="section">
+      <SfHeroItem
+        v-for="(hero, i) in heroes"
+        :key="i"
+        :title="hero.title"
+        :subtitle="hero.subtitle"
+        :button-text="hero.buttonText"
+        :background="hero.background"
+        :image="hero.image"
+        :class="hero.className"
       />
-      <SfSection title-heading="Best Sellers" class="section">
-        <SfCarousel class="product-carousel">
-          <SfCarouselItem v-for="(product, i) in products" :key="i">
-            <SfProductCard
-              :title="product.title"
-              :image="product.image"
-              :regular-price="product.price.regular"
-              :max-rating="product.rating.max"
-              :score-rating="product.rating.score"
-              :is-on-wishlist="product.isOnWishlist"
-              class="product-card"
-              @click:wishlist="toggleWishlist(i)"
-            />
-          </SfCarouselItem>
-        </SfCarousel>
-      </SfSection>
-      <SfSection
-        title-heading="Share Your Look"
-        subtitle-heading="#YOURLOOK"
-        class="section"
-      >
-        <div class="images-grid">
-          <div class="images-grid__row">
-            <div class="images-grid__col">
-              <SfImage
-                src="assets/storybook/Home/imageA.jpg"
-                :width="486"
-                :height="486"
-              >
-                katherina_trn
-              </SfImage>
-            </div>
-            <div class="images-grid__col">
-              <SfImage
-                src="assets/storybook/Home/imageB.jpg"
-                :width="486"
-                :height="486"
-              >
-                katherina_trn
-              </SfImage>
-            </div>
-          </div>
-          <div class="images-grid__row">
-            <div class="images-grid__col">
-              <SfImage
-                src="assets/storybook/Home/imageC.jpg"
-                :width="486"
-                :height="486"
-              >
-                katherina_trn
-              </SfImage>
-            </div>
-            <div class="images-grid__col">
-              <SfImage
-                src="assets/storybook/Home/imageD.jpg"
-                :width="486"
-                :height="486"
-              >
-                katherina_trn
-              </SfImage>
-            </div>
-          </div>
+    </SfHero>
+    <SfBannerGrid class="banners" :banner-grid="bannerGrid">
+      <template v-for="item in banners" #[item.slot]>
+        <SfBanner
+          :key="item.slot"
+          :title="item.title"
+          :subtitle="item.subtitle"
+          :description="item.description"
+          :button-text="item.buttonText"
+          :image="item.image"
+          :class="item.class"
+        />
+      </template>
+    </SfBannerGrid>
+    <SfCallToAction
+      title="Subscribe to Newsletters"
+      button-text="Subscribe"
+      description="Be aware of upcoming sales and events. Receive gifts and special offers!"
+      class="call-to-action-newsletter"
+      image="assets/storybook/Home/newsletter.jpg"
+    />
+    <SfSection title-heading="Best Sellers" class="section">
+      <SfCarousel class="product-carousel">
+        <SfCarouselItem v-for="(product, i) in products" :key="i">
+          <SfProductCard
+            :title="product.title"
+            :image="product.image"
+            :regular-price="product.price.regular"
+            :max-rating="product.rating.max"
+            :score-rating="product.rating.score"
+            :is-on-wishlist="product.isOnWishlist"
+            class="product-card"
+            @click:wishlist="toggleWishlist(i)"
+          />
+        </SfCarouselItem>
+      </SfCarousel>
+    </SfSection>
+    <SfSection
+      title-heading="Share Your Look"
+      subtitle-heading="#YOURLOOK"
+      class="section"
+    >
+      <div class="images-grid">
+        <SfImage
+          class="images-grid__col"
+          src="assets/storybook/Home/imageA.jpg"
+          alt="imageA"
+        >
+          katherina_trn
+        </SfImage>
+        <SfImage
+          class="images-grid__col"
+          src="assets/storybook/Home/imageB.jpg"
+          alt="imageB"
+        >
+          katherina_trn
+        </SfImage>
+        <SfImage
+          class="images-grid__col"
+          src="assets/storybook/Home/imageC.jpg"
+          alt="imageC"
+        >
+          katherina_trn
+        </SfImage>
+        <SfImage
+          class="images-grid__col"
+          src="assets/storybook/Home/imageD.jpg"
+          alt="imageD"
+        >
+          katherina_trn
+        </SfImage>
+      </div>
+    </SfSection>
+    <SfBanner
+      image="/assets/storybook/Home/bannerD.png"
+      class="banner-application desktop-only"
+    >
+      <template #subtitle>
+        <div class="banner-application__subtitle">Fashion to Take Away</div>
+      </template>
+      <template #title>
+        <h1 class="banner-application__title">
+          Download our application to your&nbsp;mobile
+        </h1>
+      </template>
+      <template #call-to-action>
+        <div>
+          <img
+            class="banner-application__download"
+            src="assets/storybook/Home/google.png"
+            alt="google"
+          />
+          <img
+            class="banner-application__download"
+            src="assets/storybook/Home/apple.png"
+            alt="apple"
+          />
         </div>
-      </SfSection>
-      <SfBanner
-        image="/assets/storybook/Home/bannerD.png"
-        class="banner-application desktop-only"
-      >
-        <template #subtitle>
-          <div class="banner-application__subtitle">Fashion to Take Away</div>
-        </template>
-        <template #title>
-          <h1 class="banner-application__title">
-            Download our application to your&nbsp;mobile
-          </h1>
-        </template>
-        <template #call-to-action>
-          <div>
-            <img
-              class="banner-application__download"
-              src="assets/storybook/Home/google.png"
-              alt=""
-            />
-            <img
-              class="banner-application__download"
-              src="assets/storybook/Home/apple.png"
-              alt=""
-            />
-          </div>
-        </template>
-      </SfBanner>
-    </div>
-  </client-only>
+      </template>
+    </SfBanner>
+  </div>
 </template>
 <script>
 import {

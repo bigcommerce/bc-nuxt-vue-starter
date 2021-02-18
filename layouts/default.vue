@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <LayoutDefaultHeader :menu="menu" />
-    <nuxt />
-  </div>
+  <client-only>
+    <div>
+      <LayoutDefaultHeader :menu="menu" />
+      <nuxt />
+    </div>
+  </client-only>
 </template>
 
 <script>

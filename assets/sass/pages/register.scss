@@ -3,18 +3,38 @@
 @import '@/assets/sass/_mixins.scss';
 
 #register-page {
-  .register-modal-header {
-    text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  @include for-desktop {
+    max-width: 1240px;
+    margin: auto;
   }
-  .register-actions {
+  .register-form {
+    padding: 1rem;
+    min-width: 400px;
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    align-items: center;
-    .sf-button {
-      margin-top: 1rem;
+
+    @include for-mobile{
+      min-width: 300px;
     }
-  }
-  .sf-input {
-    margin-top: 2rem !important;
+
+    .register-header {
+      text-align: center;
+    }
+    .register-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1.5rem;
+      .sf-button {
+        margin-top: 1rem;
+      }
+    }
+    .sf-input {
+      margin-top: 2rem !important;
+    }
   }
 }

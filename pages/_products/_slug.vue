@@ -1,161 +1,156 @@
 <template>
-  <div>
-    <Loader :loading="isLoading" />
-    <SfBreadcrumbs
-      class="breadcrumbs desktop-only"
-      :breadcrumbs="breadcrumbs"
-    />
-    <div v-if="!product" id="error">
+  <div v-if="!product" id="error">
+    <div class="img_not_found">
       <SfImage
         class="image"
         :src="require('../../static/assets/not-found.svg')"
+        alt="not_found"
       />
-      <SfHeading
-        title="Page not found"
-        subtitle="We are sorry that we can’t find the page, please go back or try again"
-        class="heading sf-heading--no-underline"
-      />
-      <div class="actions">
-        <SfButton
-          class="sf-button--full-width actions__button"
-          @click="window.location = '/'"
-        >
-          Return to home
-        </SfButton>
-        <SfButton
-          class="sf-button--full-width sf-button--text actions__button"
-          @click="$emit('click:back')"
-        >
-          Back
-        </SfButton>
-      </div>
     </div>
-    <div v-if="product" id="product">
+    <SfHeading
+      title="Page not found"
+      subtitle="We are sorry that we can’t find the page, please go back or try again"
+      class="heading sf-heading--no-underline"
+    />
+    <div class="actions">
+      <SfButton
+        class="sf-button--full-width actions__button"
+        @click="window.location = '/'"
+      >
+        Return to home
+      </SfButton>
+      <SfButton
+        class="sf-button--full-width sf-button--text actions__button"
+        @click="$emit('click:back')"
+      >
+        Back
+      </SfButton>
+    </div>
+  </div>
+  <div v-else id="product">
+    <Loader :loading="isLoading" />
+    <div>
+      <SfBreadcrumbs
+        class="breadcrumbs desktop-only"
+        :breadcrumbs="breadcrumbs"
+      />
       <div class="product">
-        <div class="product__gallery">
-          <SfGallery
-            class="gallery-mobile mobile-only"
-            :image-width="375"
-            :image-height="490"
-            :images="product.imageList"
-          />
-          <div v-for="(image, index) in product.imageList" :key="index">
-            <SfImage
-              :src="image.desktop.url"
-              :width="590"
-              :height="700"
-              class="desktop-only"
+        <SfGallery :images="product.images" class="product__gallery" />
+        <div class="product__info">
+          <div class="product__header">
+            <SfHeading
+              :title="product.name"
+              :level="3"
+              class="sf-heading--no-underline sf-heading--left"
+            />
+            <SfIcon
+              icon="drag"
+              size="42px"
+              color="#E0E0E1"
+              class="product__drag-icon smartphone-only"
             />
           </div>
-        </div>
-        <div class="product__description">
-          <SfSticky class="product-details">
-            <div class="product-details__mobile-top">
-              <div>
-                <SfHeading
-                  :title="product.name"
-                  :level="1"
-                  class="sf-heading--no-underline sf-heading--left product-details__heading"
+          <div class="product__price-and-rating">
+            <SfPrice :regular="product.price" />
+            <div>
+              <div class="product__rating">
+                <SfRating
+                  :score="product.rating.rate"
+                  :max="product.rating.max"
                 />
-                <div class="product-details__sub">
-                  <SfPrice
-                    :regular="'$' + product.prices.price.value.toFixed(2)"
-                    class="sf-price--big product-details__sub-price"
-                  />
-                  <div class="product-details__sub-rating">
-                    <SfRating :score="product.reviewSummary.score" :max="5" />
-                    <div class="product-details__sub-reviews desktop-only">
-                      {{ product.reviewSummary.numberOfReviews }}
-                      <span v-if="product.reviewSummary.numberOfReviews == 1">
-                        Review
-                      </span>
-                      <span v-if="product.reviewSummary.numberOfReviews !== 1">
-                        Reviews
-                      </span>
-                    </div>
-                    <div class="product-details__sub-reviews mobile-only">
-                      ({{ product.reviewSummary.numberOfReviews }})
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p
-              class="product-details__description desktop-only"
-              :v-text="product.description"
-            />
-            <div class="product-details__section">
-              <SfSelect
-                v-for="(option, i) in product.options.edges"
-                :key="i"
-                v-model="optionSelections[option.node.entityId]"
-                :label="option.node.displayName"
-                class="sf-select--bordered product-details__attribute"
-              >
-                <SfSelectOption
-                  v-for="(value, x) in option.node.values.edges"
-                  :key="x"
-                  :value="value.node.entityId"
+                <a
+                  v-if="product.rating.reviews"
+                  href="#"
+                  class="product__count"
                 >
-                  {{ value.node.label }}
-                  <!-- <SfProductOption :label="value.node.label" /> -->
-                </SfSelectOption>
-              </SfSelect>
+                  ({{ product.rating.reviews }})
+                </a>
+              </div>
+              <SfButton class="sf-button--text">Read all reviews</SfButton>
             </div>
-            <div class="product-details__section">
-              <SfAlert
-                message="Low in stock"
-                type="warning"
-                class="product-details__alert mobile-only"
-              />
-              <SfAddToCart
-                v-model="qty"
-                :stock="stock"
-                :can-add-to-cart="stock > 0"
-                class="product-details__add-to-cart"
-                @click="addCart"
-              />
-              <SfButton class="product-details__add-to-cart" @click="buyNow">
-                Buy Now
-              </SfButton>
+          </div>
+          <div>
+            <div class="product__description desktop-only">
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <p v-html="product.description" />
             </div>
-            <SfTabs
-              class="product-details__tabs"
-              :open-tab="product.description ? 1 : 2"
+            <SfButton class="sf-button--text desktop-only product__guide">
+              Size guide
+            </SfButton>
+            <SfSelect
+              v-if="product.sizes.length > 0"
+              v-model="selectedSize"
+              label="Size"
+              class="sf-select--underlined product__select-size"
+              :reqired="true"
             >
-              <SfTab
-                v-if="
-                  product.description.length > 0 ||
-                  product.customFields.edges.length > 0
-                "
-                title="Description"
+              <SfSelectOption
+                v-for="size in product.sizes"
+                :key="size.id"
+                :value="size.id"
               >
-                <div>
-                  <!-- eslint-disable-next-line vue/no-v-html -->
-                  <p v-html="product.description" />
-                </div>
-                <div class="product-details__properties">
-                  <SfProperty
-                    v-for="(customField, i) in product.customFields.edges"
-                    :key="i"
-                    :name="customField.node.name"
-                    :value="customField.node.value"
-                    class="product-property"
-                  />
-                </div>
-              </SfTab>
-              <SfTab v-if="product.brand" title="Additional Information">
-                <SfHeading
-                  :title="product.brand.name"
-                  :level="3"
-                  class="sf-heading--no-underline sf-heading--left"
+                <SfProductOption :label="size.value"></SfProductOption>
+              </SfSelectOption>
+            </SfSelect>
+            <div
+              v-if="product.colors.length > 0"
+              class="product__colors desktop-only"
+            >
+              <p class="product__color-label">Color:</p>
+              <SfColor
+                v-for="color in product.colors"
+                :key="color.id"
+                :color="color.value"
+                :selected="color.selected"
+                class="product__color"
+                @click="selectColor(color.id)"
+              />
+            </div>
+            <SfAddToCart
+              v-model="qty"
+              class="product__add-to-cart"
+              @click="addToCart"
+            />
+            <SfButton class="sf-button--text desktop-only product__save">
+              Save for later
+            </SfButton>
+            <SfButton class="sf-button--text desktop-only product__compare">
+              Add to compare
+            </SfButton>
+          </div>
+          <SfTabs :open-tab="1" class="product__tabs">
+            <SfTab v-for="title in tabs" :key="title" :title="title">
+              <div v-if="title === 'Description'">
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <p v-html="product.description" />
+                <SfProperty
+                  v-for="(customField, i) in product.customFields.edges"
+                  :key="i"
+                  :name="customField.node.name"
+                  :value="customField.node.value"
+                  class="product__property"
                 />
-                <p v-text="product.brand.metaDesc" />
-              </SfTab>
-            </SfTabs>
-          </SfSticky>
+              </div>
+              <div
+                v-else-if="title === 'Additional Information'"
+                class="product__additional-info"
+              >
+                <p class="product__additional-info__title">Brand</p>
+                <template v-if="product.brand">
+                  <SfHeading
+                    :title="product.brand.name"
+                    :level="3"
+                    class="sf-heading--no-underline sf-heading--left"
+                  />
+                  <p v-text="product.brand.metaDesc" />
+                </template>
+              </div>
+            </SfTab>
+          </SfTabs>
         </div>
       </div>
+    </div>
+    <div>
       <SfBanner
         title="Download our application to your mobile"
         image="/assets/storybook/Home/bannerD.png"
@@ -174,12 +169,12 @@
             <img
               class="banner-application__download"
               src="/assets/storybook/Home/google.png"
-              alt=""
+              alt="google"
             />
             <img
               class="banner-application__download"
               src="/assets/storybook/Home/apple.png"
-              alt=""
+              alt="apple"
             />
           </div>
         </template>
@@ -189,77 +184,104 @@
 </template>
 <script>
 import {
-  SfProperty,
+  SfGallery,
   SfHeading,
   SfPrice,
   SfRating,
-  SfSelect,
-  // SfProductOption,
-  SfAddToCart,
+  SfIcon,
   SfTabs,
-  SfGallery,
-  SfImage,
-  SfBanner,
-  SfAlert,
-  SfSticky,
+  SfProperty,
+  SfButton,
+  SfAddToCart,
+  SfColor,
+  SfSelect,
+  SfProductOption,
   SfBreadcrumbs,
-  SfButton
+  SfImage,
+  SfBanner
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import Loader from '~/components/Loader.vue';
+import { color } from '~/constants';
 export default {
   name: 'Product',
   components: {
-    SfAlert,
-    SfProperty,
+    SfImage,
+    SfGallery,
     SfHeading,
     SfPrice,
     SfRating,
-    SfSelect,
-    // SfProductOption,
-    SfAddToCart,
+    SfIcon,
     SfTabs,
-    SfGallery,
-    SfImage,
-    SfBanner,
-    SfSticky,
-    SfBreadcrumbs,
+    SfProperty,
     SfButton,
+    SfAddToCart,
+    SfColor,
+    SfSelect,
+    SfProductOption,
+    SfBreadcrumbs,
+    SfBanner,
     Loader
   },
   async asyncData({ params, $queries, $axios }) {
     const result = await $axios.$post('/graphql', {
       query: $queries.productBySlug(params)
     });
-    const productData = result.data?.site?.route?.node;
-    const optionSelections = {};
+    const product = result.data?.site?.route?.node;
 
-    if (productData != null) {
-      productData.imageList = productData.images.edges.map((t) => {
+    const filterOption = (option) => {
+      return (
+        product.options?.edges
+          ?.find(({ node }) => node.displayName === option)
+          ?.node?.values?.edges?.map(({ node }) => ({
+            id: node.entityId,
+            value: option === 'Color' ? color[node.label] : node.label,
+            selected: false
+          })) ?? []
+      );
+    };
+
+    if (product != null) {
+      product.images = product.images.edges.map((t) => {
         return {
           mobile: { url: t.node.mobile },
           desktop: { url: t.node.desktop },
-          big: { url: t.node.big }
+          big: { url: t.node.big },
+          alt: t.node.altText
         };
       });
-
-      productData.options.edges.forEach((o) => {
-        optionSelections[o.node.entityId] = null;
-      });
-
-      productData.reviewSummary.score =
-        productData.reviewSummary.summationOfRatings /
-        productData.reviewSummary.numberOfRatings;
+      product.price = `$${product.prices?.price?.value.toFixed(2)}`;
+      product.colors = filterOption('Color');
+      product.sizes = filterOption('Size');
+      product.rating = {
+        reviews: product.reviewSummary.numberOfReviews,
+        rate:
+          product.reviewSummary.summationOfRatings /
+          product.reviewSummary.numberOfReviews,
+        max: 5
+      };
     }
-
-    return { product: productData, optionSelections };
+    return {
+      product
+    };
   },
   data() {
-    const productData = {
-      product: {},
-      optionSelections: {},
-      qty: '1',
-      stock: 1,
+    return {
+      current: 1,
+      selectedColor: null,
+      selectedSize: null,
+      qty: 1,
+      product: {
+        name: null,
+        description: null,
+        images: [],
+        price: null,
+        colors: [],
+        rating: null,
+        sizes: [],
+        brand: null
+      },
+      tabs: ['Description', 'Additional Information'],
       breadcrumbs: [
         {
           text: 'Shop All',
@@ -271,23 +293,65 @@ export default {
         }
       ]
     };
-    return productData;
   },
   computed: {
     ...mapGetters('carts', ['isLoading'])
   },
   methods: {
-    addCart() {
+    /* eslint-disable array-callback-return */
+    addToCart() {
       const variants = this.product.variants.edges;
       const addData = {
         quantity: this.qty,
         product_id: this.product.entityId
       };
-      if (variants.length > 0) addData.variant_id = variants[0].node.entityId;
-      this.$store.dispatch('carts/addToCart', addData);
+      if (variants.length) {
+        if (!this.selectedSize) {
+          this.$toast.error('Please select size');
+          return;
+        }
+        if (!this.selectedColor) {
+          this.$toast.error('Please select color');
+          return;
+        }
+        if (this.selectedColor && this.selectedSize) {
+          const pairOptions = variants.map(({ node }) => ({
+            id: node?.entityId,
+            options: node?.options?.edges?.map(
+              ({ node }) => node?.values?.edges
+            )
+          }));
+          const selectedVariant = pairOptions.find(
+            ({ options }) =>
+              options.find((option) =>
+                option.find(({ node }) => node?.entityId === this.selectedColor)
+              ) &&
+              options.find((option) =>
+                option.find(
+                  ({ node }) => node?.entityId === parseInt(this.selectedSize)
+                )
+              )
+          );
+          if (selectedVariant) {
+            addData.variant_id = selectedVariant.id;
+            this.$store.dispatch('carts/addToCart', addData);
+          } else {
+            this.$toast.error(
+              'We do not have the product which matches to the options'
+            );
+          }
+        }
+      }
     },
-    buyNow(event) {
-      window.location = this.product.addToCartUrl.replace('add', 'buy');
+    selectColor(colorIndex) {
+      this.product.colors.map((el) => {
+        if (colorIndex === el.id) {
+          el.selected = true;
+          this.selectedColor = el.id;
+        } else {
+          el.selected = false;
+        }
+      });
     }
   }
 };

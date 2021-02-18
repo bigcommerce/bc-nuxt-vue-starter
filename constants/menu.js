@@ -6,5 +6,13 @@ export const menu = [
   {
     link: '/shop-all',
     name: 'Shop All'
+  },
+  {
+    link: '/cart',
+    name: 'Cart'
+  },
+  {
+    link: '/login',
+    name: 'Profile'
   }
 ];
