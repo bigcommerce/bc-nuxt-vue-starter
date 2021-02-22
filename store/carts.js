@@ -58,7 +58,10 @@ export const actions = {
 
   createCart({ commit }, createData) {
     commit('SET_LOADING', true);
-    const data = { line_items: [{ ...createData }] };
+    const data = {
+      line_items: [{ ...createData }],
+      channel_id: `${process.env.CHANNEL_ID}`
+    };
     this.$axios
       .$post(
         `/api/stores/${process.env.storeHash}/v3/carts?include=redirect_urls`,
