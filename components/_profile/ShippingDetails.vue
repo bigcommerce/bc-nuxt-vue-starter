@@ -16,13 +16,21 @@
             required
             class="form__element form__element--half"
           />
-          <SfInput
+          <SfComponentSelect
             v-model="address.address_type"
             name="address_type"
             label="Address Type"
             required
-            class="form__element form__element--half form__element--half-even"
-          />
+            class="sf-component-select--underlined form__select form__element form__element--half form__element--half-even"
+          >
+            <SfComponentSelectOption
+              v-for="address_type in address_types"
+              :key="address_type"
+              :value="address_type"
+            >
+              {{ address_type }}
+            </SfComponentSelectOption>
+          </SfComponentSelect>
           <SfInput
             v-model="address.first_name"
             name="firstName"
@@ -140,14 +148,21 @@
   </transition>
 </template>
 <script>
-import { SfTabs, SfInput, SfButton, SfIcon } from '@storefront-ui/vue';
+import {
+  SfTabs,
+  SfInput,
+  SfButton,
+  SfIcon,
+  SfComponentSelect
+} from '@storefront-ui/vue';
 export default {
   name: 'ShippingDetails',
   components: {
     SfTabs,
     SfInput,
     SfButton,
-    SfIcon
+    SfIcon,
+    SfComponentSelect
   },
   props: {
     addresses: {
@@ -174,8 +189,8 @@ export default {
         street_2: '',
         zip: ''
       },
-      countries: [],
-      action: ''
+      action: '',
+      address_types: ['residential', 'commercial']
     };
   },
   methods: {

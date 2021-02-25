@@ -76,7 +76,10 @@ export default {
     ...mapActions({
       logOut: 'customer/logOut',
       getAllOrders: 'order/getAllOrders',
-      getAllAddresses: 'address/getAllAddresses'
+      getAllAddresses: 'address/getAllAddresses',
+      updateAddress: 'address/updateAddress',
+      addAddress: 'address/addAddress',
+      deleteAddress: 'address/deleteAddress'
     }),
     changeActivePage(title) {
       if (title === 'Log out') {
@@ -85,13 +88,16 @@ export default {
       this.activePage = title;
     },
     handleUpdate(address) {
-      console.log('update======', address);
+      this.updateAddress(address);
     },
     handleAdd(address) {
-      console.log('add======', address);
+      this.addAddress(address);
     },
     handleDelete(address) {
-      console.log('delete======', address);
+      this.deleteAddress({
+        customerId: address.customer_id,
+        addressId: address.id
+      });
     }
   }
 };
