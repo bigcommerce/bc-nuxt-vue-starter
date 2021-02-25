@@ -7,5 +7,6 @@ export default {
   apiSecret: process.env.API_SECRET || '',
   bcApiUrl: process.env.BC_API_URL || '',
   storeHash: process.env.STORE_HASH || '',
-  jwtSecret: process.env.JWT_SECRET || ''
+  jwtSecret: process.env.JWT_SECRET || '',
+  channelId: process.env.CHANNEL_ID || ''
 };
