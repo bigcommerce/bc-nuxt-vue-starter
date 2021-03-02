@@ -1,83 +1,109 @@
 <template>
-  <SfContentPages
-    title="My Account"
-    :active="activeTabName"
-    @click:change="handleChangeTab"
-  >
-    <SfHeading
-      :level="4"
-      title="Your Store Credit"
-      :description="`${customer.storeCredit.currencyCode} ${customer.storeCredit.value}`"
+  <div id="my-account">
+    <Loader :loading="isLoading" />
+    <SfBreadcrumbs
+      class="breadcrumbs desktop-only"
+      :breadcrumbs="breadcrumbs"
     />
-    <SfContentPage :title="profileTabs[0]">
-      <SfTabs :open-tab="1">
-        <SfTab title="Personal Data">
-          <SfInput :label="'First Name'" :value="customer.firstName" readonly />
-          <SfInput :label="'Last Name'" :value="customer.lastName" readonly />
-          <SfInput :label="'Email'" :value="customer.email" readonly />
-          <SfInput :label="'Phone'" :value="customer.phone" readonly />
-        </SfTab>
-        <SfTab title="Additional Data">
-          <SfInput :label="'Company'" :value="customer.company" readonly />
-          <SfInput
-            :label="'Tax Exempt Category'"
-            :value="customer.taxExemptCategory"
-            readonly
+    <SfContentPages
+      title="My Account"
+      :active="activePage"
+      class="my-account"
+      @click:change="changeActivePage"
+    >
+      <SfContentCategory title="Personal Details">
+        <SfContentPage title="My profile">
+          <MyProfile :account="customer" />
+        </SfContentPage>
+        <SfContentPage title="Shipping details">
+          <ShippingDetails
+            :addresses="addresses"
+            @update:address="handleUpdate"
+            @add:address="handleAdd"
+            @delete:address="handleDelete"
           />
-          <SfInput :label="'Notes'" :value="customer.notes" readonly />
-          <SfInput
-            :label="'Address Count'"
-            :value="customer.addressCount"
-            readonly
-          />
-          <SfInput
-            :label="'Attribute Count'"
-            :value="customer.attributeCount"
-            readonly
-          />
-        </SfTab>
-      </SfTabs>
-    </SfContentPage>
-    <SfContentPage :title="profileTabs[1]"></SfContentPage>
-  </SfContentPages>
+        </SfContentPage>
+      </SfContentCategory>
+      <SfContentCategory title="Order details">
+        <SfContentPage title="Order history">
+          <OrderHistory :orders="orders" />
+        </SfContentPage>
+      </SfContentCategory>
+      <SfContentPage title="Log out" />
+    </SfContentPages>
+  </div>
 </template>
-
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { SfContentPages, SfTabs, SfInput, SfHeading } from '@storefront-ui/vue';
+import { SfBreadcrumbs, SfContentPages } from '@storefront-ui/vue';
+import { mapActions, mapGetters } from 'vuex';
+import { MyProfile, ShippingDetails, OrderHistory } from './_profile/index.js';
+import Loader from '~/components/Loader.vue';
 export default {
+  name: 'MyAccount',
   components: {
-    SfTabs,
+    SfBreadcrumbs,
     SfContentPages,
-    SfInput,
-    SfHeading
+    MyProfile,
+    ShippingDetails,
+    OrderHistory,
+    Loader
   },
   data() {
     return {
-      profileTabs: ['Personal Details', 'Log Out'],
-      activeTabName: 'Personal Details'
+      activePage: 'My profile',
+      breadcrumbs: [
+        {
+          text: 'Home',
+          link: '/'
+        },
+        {
+          text: 'My Account',
+          link: '/login'
+        }
+      ]
     };
   },
   computed: {
-    ...mapGetters('customer', ['customer'])
+    ...mapGetters('customer', ['customer']),
+    ...mapGetters('order', ['orders', 'isLoading']),
+    ...mapGetters('address', ['addresses', 'isLoading'])
+  },
+  mounted() {
+    this.getAllOrders();
+    this.getAllAddresses();
   },
   methods: {
-    logOut: 'customer/logOut',
     ...mapActions({
       logOut: 'customer/logOut',
-      updateAccount: 'customer/updateAccount'
+      getAllOrders: 'order/getAllOrders',
+      getAllAddresses: 'address/getAllAddresses',
+      updateAddress: 'address/updateAddress',
+      addAddress: 'address/addAddress',
+      deleteAddress: 'address/deleteAddress'
     }),
-    handleChangeTab(TabName) {
-      if (!TabName) {
-        this.activeTabName = '';
-      } else if (TabName === this.profileTabs[1]) {
+    changeActivePage(title) {
+      if (title === 'Log out') {
         this.logOut();
-      } else if (TabName === this.profileTabs[0]) {
-        this.activeTabName = this.profileTabs[0];
       }
+      this.activePage = title;
+    },
+    handleUpdate(address) {
+      this.updateAddress(address);
+    },
+    handleAdd(address) {
+      this.addAddress(address);
+    },
+    handleDelete(address) {
+      this.deleteAddress({
+        customerId: address.customer_id,
+        addressId: address.id
+      });
     }
   }
 };
 </script>
-
-<style></style>
+<style
+  src="~/assets/sass/components/customerprofile.scss"
+  lang="scss"
+  scoped
+></style>

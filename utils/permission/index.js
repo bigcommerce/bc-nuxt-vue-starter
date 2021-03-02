@@ -7,7 +7,12 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'PUT_carts/items',
   'DELETE_carts/items',
   'POST_pricing/products',
-  'POST_customers'
+  'POST_customers',
+  'GET_orders',
+  'GET_addresses',
+  'PUT_addresses',
+  'POST_addresses',
+  'DELETE_addresses'
 ];
 
 export const checkApiAccessPermission = (url, method) => {
@@ -19,6 +24,9 @@ export const checkApiAccessPermission = (url, method) => {
     prefix = 'pricing/products';
   } else if (url.includes('customers')) {
     prefix = 'customers';
+    if (url.includes('addresses')) prefix = 'addresses';
+  } else if (url.includes('orders')) {
+    prefix = 'orders';
   }
   const queryString = `${method.toUpperCase()}_${prefix}`;
   if (ACCESSIBLE_API_ENDPOINTS.includes(queryString)) return null;

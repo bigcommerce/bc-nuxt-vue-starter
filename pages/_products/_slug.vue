@@ -305,7 +305,7 @@ export default {
         quantity: this.qty,
         product_id: this.product.entityId
       };
-      if (variants.length) {
+      if (this.product.colors.length && this.product.sizes.length) {
         if (!this.selectedSize) {
           this.$toast.error('Please select size');
           return;
@@ -341,6 +341,8 @@ export default {
             );
           }
         }
+      } else {
+        this.$store.dispatch('carts/addToCart', addData);
       }
     },
     selectColor(colorIndex) {
