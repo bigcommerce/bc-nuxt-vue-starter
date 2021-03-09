@@ -4,7 +4,12 @@
       <p class="message">Your order history.</p>
       <div v-if="orders.length === 0" class="no-orders">
         <p class="no-orders__title">You currently have no order history.</p>
-        <SfButton class="no-orders__button">Start shopping</SfButton>
+        <SfButton
+          link="/shop-all"
+          class="no-orders__button"
+          style="color: white; font-weight: bold"
+          >Start shopping</SfButton
+        >
       </div>
       <SfTable v-else class="orders">
         <SfTableHeading>
