@@ -13,14 +13,16 @@
             v-model="address.company"
             name="company"
             label="Company"
-            required
             class="form__element form__element--half"
+            :valid="$v.address.company.required"
+            :error-message="'Company is required'"
           />
           <SfComponentSelect
             v-model="address.address_type"
             name="address_type"
             label="Address Type"
-            required
+            :valid="$v.address.address_type.required"
+            :error-message="'Address Type is required'"
             class="sf-component-select--underlined form__select form__element form__element--half form__element--half-even"
           >
             <SfComponentSelectOption
@@ -35,35 +37,40 @@
             v-model="address.first_name"
             name="firstName"
             label="First Name"
-            required
+            :valid="$v.address.first_name.required"
+            :error-message="'First Name is required'"
             class="form__element form__element--half"
           />
           <SfInput
             v-model="address.last_name"
             name="lastName"
             label="Last Name"
-            required
+            :valid="$v.address.last_name.required"
+            :error-message="'Last Name is required'"
             class="form__element form__element--half form__element--half-even"
           />
           <SfInput
             v-model="address.street_1"
             name="street_1"
             label="Street 1"
-            required
+            :valid="$v.address.street_1.required"
+            :error-message="'Street 1 is required'"
             class="form__element"
           />
           <SfInput
             v-model="address.street_2"
             name="street_2"
             label="Street 2"
-            required
+            :valid="$v.address.street_2.required"
+            :error-message="'Street 2 is required'"
             class="form__element"
           />
           <SfInput
             v-model="address.city"
             name="city"
             label="City"
-            required
+            :valid="$v.address.city.required"
+            :error-message="'City is required'"
             class="form__element form__element--half"
           />
           <region-select
@@ -74,12 +81,18 @@
             :country-name="true"
             class="region_select"
           />
+          <span
+            v-if="!$v.address.state.required"
+            style="margin-top: -20px; color: red; font-size: 14px"
+            >State is required</span
+          >
           <SfInput
             v-model="address.zip"
             name="zip"
             label="Zip-code"
-            required
-            class="form__element form__element--half"
+            :valid="$v.address.zip.required"
+            :error-message="'ZipCode is required'"
+            class="form__element"
           />
           <country-select
             v-model="address.country"
@@ -88,11 +101,17 @@
             top-country="US"
             class="country_select"
           />
+          <span
+            v-if="!$v.address.country.required"
+            style="margin-top: -20px; color: red; font-size: 14px"
+            >Country is required</span
+          >
           <SfInput
             v-model="address.phone"
             name="phone"
             label="Phone number"
-            required
+            :valid="$v.address.phone.required"
+            :error-message="'Phone Number is required'"
             class="form__element"
           />
           <SfButton class="action-button" @click="updateAddress(action)"
@@ -155,6 +174,7 @@ import {
   SfIcon,
   SfComponentSelect
 } from '@storefront-ui/vue';
+import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'ShippingDetails',
   components: {
@@ -193,6 +213,43 @@ export default {
       address_types: ['residential', 'commercial']
     };
   },
+  validations: {
+    address: {
+      company: {
+        required
+      },
+      address_type: {
+        required
+      },
+      first_name: {
+        required
+      },
+      last_name: {
+        required
+      },
+      street_1: {
+        required
+      },
+      street_2: {
+        required
+      },
+      city: {
+        required
+      },
+      state: {
+        required
+      },
+      zip: {
+        required
+      },
+      country: {
+        required
+      },
+      phone: {
+        required
+      }
+    }
+  },
   methods: {
     changeAddress(index, action) {
       this.action = action;
@@ -204,6 +261,10 @@ export default {
       this.editAddress = true;
     },
     updateAddress(action) {
+      if (this.$v.address.$invalid) {
+        this.$toast.error('Please input required fields');
+        return;
+      }
       this.$emit(`${action}:address`, this.address);
       this.editAddress = false;
     },
