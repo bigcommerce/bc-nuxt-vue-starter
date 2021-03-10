@@ -58,7 +58,7 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/storefront/api-token
 Or you can just run a CLI.
 $ npm run create-storefront-token {channel_id} {host_url}
 channel_id - you will get this id from above command.
-i.e -> npm run create-storefront-token http://localhost:3000 123455
+i.e -> npm run create-storefront-token 123455 http://localhost:3000
 ````
 
 You will need a site.
