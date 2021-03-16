@@ -16,7 +16,7 @@ export default {
   parallel: true,
   cache: true,
   hardSource: true,
-  target: 'server',
+  target: 'static',
   /**
    ** Global Env Varialbes
    */
@@ -53,5 +53,6 @@ export default {
    */
   build,
   toast,
-  proxy
+  proxy,
+  serverMiddleware: [{ path: '/', handler: '~/api' }]
 };

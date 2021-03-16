@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import axios from 'axios';
 import { getCartCheckoutRedirectUrl, getUser } from '~/utils/auth';
 const productFilter = (cart) => {
   return cart && cart !== ''
@@ -9,11 +10,6 @@ const productFilter = (cart) => {
         title: item.name,
         image: item.image_url,
         price: { regular: item.sale_price },
-        configuration: [
-          /* { name: 'Size', value: 'XS' },
-            { name: 'Color', value: 'White' }
-            Example configuration */
-        ],
         qty: item.quantity
       }))
     : [];
@@ -58,64 +54,59 @@ export const actions = {
 
   createCart({ commit }, createData) {
     commit('SET_LOADING', true);
-    const data = {
+    const cartData = {
       line_items: [{ ...createData }],
       channel_id: `${process.env.CHANNEL_ID}`
     };
-    this.$axios
-      .$post(
-        `/api/stores/${process.env.storeHash}/v3/carts?include=redirect_urls`,
-        data
-      )
-      .then((response) => {
-        const cartId = response.data.id;
+    axios.post(`/createCart`, { cartData }).then(({ data }) => {
+      if (data.status) {
+        const body = data.body;
+        const cartId = body.data.id;
         window.localStorage.setItem('cartId', cartId);
-        this.$toast.info('Successfully created cart!');
-        commit('SET_CART', productFilter(response));
-        commit('SET_REDIRECTURLS', response.data.redirect_urls);
-        commit('SET_LOADING', false);
-      })
-      .catch(() => {
-        commit('SET_LOADING', false);
-      });
+        commit('SET_CART', productFilter(body));
+        commit('SET_REDIRECTURLS', body.data.redirect_urls);
+        this.$toast.info(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
   },
 
   addCartItem({ commit }, addData) {
     const cartId = window.localStorage.getItem('cartId');
-    const data = { line_items: [{ ...addData }] };
+    const cartData = { line_items: [{ ...addData }] };
     commit('SET_LOADING', true);
-    this.$axios
-      .$post(
-        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items?include=redirect_urls`,
-        data
-      )
-      .then((response) => {
-        this.$toast.info('Successfully added a item to cart!');
-        commit('SET_LOADING', false);
-        commit('SET_CART', productFilter(response));
-        commit('SET_REDIRECTURLS', response.data.redirect_urls);
-      })
-      .catch(() => {
+    axios
+      .post(`/addCartItem?cartId=${cartId}`, { cartData })
+      .then(({ data }) => {
+        if (data.status) {
+          const body = data.body;
+          commit('SET_CART', productFilter(body));
+          commit('SET_REDIRECTURLS', body.data.redirect_urls);
+          this.$toast.info(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
       });
   },
 
   updateCartItem({ commit }, { updateData, item_id }) {
     const cartId = window.localStorage.getItem('cartId');
-    const data = { line_item: { ...updateData } };
+    const cartData = { line_item: { ...updateData } };
     commit('SET_LOADING', true);
-    this.$axios
-      .$put(
-        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${item_id}?include=redirect_urls`,
-        data
-      )
-      .then((response) => {
-        this.$toast.info('Successfully updated cart item!');
-        commit('SET_CART', productFilter(response));
-        commit('SET_REDIRECTURLS', response.data.redirect_urls);
-        commit('SET_LOADING', false);
-      })
-      .catch(() => {
+    axios
+      .put(`/updateCartItem?cartId=${cartId}&itemId=${item_id}`, { cartData })
+      .then(({ data }) => {
+        if (data.status) {
+          const body = data.body;
+          commit('SET_CART', productFilter(body));
+          commit('SET_REDIRECTURLS', body.data.redirect_urls);
+          this.$toast.info(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
       });
   },
@@ -123,41 +114,39 @@ export const actions = {
   deleteCartItem({ commit }, itemId) {
     const cartId = window.localStorage.getItem('cartId');
     commit('SET_LOADING', true);
-    this.$axios
-      .$delete(
-        `/api/stores/${process.env.storeHash}/v3/carts/${cartId}/items/${itemId}?include=redirect_urls`
-      )
-      .then((response) => {
-        const cart = productFilter(response);
-        this.$toast.info('Successfully deleted a item from cart');
-        commit('SET_LOADING', false);
-        commit('SET_CART', cart);
-        commit(
-          'SET_REDIRECTURLS',
-          response ? response.data.redirect_urls : null
-        );
-        if (cart.length === 0) window.localStorage.removeItem('cartId');
-      })
-      .catch(() => {
+    axios
+      .delete(`/deleteCartItem?cartId=${cartId}&itemId=${itemId}`)
+      .then(({ data }) => {
+        if (data.status) {
+          const body = data.body;
+          const cart = productFilter(body);
+          commit('SET_CART', cart);
+          commit('SET_REDIRECTURLS', body ? body.data.redirect_urls : null);
+          if (cart.length === 0) window.localStorage.removeItem('cartId');
+          this.$toast.info(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
       });
   },
 
   getCart({ commit }) {
     const cartId = window.localStorage.getItem('cartId');
-    if (cartId)
-      this.$axios
-        .$get(
-          `/api/stores/${process.env.storeHash}/v3/carts/${cartId}?include=redirect_urls`
-        )
-        .then((cart) => {
-          commit('SET_CART', productFilter(cart));
-          commit('SET_REDIRECTURLS', cart.data.redirect_urls);
-        })
-        .catch(() => {
+    if (cartId) {
+      commit('SET_LOADING', true);
+      axios.get(`/getCart?cartId=${cartId}`).then(({ data }) => {
+        if (data.status) {
+          const body = data.body;
+          commit('SET_CART', productFilter(body));
+          commit('SET_REDIRECTURLS', body.data.redirect_urls);
+        } else {
           window.localStorage.removeItem('cartId');
           commit('SET_CART', productFilter(null));
-        });
+        }
+        commit('SET_LOADING', false);
+      });
+    }
   },
 
   async cartCheckout({ state }) {
