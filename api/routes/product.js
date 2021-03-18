@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { shopAll, getProductBySlug } from './controller/product';
-import { permissionMiddleware } from './middleware';
+import { shopAll, getProductBySlug } from '../controller/product';
+import { permissionMiddleware } from '../middleware';
 
 const router = Router();
 

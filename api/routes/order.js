@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getAllOrders } from './controller/order';
-import { permissionMiddleware } from './middleware';
+import { getAllOrders } from '../controller/order';
+import { permissionMiddleware } from '../middleware';
 
 const router = Router();
 

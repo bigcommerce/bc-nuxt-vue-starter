@@ -244,8 +244,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('product', ['product', 'isLoading']),
-    ...mapGetters('carts', ['isLoading'])
+    ...mapGetters('product', ['product', 'isLoading'])
   },
   mounted() {
     this.getProductBySlug(this.$route.params.slug);

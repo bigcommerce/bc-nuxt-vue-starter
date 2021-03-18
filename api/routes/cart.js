@@ -5,8 +5,8 @@ import {
   addCartItem,
   updateCartItem,
   deleteCartItem
-} from './controller/cart';
-import { permissionMiddleware } from './middleware';
+} from '../controller/cart';
+import { permissionMiddleware } from '../middleware';
 
 const router = Router();
 

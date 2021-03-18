@@ -4,8 +4,8 @@ import {
   updateAddress,
   addAddress,
   deleteAddress
-} from './controller/address';
-import { permissionMiddleware } from './middleware';
+} from '../controller/address';
+import { permissionMiddleware } from '../middleware';
 
 const router = Router();
 

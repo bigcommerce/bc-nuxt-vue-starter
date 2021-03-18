@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import product from './product';
-import address from './address';
-import order from './order';
-import cart from './cart';
+import product from './routes/product';
+import address from './routes/address';
+import order from './routes/order';
+import cart from './routes/cart';
 
 const app = express();
 
