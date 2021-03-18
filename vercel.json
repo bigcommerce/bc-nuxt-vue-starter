@@ -1,0 +1,29 @@
+{
+  "rewrites": [
+    { "source": "/shopAll", "destination": "/api/routes/product" },
+    { "source": "/getProductBySlug", "destination": "/api/routes/product" },
+    { "source": "/getAllAddresses", "destination": "/api/routes/address" },
+    { "source": "/updateAddress", "destination": "/api/routes/address" },
+    { "source": "/addAddress", "destination": "/api/routes/address" },
+    { "source": "/deleteAddress", "destination": "/api/routes/address" },
+    { "source": "/getAllOrders", "destination": "/api/routes/order" },
+    { "source": "/getCart", "destination": "/api/routes/cart" },
+    { "source": "/createCart", "destination": "/api/routes/cart" },
+    { "source": "/addCartItem", "destination": "/api/routes/cart" },
+    { "source": "/updateCartItem", "destination": "/api/routes/cart" },
+    { "source": "/deleteCartItem", "destination": "/api/routes/cart" }
+  ],
+  "env": {
+    "APP_NAME": "BigCommerce Nuxt Vue Starter",
+    "PORT": "3000",
+    "JWT_SECRET": "***",
+    "BC_API_URL": "https://api.bigcommerce.com",
+    "STORE_HASH": "***",
+    "API_TOKEN": "***",
+    "API_CLIENT_ID": "***",
+    "API_SECRET": "***",
+    "CHANNEL_ID": "***",
+    "BASE_URL": "https://store-storehash-channelid.mybigcommerce.com",
+    "STOREFRONT_API_TOKEN": "***"
+  }
+}
