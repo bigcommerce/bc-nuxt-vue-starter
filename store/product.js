@@ -4,7 +4,9 @@ import { color } from '~/constants';
 export const state = () => ({
   products: [],
   product: null,
-  isLoading: false
+  colors: [],
+  isLoading: false,
+  selectedColor: null
 });
 
 export const getters = {
@@ -13,6 +15,12 @@ export const getters = {
   },
   product(state) {
     return state.product;
+  },
+  colors(state) {
+    return state.colors;
+  },
+  selectedColor(state) {
+    return state.selectedColor;
   },
   isLoading(state) {
     return state.isLoading;
@@ -25,6 +33,12 @@ export const mutations = {
   },
   SET_PRODUCT(state, product) {
     state.product = product;
+  },
+  SET_COLORS(state, colors) {
+    state.colors = colors;
+  },
+  SET_SELECTED_COLOR(state, selectedColor) {
+    state.selectedColor = selectedColor;
   },
   SET_LOADING(state, isLoading) {
     state.isLoading = isLoading;
@@ -73,7 +87,6 @@ export const actions = {
             };
           });
           product.price = `$${product.prices?.price?.value.toFixed(2)}`;
-          product.colors = filterOption('Color');
           product.sizes = filterOption('Size');
           product.rating = {
             reviews: product.reviewSummary.numberOfReviews,
@@ -82,12 +95,26 @@ export const actions = {
               product.reviewSummary.numberOfReviews,
             max: 5
           };
+          commit('SET_COLORS', filterOption('Color'));
+          commit('SET_PRODUCT', product);
         }
-        commit('SET_PRODUCT', product);
       } else {
         this.$toast.error(data.message);
       }
       commit('SET_LOADING', false);
     });
+  },
+  setColor({ commit, getters }, colorIndex) {
+    const colors = getters.colors.map((item) => Object.assign({}, item));
+    // eslint-disable-next-line array-callback-return
+    colors.map((el) => {
+      if (colorIndex === el.id) {
+        el.selected = true;
+        commit('SET_SELECTED_COLOR', el.id);
+      } else {
+        el.selected = false;
+      }
+    });
+    commit('SET_COLORS', colors);
   }
 };

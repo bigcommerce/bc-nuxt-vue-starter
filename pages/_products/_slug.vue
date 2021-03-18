@@ -94,12 +94,12 @@
                 </SfSelectOption>
               </SfSelect>
               <div
-                v-if="product.colors.length > 0"
+                v-if="colors.length > 0"
                 class="product__colors desktop-only"
               >
                 <p class="product__color-label">Color:</p>
                 <SfColor
-                  v-for="color in product.colors"
+                  v-for="color in colors"
                   :key="color.id"
                   :color="color.value"
                   :selected="color.selected"
@@ -227,7 +227,6 @@ export default {
   data() {
     return {
       current: 1,
-      selectedColor: null,
       selectedSize: null,
       qty: 1,
       tabs: ['Description', 'Additional Information'],
@@ -244,7 +243,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('product', ['product', 'isLoading'])
+    ...mapGetters('product', [
+      'product',
+      'isLoading',
+      'colors',
+      'selectedColor'
+    ])
   },
   mounted() {
     this.getProductBySlug(this.$route.params.slug);
@@ -256,11 +260,12 @@ export default {
     }),
     addToCart() {
       const variants = this.product.variants.edges;
+      debugger;
       const addData = {
         quantity: this.qty,
         product_id: this.product.entityId
       };
-      if (this.product.colors.length && this.product.sizes.length) {
+      if (this.colors.length && this.product.sizes.length) {
         if (!this.selectedSize) {
           this.$toast.error('Please select size');
           return;
@@ -301,14 +306,7 @@ export default {
       }
     },
     selectColor(colorIndex) {
-      this.product.colors.map((el) => {
-        if (colorIndex === el.id) {
-          el.selected = true;
-          this.selectedColor = el.id;
-        } else {
-          el.selected = false;
-        }
-      });
+      this.$store.dispatch('product/setColor', colorIndex);
     }
   }
 };

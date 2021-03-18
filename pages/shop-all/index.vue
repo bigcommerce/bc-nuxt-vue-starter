@@ -1,8 +1,6 @@
 <template>
-  <div v-if="isLoading">
+  <div id="category">
     <Loader :loading="isLoading" />
-  </div>
-  <div v-else id="category">
     <template v-if="products.length">
       <div class="navbar section">
         <div class="navbar__aside desktop-only">
@@ -46,9 +44,24 @@
         </div>
       </div>
     </template>
-    <div v-else style="width: 100%; display: flex; justify-content: center">
-      Product Not Found
-    </div>
+    <template v-else>
+      <div class="navbar section">
+        <div class="navbar__aside desktop-only">
+          <h1 class="navbar__title">Shop All</h1>
+        </div>
+        <div class="navbar__main">
+          <div class="navbar__counter">
+            <span class="navbar__label desktop-only">Products Not found: </span>
+            <strong class="desktop-only">
+              {{ products.length }}
+            </strong>
+            <span class="navbar__label mobile-only">
+              {{ products.length }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
