@@ -31,21 +31,24 @@ export const actions = {
     const customer = getSecuredData(user.secureData);
     axios.get(`/getAllAddresses?customerId=${customer.id}`).then(({ data }) => {
       if (data.status) {
-        const addresses = data.body.map((item) => ({
-          address_type: item.address_type,
-          city: item.city,
-          company: item.company,
-          country: item.country,
-          customer_id: item.customer_id,
-          first_name: item.first_name,
-          id: item.id,
-          last_name: item.last_name,
-          phone: item.phone,
-          state: item.state,
-          street_1: item.street_1,
-          street_2: item.street_2,
-          zip: item.zip
-        }));
+        let addresses = [];
+        if (data.body) {
+          addresses = data.body.map((item) => ({
+            address_type: item.address_type,
+            city: item.city,
+            company: item.company,
+            country: item.country,
+            customer_id: item.customer_id,
+            first_name: item.first_name,
+            id: item.id,
+            last_name: item.last_name,
+            phone: item.phone,
+            state: item.state,
+            street_1: item.street_1,
+            street_2: item.street_2,
+            zip: item.zip
+          }));
+        }
         commit('SET_ADDRESSES', addresses);
       } else {
         this.$toast.error(data.message);
