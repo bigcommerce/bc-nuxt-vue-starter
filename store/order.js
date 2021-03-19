@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
@@ -28,14 +29,11 @@ export const actions = {
     commit('SET_LOADING', true);
     const user = getUser();
     const customer = getSecuredData(user.secureData);
-    this.$axios
-      .$get(
-        `/api/stores/${process.env.storeHash}/v2/orders?customer_id=${customer.id}&channel_id=${process.env.channelId}`
-      )
-      .then((response) => {
+    axios.get(`/getAllOrders?customerId=${customer.id}`).then(({ data }) => {
+      if (data.status) {
         let orders = [];
-        if (response) {
-          orders = response.map((item) => {
+        if (data.body) {
+          orders = data.body.map((item) => {
             return [
               `#${item.id}`,
               item.date_modified,
@@ -46,11 +44,10 @@ export const actions = {
           });
         }
         commit('SET_ORDERS', orders);
-        commit('SET_LOADING', false);
-      })
-      .catch(() => {
-        this.$toast.error('Getting orders failed');
-        commit('SET_LOADING', false);
-      });
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
   }
 };

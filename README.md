@@ -21,6 +21,10 @@ $ npm run start
 
 # generate static project
 $ npm run generate
+
+#deploy static project
+Before running bellow script, you should put the vercel ENV from the local env.
+$ npm run deploy
 ````
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
@@ -59,6 +63,8 @@ Or you can just run a CLI.
 $ npm run create-storefront-token {channel_id} {host_url}
 channel_id - you will get this id from above command.
 i.e -> npm run create-storefront-token 123455 http://localhost:3000
+
+(*) If you need to deploy on vercel, you should set the origin as the initially deployed URL and create this token.
 ````
 
 You will need a site.

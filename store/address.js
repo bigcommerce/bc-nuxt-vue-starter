@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
@@ -28,13 +29,11 @@ export const actions = {
     commit('SET_LOADING', true);
     const user = getUser();
     const customer = getSecuredData(user.secureData);
-    this.$axios
-      .$get(
-        `/api/stores/${process.env.storeHash}/v2/customers/${customer.id}/addresses`
-      )
-      .then((response) => {
-        if (response) {
-          const addresses = response.map((item) => ({
+    axios.get(`/getAllAddresses?customerId=${customer.id}`).then(({ data }) => {
+      if (data.status) {
+        let addresses = [];
+        if (data.body) {
+          addresses = data.body.map((item) => ({
             address_type: item.address_type,
             city: item.city,
             company: item.company,
@@ -49,33 +48,30 @@ export const actions = {
             street_2: item.street_2,
             zip: item.zip
           }));
-          commit('SET_ADDRESSES', addresses);
         }
-        commit('SET_LOADING', false);
-      })
-      .catch(() => {
-        this.$toast.error('Getting customer addresses failed');
-        commit('SET_LOADING', false);
-      });
+        commit('SET_ADDRESSES', addresses);
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
   },
   updateAddress({ commit, dispatch }, address) {
     commit('SET_LOADING', true);
     const customerId = address.customer_id;
     const id = address.id;
     delete address.id;
-    this.$axios
-      .$put(
-        `/api/stores/${process.env.storeHash}/v2/customers/${customerId}/addresses/${id}`,
-        { ...address }
-      )
-      .then((response) => {
-        if (response) {
-          dispatch('getAllAddresses');
-        }
-        commit('SET_LOADING', false);
+    axios
+      .put(`/updateAddress?customerId=${customerId}&addressId=${id}`, {
+        address
       })
-      .catch(() => {
-        this.$toast.error('Updating customer address failed');
+      .then(({ data }) => {
+        if (data.status) {
+          dispatch('getAllAddresses');
+          this.$toast.info(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
       });
   },
@@ -85,34 +81,29 @@ export const actions = {
     commit('SET_LOADING', true);
     delete address.id;
     delete address.customer_id;
-    this.$axios
-      .$post(
-        `/api/stores/${process.env.storeHash}/v2/customers/${customer.id}/addresses`,
-        { ...address }
-      )
-      .then((response) => {
-        if (response) {
+    axios
+      .post(`/addAddress?customerId=${customer.id}`, { address })
+      .then(({ data }) => {
+        if (data.status) {
           dispatch('getAllAddresses');
+          this.$toast.info(data.message);
+        } else {
+          this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
-      })
-      .catch(() => {
-        this.$toast.error('Adding customer address failed');
         commit('SET_LOADING', false);
       });
   },
   deleteAddress({ commit, dispatch }, { customerId, addressId }) {
     commit('SET_LOADING', true);
-    this.$axios
-      .$delete(
-        `/api/stores/${process.env.storeHash}/v2/customers/${customerId}/addresses/${addressId}`
-      )
-      .then(() => {
-        dispatch('getAllAddresses');
-        commit('SET_LOADING', false);
-      })
-      .catch(() => {
-        this.$toast.error('Deleting customer address failed');
+    axios
+      .delete(`/deleteAddress?customerId=${customerId}&addressId=${addressId}`)
+      .then(({ data }) => {
+        if (data.status) {
+          dispatch('getAllAddresses');
+          this.$toast.info(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
       });
   }
