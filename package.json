@@ -15,7 +15,7 @@
     "create-storefront-channel": "node ./utils/script/create-storefront-channel.mjs",
     "create-storefront-site": "node ./utils/script/create-storefront-site.mjs",
     "create-storefront-route": "node ./utils/script/create-storefront-route.mjs",
-    "deploy": "npm run generate && npm run build && vercel"
+    "deploy": "npm run generate && vercel"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.4",

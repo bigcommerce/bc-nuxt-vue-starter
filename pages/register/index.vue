@@ -1,6 +1,5 @@
 <template>
   <div id="register-page">
-    <Loader :loading="isLoading" />
     <div class="register-form">
       <h3 class="register-header">Register</h3>
       <SfInput
@@ -81,15 +80,13 @@
 import { SfInput, SfButton } from '@storefront-ui/vue';
 import { required, email, sameAs, minLength } from 'vuelidate/lib/validators';
 import { mapGetters, mapActions } from 'vuex';
-import Loader from '~/components/Loader.vue';
 import { passwordRegexValidate } from '~/utils/validation';
 
 export default {
   name: 'RegisterPage',
   components: {
     SfInput,
-    SfButton,
-    Loader
+    SfButton
   },
   layout: 'Default',
   data() {

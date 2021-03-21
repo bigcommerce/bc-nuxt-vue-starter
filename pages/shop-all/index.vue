@@ -1,6 +1,5 @@
 <template>
   <div id="category">
-    <Loader :loading="isLoading" />
     <template v-if="products.length">
       <div class="navbar section">
         <div class="navbar__aside desktop-only">
@@ -67,12 +66,10 @@
 <script>
 import { SfProductCard, SfButton } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
-import Loader from '~/components/Loader.vue';
 export default {
   components: {
     SfProductCard,
-    SfButton,
-    Loader
+    SfButton
   },
   layout: 'Default',
   computed: {

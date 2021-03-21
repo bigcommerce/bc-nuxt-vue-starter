@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Loader :loading="isLoading" />
     <div v-if="!product" id="error">
       <div class="img_not_found">
         <SfImage
@@ -203,7 +202,6 @@ import {
   SfBanner
 } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
-import Loader from '~/components/Loader.vue';
 export default {
   name: 'Product',
   components: {
@@ -221,8 +219,7 @@ export default {
     SfSelect,
     SfProductOption,
     SfBreadcrumbs,
-    SfBanner,
-    Loader
+    SfBanner
   },
   data() {
     return {
