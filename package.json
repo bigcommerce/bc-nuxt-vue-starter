@@ -24,7 +24,6 @@
     "@nuxtjs/pwa": "^3.3.3",
     "@nuxtjs/toast": "^3.3.1",
     "@storefront-ui/vue": "^0.10.2",
-    "body-parser": "^1.19.0",
     "core-js": "^3.8.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

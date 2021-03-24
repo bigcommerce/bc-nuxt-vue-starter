@@ -257,7 +257,6 @@ export default {
     }),
     addToCart() {
       const variants = this.product.variants.edges;
-      debugger;
       const addData = {
         quantity: this.qty,
         product_id: this.product.entityId
