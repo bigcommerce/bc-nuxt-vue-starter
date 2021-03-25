@@ -1,6 +1,5 @@
 <template>
   <div id="login-page">
-    <Loader :loading="isLoading" />
     <div v-if="loggedIn">
       <CustomerProfile />
     </div>
@@ -61,13 +60,11 @@
 import { SfInput, SfButton } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
-import Loader from '~/components/Loader.vue';
 import CustomerProfile from '~/components/CustomerProfile.vue';
 export default {
   components: {
     SfInput,
     SfButton,
-    Loader,
     CustomerProfile
   },
   layout: 'Default',

@@ -1,6 +1,5 @@
 <template>
   <div id="my-account">
-    <Loader :loading="isLoading" />
     <SfBreadcrumbs
       class="breadcrumbs desktop-only"
       :breadcrumbs="breadcrumbs"
@@ -34,10 +33,10 @@
   </div>
 </template>
 <script>
+import { breadcrumbs } from '@/constants';
 import { SfBreadcrumbs, SfContentPages } from '@storefront-ui/vue';
 import { mapActions, mapGetters } from 'vuex';
 import { MyProfile, ShippingDetails, OrderHistory } from './_profile/index.js';
-import Loader from '~/components/Loader.vue';
 export default {
   name: 'MyAccount',
   components: {
@@ -45,22 +44,12 @@ export default {
     SfContentPages,
     MyProfile,
     ShippingDetails,
-    OrderHistory,
-    Loader
+    OrderHistory
   },
   data() {
     return {
       activePage: 'My profile',
-      breadcrumbs: [
-        {
-          text: 'Home',
-          link: '/'
-        },
-        {
-          text: 'My Account',
-          link: '/login'
-        }
-      ]
+      breadcrumbs
     };
   },
   computed: {

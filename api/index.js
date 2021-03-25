@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import product from './routes/product';
 import address from './routes/address';
 import order from './routes/order';
@@ -7,8 +6,8 @@ import cart from './routes/cart';
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(product);
 app.use(address);
 app.use(order);
