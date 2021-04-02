@@ -6,7 +6,8 @@ export const state = () => ({
   product: null,
   colors: [],
   isLoading: false,
-  selectedColor: null
+  selectedColor: null,
+  categories: []
 });
 
 export const getters = {
@@ -24,6 +25,9 @@ export const getters = {
   },
   isLoading(state) {
     return state.isLoading;
+  },
+  categories(state) {
+    return state.categories;
   }
 };
 
@@ -42,18 +46,48 @@ export const mutations = {
   },
   SET_LOADING(state, isLoading) {
     state.isLoading = isLoading;
+  },
+  SET_CATEGORIES(state, categories) {
+    state.categories = categories;
   }
 };
 
 export const actions = {
-  getShopAll({ commit }) {
+  getCategories({ commit }) {
     commit('SET_LOADING', true);
-    axios.get('/shopAll').then(({ data }) => {
+    axios.get(`/getCategories`).then(({ data }) => {
       if (data.status) {
-        commit(
-          'SET_PRODUCTS',
-          data.body?.data?.site?.route?.node?.products?.edges
+        commit('SET_CATEGORIES', data.body?.data?.site?.categoryTree);
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
+  },
+  getProductsByCategory({ commit }, path) {
+    commit('SET_LOADING', true);
+    axios.get(`/getProductsByCategory?path=${path}`).then(({ data }) => {
+      if (data.status) {
+        const products = data.body?.data?.site?.route?.node?.products?.edges.map(
+          ({ node }) => ({
+            path: node.path,
+            title: node.name,
+            id: node.entityId,
+            description: node.description,
+            image: node.defaultImage?.url,
+            price: {
+              regular: `${node.prices?.price?.currencyCode} ${node.prices?.price?.value}`
+            },
+            rating: {
+              max: 5,
+              score:
+                node.reviewSummary?.summationOfRatings /
+                node.reviewSummary?.numberOfReviews
+            },
+            reviewsCount: node.reviewSummary?.numberOfReviews
+          })
         );
+        commit('SET_PRODUCTS', products);
       } else {
         this.$toast.error(data.message);
       }

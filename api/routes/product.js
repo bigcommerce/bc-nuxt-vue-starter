@@ -1,10 +1,19 @@
 import { Router } from 'express';
-import { shopAll, getProductBySlug } from '../controller/product';
+import {
+  getProductsByCategory,
+  getProductBySlug,
+  getCategories
+} from '../controller/product';
 import { permissionMiddleware } from '../middleware';
 
 const router = Router();
 
-router.get('/shopAll', permissionMiddleware, shopAll);
+router.get(
+  '/getProductsByCategory',
+  permissionMiddleware,
+  getProductsByCategory
+);
 router.get('/getProductBySlug', permissionMiddleware, getProductBySlug);
+router.get('/getCategories', permissionMiddleware, getCategories);
 
 export default router;

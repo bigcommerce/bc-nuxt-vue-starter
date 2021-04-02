@@ -5,7 +5,7 @@
       <div v-if="orders.length === 0" class="no-orders">
         <p class="no-orders__title">You currently have no order history.</p>
         <SfButton
-          link="/shop-all"
+          link="/products"
           class="no-orders__button"
           style="color: white; font-weight: bold"
           >Start shopping</SfButton

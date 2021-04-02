@@ -4,8 +4,8 @@ export const menu = [
     name: 'Home'
   },
   {
-    link: '/shop-all',
-    name: 'Shop All'
+    link: '/products',
+    name: 'Products'
   },
   {
     link: '/cart',

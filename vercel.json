@@ -1,6 +1,9 @@
 {
   "rewrites": [
-    { "source": "/shopAll", "destination": "/api/routes/product" },
+    {
+      "source": "/getProductsByCategory",
+      "destination": "/api/routes/product"
+    },
     { "source": "/getProductBySlug", "destination": "/api/routes/product" },
     { "source": "/getAllAddresses", "destination": "/api/routes/address" },
     { "source": "/updateAddress", "destination": "/api/routes/address" },

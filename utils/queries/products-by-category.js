@@ -1,8 +1,8 @@
-export const shopAll = () => {
+export const productsByCategory = (path) => {
   return `
   query CategoryByUrl {
     site {
-      route(path: "/shop-all/") {
+      route(path: "${path}") {
         node {
           id
           ... on Category {
@@ -22,6 +22,7 @@ export const shopAll = () => {
                   entityId
                   name
                   path
+                  description
                   defaultImage {
                     url(width: 216, height: 326)
                   }
@@ -30,6 +31,10 @@ export const shopAll = () => {
                       value
                       currencyCode
                     }
+                  }
+                  reviewSummary {
+                    numberOfReviews
+                    summationOfRatings
                   }
                 }
               }

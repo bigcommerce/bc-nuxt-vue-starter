@@ -202,6 +202,7 @@ import {
   SfBanner
 } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
+import { productBreadcrumbs } from '~/constants';
 export default {
   name: 'Product',
   components: {
@@ -227,16 +228,7 @@ export default {
       selectedSize: null,
       qty: 1,
       tabs: ['Description', 'Additional Information'],
-      breadcrumbs: [
-        {
-          text: 'Shop All',
-          link: '/shop-all'
-        },
-        {
-          text: 'Product Page',
-          link: '#'
-        }
-      ]
+      breadcrumbs: productBreadcrumbs
     };
   },
   computed: {
