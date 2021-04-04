@@ -1,4 +1,4 @@
-export const productsByCategory = (path) => {
+export const productsByCategory = (path, pageParam) => {
   return `
   query CategoryByUrl {
     site {
@@ -8,7 +8,13 @@ export const productsByCategory = (path) => {
           ... on Category {
             name
             entityId
-            products {
+            products(${pageParam}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+								startCursor
+                endCursor
+              }
               edges {
                 node {
                   variants {

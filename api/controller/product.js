@@ -23,8 +23,9 @@ export const getCategories = async (req, res) => {
 export const getProductsByCategory = async (req, res) => {
   try {
     const path = req.query.path;
+    const pageParam = req.query.pageParam;
     const result = await customAxios('graphql').post(`/graphql`, {
-      query: queries.productsByCategory(path)
+      query: queries.productsByCategory(path, pageParam)
     });
     res.json({
       message: 'Successfully got all products',

@@ -7,7 +7,11 @@ export const state = () => ({
   colors: [],
   isLoading: false,
   selectedColor: null,
-  categories: []
+  categories: [],
+  category: '/shop-all/',
+  startCursor: '',
+  endCursor: '',
+  showOnPage: 10
 });
 
 export const getters = {
@@ -28,6 +32,18 @@ export const getters = {
   },
   categories(state) {
     return state.categories;
+  },
+  category(state) {
+    return state.category;
+  },
+  startCursor(state) {
+    return state.startCursor;
+  },
+  endCursor(state) {
+    return state.endCursor;
+  },
+  showOnPage(state) {
+    return state.showOnPage;
   }
 };
 
@@ -49,6 +65,18 @@ export const mutations = {
   },
   SET_CATEGORIES(state, categories) {
     state.categories = categories;
+  },
+  SET_CATEGORY(state, category) {
+    state.category = category;
+  },
+  SET_START_CURSOR(state, startCursor) {
+    state.startCursor = startCursor;
+  },
+  SET_END_CURSOR(state, endCursor) {
+    state.endCursor = endCursor;
+  },
+  SET_SHOW_ON_PAGE(state, showOnPage) {
+    state.showOnPage = showOnPage;
   }
 };
 
@@ -64,35 +92,53 @@ export const actions = {
       commit('SET_LOADING', false);
     });
   },
-  getProductsByCategory({ commit }, path) {
+  getProductsByCategory({ commit, getters }, data) {
+    let path = data?.path;
+    const page = data?.page;
+    let pageParam = null;
+    if (!page) {
+      pageParam = `after: "", first: ${getters.showOnPage}`;
+    } else if (page === 'next') {
+      pageParam = `after: "${getters.endCursor}", first: ${getters.showOnPage}`;
+    } else if (page === 'prev') {
+      pageParam = `before: "${getters.startCursor}", last: ${getters.showOnPage}`;
+    }
+    if (typeof path !== 'undefined') commit('SET_CATEGORY', path);
+    else path = getters.category;
     commit('SET_LOADING', true);
-    axios.get(`/getProductsByCategory?path=${path}`).then(({ data }) => {
-      if (data.status) {
-        const products = data.body?.data?.site?.route?.node?.products?.edges.map(
-          ({ node }) => ({
-            path: node.path,
-            title: node.name,
-            id: node.entityId,
-            description: node.description,
-            image: node.defaultImage?.url,
-            price: {
-              regular: `${node.prices?.price?.currencyCode} ${node.prices?.price?.value}`
-            },
-            rating: {
-              max: 5,
-              score:
-                node.reviewSummary?.summationOfRatings /
-                node.reviewSummary?.numberOfReviews
-            },
-            reviewsCount: node.reviewSummary?.numberOfReviews
-          })
-        );
-        commit('SET_PRODUCTS', products);
-      } else {
-        this.$toast.error(data.message);
-      }
-      commit('SET_LOADING', false);
-    });
+    axios
+      .get(`/getProductsByCategory?path=${path}&pageParam=${pageParam}`)
+      .then(({ data }) => {
+        if (data.status) {
+          const products = data.body?.data?.site?.route?.node?.products?.edges.map(
+            ({ node }) => ({
+              path: node.path,
+              title: node.name,
+              id: node.entityId,
+              description: node.description,
+              image: node.defaultImage?.url,
+              price: {
+                regular: `${node.prices?.price?.currencyCode} ${node.prices?.price?.value}`
+              },
+              rating: {
+                max: 5,
+                score:
+                  node.reviewSummary?.summationOfRatings /
+                  node.reviewSummary?.numberOfReviews
+              },
+              reviewsCount: node.reviewSummary?.numberOfReviews
+            })
+          );
+          const pageInfo =
+            data.body?.data?.site?.route?.node?.products?.pageInfo;
+          commit('SET_START_CURSOR', pageInfo.startCursor);
+          commit('SET_END_CURSOR', pageInfo.endCursor);
+          commit('SET_PRODUCTS', products);
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
   },
   getProductBySlug({ commit }, slug) {
     commit('SET_LOADING', true);
