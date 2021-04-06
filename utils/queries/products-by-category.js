@@ -20,8 +20,11 @@ export const productsByCategory = (path, pageParam) => {
                   variants {
                     edges {
                       node {
-                        id
-                        entityId
+                        options {
+                          edges {
+                            cursor
+                          }
+                        }
                       }
                     }
                   }

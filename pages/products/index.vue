@@ -87,10 +87,14 @@
             :show-add-to-cart-button="true"
             class="products__product-card"
             @click="gotoProduct(product)"
+            @mouseover="handleProductHover(product.id)"
+            @mouseout="handleProductHoverOut(product.id)"
+            @click:add-to-cart="addToCart(1, product.id)"
           >
-            <template #add-to-cart>
-              <div style="display: flex; justify-content: center">
+            <template v-if="product.isCartableOnCategoryPage" #add-to-cart>
+              <div class="product_add_to_cart">
                 <SfButton
+                  v-if="hoveredProduct === product.id"
                   :link="'/products' + product.path"
                   class="products__choose-options"
                   >Choose Options</SfButton
@@ -109,6 +113,7 @@
           <SfProductCardHorizontal
             v-for="(product, i) in products"
             :key="product.id"
+            :qty="getQuantity(product.id)"
             :style="{ '--index': i }"
             :title="product.title"
             :image="product.image"
@@ -119,6 +124,8 @@
             :score-rating="product.rating.score"
             :link="'/products' + product.path"
             class="products__product-card-horizontal"
+            @click:add-to-cart="addToCart(getQuantity(product.id), product.id)"
+            @input="(e) => handleProductQuantity(e, product.id)"
           >
             <template #description>
               <p
@@ -126,18 +133,20 @@
                 v-html="product.description"
               />
             </template>
-            <template #add-to-cart
-              ><SfButton
-                :link="'/products' + product.path"
-                class="products__choose-options"
-                >Choose Options</SfButton
-              ></template
-            >
+            <template v-if="product.isCartableOnCategoryPage" #add-to-cart>
+              <div class="product_add_to_cart">
+                <SfButton
+                  :link="'/products' + product.path"
+                  class="products__choose-options"
+                  >Choose Options</SfButton
+                >
+              </div>
+            </template>
           </SfProductCardHorizontal>
         </transition-group>
         <SfPagination
           class="products__pagination"
-          :current="currentPage"
+          :current="1"
           :total="1"
           :visible="0"
         >
@@ -202,24 +211,18 @@ export default {
   data() {
     return {
       productQtys: [],
-      currentPage: 1,
-      sortBy: 'Latest',
-      isFilterSidebarOpen: false,
       isGridView: true,
       category: 'Shop All',
-      displayOnPage: '40',
       sidebarAccordion: [],
       showOnPage: ['5', '10', '20'],
-      breadcrumbs: productsBreadcrumbs
+      breadcrumbs: productsBreadcrumbs,
+      hoveredProduct: null
     };
   },
   computed: {
     ...mapGetters('product', ['categories', 'products', 'isLoading'])
   },
   watch: {
-    currentPage(val) {
-      console.log(val);
-    },
     categories(val) {
       this.sidebarAccordion = [
         {
@@ -264,6 +267,28 @@ export default {
     },
     handlePage(action) {
       this.$store.dispatch('product/getProductsByCategory', { page: action });
+    },
+    addToCart(qty, id) {
+      this.$store.dispatch('carts/addToCart', {
+        quantity: qty,
+        product_id: id
+      });
+    },
+    handleProductQuantity(quantity, productId) {
+      const obj = this.productQtys.find((data) => data.productId === productId);
+      if (obj) obj.quantity = quantity;
+      else this.productQtys.push({ quantity, productId });
+    },
+    getQuantity(id) {
+      const qty = this.productQtys.find(({ productId }) => productId === id)
+        ?.quantity;
+      return qty ?? 1;
+    },
+    handleProductHover(id) {
+      this.hoveredProduct = id;
+    },
+    handleProductHoverOut(id) {
+      this.hoveredProduct = id;
     }
   }
 };

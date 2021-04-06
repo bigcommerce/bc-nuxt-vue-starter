@@ -200,6 +200,10 @@
       --product-card-max-width: 50%;
       --product-card-title-margin: var(--spacer-base) 0 0 0;
     }
+    .product_add_to_cart {
+      display: flex;
+      justify-content: center;
+    }
   }
   &__product-card-horizontal {
     margin-bottom: var(--spacer-sm);
