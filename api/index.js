@@ -3,6 +3,7 @@ import product from './routes/product';
 import address from './routes/address';
 import order from './routes/order';
 import cart from './routes/cart';
+import customer from './routes/customer';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(product);
 app.use(address);
 app.use(order);
 app.use(cart);
+app.use(customer);
 
 if (require.main === module) {
   const port = 3001;

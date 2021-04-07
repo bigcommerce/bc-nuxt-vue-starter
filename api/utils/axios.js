@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const customAxios = (action) => {
+export const customAxios = (action, cookie = null) => {
   let baseURL = '';
   const headers = {
     'Content-Type': 'application/json',
@@ -12,6 +12,9 @@ export const customAxios = (action) => {
   } else if (action === 'graphql') {
     baseURL = process.env.BASE_URL;
     headers.authorization = `Bearer ${process.env.STOREFRONT_API_TOKEN}`;
+  }
+  if (cookie) {
+    headers.Cookie = cookie;
   }
   return axios.create({
     baseURL,
