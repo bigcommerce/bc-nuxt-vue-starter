@@ -84,8 +84,18 @@ export const actions = {
       });
   },
   async logOut({ commit }) {
-    removeUserAndCookie();
-    commit('SET_LOGGEDIN', false);
+    bigCommerce
+      .post('/graphql', {
+        query: this.$queries.customerLogOut()
+      })
+      .then(() => {
+        commit('SET_LOADING', false);
+        commit('SET_LOGGEDIN', false);
+        removeUserAndCookie();
+      })
+      .catch(() => {
+        commit('SET_LOADING', false);
+      });
   },
   async isLoggedIn({ commit }) {
     const user = getUser();
