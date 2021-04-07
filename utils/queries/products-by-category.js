@@ -1,27 +1,37 @@
-export const shopAll = () => {
+export const productsByCategory = (path, pageParam) => {
   return `
   query CategoryByUrl {
     site {
-      route(path: "/shop-all/") {
+      route(path: "${path}") {
         node {
           id
           ... on Category {
             name
             entityId
-            products {
+            products(${pageParam}) {
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+								startCursor
+                endCursor
+              }
               edges {
                 node {
                   variants {
                     edges {
                       node {
-                        id
-                        entityId
+                        options {
+                          edges {
+                            cursor
+                          }
+                        }
                       }
                     }
                   }
                   entityId
                   name
                   path
+                  description
                   defaultImage {
                     url(width: 216, height: 326)
                   }
@@ -30,6 +40,10 @@ export const shopAll = () => {
                       value
                       currencyCode
                     }
+                  }
+                  reviewSummary {
+                    numberOfReviews
+                    summationOfRatings
                   }
                 }
               }

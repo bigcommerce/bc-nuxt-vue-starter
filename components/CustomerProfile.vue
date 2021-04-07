@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { breadcrumbs } from '@/constants';
+import { profileBreadcrumbs } from '@/constants';
 import { SfBreadcrumbs, SfContentPages } from '@storefront-ui/vue';
 import { mapActions, mapGetters } from 'vuex';
 import { MyProfile, ShippingDetails, OrderHistory } from './_profile/index.js';
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       activePage: 'My profile',
-      breadcrumbs
+      breadcrumbs: profileBreadcrumbs
     };
   },
   computed: {

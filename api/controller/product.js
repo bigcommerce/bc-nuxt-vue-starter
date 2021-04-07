@@ -1,10 +1,31 @@
 import queries from '../../utils/queries';
 import { customAxios } from '../utils/axios';
 
-export const shopAll = async (req, res) => {
+export const getCategories = async (req, res) => {
   try {
     const result = await customAxios('graphql').post(`/graphql`, {
-      query: queries.shopAll()
+      query: queries.category()
+    });
+    res.json({
+      message: 'Successfully got all categories',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Getting all categories failed',
+      body: error,
+      status: false
+    });
+  }
+};
+
+export const getProductsByCategory = async (req, res) => {
+  try {
+    const path = req.query.path;
+    const pageParam = req.query.pageParam;
+    const result = await customAxios('graphql').post(`/graphql`, {
+      query: queries.productsByCategory(path, pageParam)
     });
     res.json({
       message: 'Successfully got all products',

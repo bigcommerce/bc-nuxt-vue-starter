@@ -1,10 +1,32 @@
-export const breadcrumbs = [
+export const profileBreadcrumbs = [
   {
     text: 'Home',
     link: '/'
   },
   {
     text: 'My Account',
-    link: '/login'
+    link: '#'
+  }
+];
+
+export const productsBreadcrumbs = [
+  {
+    text: 'Home',
+    link: '/'
+  },
+  {
+    text: 'Products',
+    link: '#'
+  }
+];
+
+export const productBreadcrumbs = [
+  {
+    text: 'Products',
+    link: '/products'
+  },
+  {
+    text: 'Product Page',
+    link: '#'
   }
 ];

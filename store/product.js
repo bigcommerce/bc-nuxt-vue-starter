@@ -6,7 +6,12 @@ export const state = () => ({
   product: null,
   colors: [],
   isLoading: false,
-  selectedColor: null
+  selectedColor: null,
+  categories: [],
+  category: '/shop-all/',
+  startCursor: '',
+  endCursor: '',
+  showOnPage: 10
 });
 
 export const getters = {
@@ -24,6 +29,21 @@ export const getters = {
   },
   isLoading(state) {
     return state.isLoading;
+  },
+  categories(state) {
+    return state.categories;
+  },
+  category(state) {
+    return state.category;
+  },
+  startCursor(state) {
+    return state.startCursor;
+  },
+  endCursor(state) {
+    return state.endCursor;
+  },
+  showOnPage(state) {
+    return state.showOnPage;
   }
 };
 
@@ -42,23 +62,101 @@ export const mutations = {
   },
   SET_LOADING(state, isLoading) {
     state.isLoading = isLoading;
+  },
+  SET_CATEGORIES(state, categories) {
+    state.categories = categories;
+  },
+  SET_CATEGORY(state, category) {
+    state.category = category;
+  },
+  SET_START_CURSOR(state, startCursor) {
+    state.startCursor = startCursor;
+  },
+  SET_END_CURSOR(state, endCursor) {
+    state.endCursor = endCursor;
+  },
+  SET_SHOW_ON_PAGE(state, showOnPage) {
+    state.showOnPage = showOnPage;
   }
 };
 
 export const actions = {
-  getShopAll({ commit }) {
+  getCategories({ commit }) {
     commit('SET_LOADING', true);
-    axios.get('/shopAll').then(({ data }) => {
+    axios.get(`/getCategories`).then(({ data }) => {
       if (data.status) {
-        commit(
-          'SET_PRODUCTS',
-          data.body?.data?.site?.route?.node?.products?.edges
-        );
+        commit('SET_CATEGORIES', data.body?.data?.site?.categoryTree);
       } else {
         this.$toast.error(data.message);
       }
       commit('SET_LOADING', false);
     });
+  },
+  getProductsByCategory({ commit, getters }, data) {
+    let path = data?.path;
+    const page = data?.page;
+    let pageParam = null;
+    if (!page) {
+      pageParam = `after: "", first: ${getters.showOnPage}`;
+    } else if (page === 'next') {
+      pageParam = `after: "${getters.endCursor}", first: ${getters.showOnPage}`;
+    } else if (page === 'prev') {
+      pageParam = `before: "${getters.startCursor}", last: ${getters.showOnPage}`;
+    }
+    if (typeof path !== 'undefined') commit('SET_CATEGORY', path);
+    else path = getters.category;
+    commit('SET_LOADING', true);
+    axios
+      .get(`/getProductsByCategory?path=${path}&pageParam=${pageParam}`)
+      .then(({ data }) => {
+        if (data.status) {
+          const checkCartOnPage = (edges) => {
+            let flag = false;
+            // eslint-disable-next-line no-unreachable-loop
+            for (let index = 0; index < edges.length; index++) {
+              const { node } = edges[index];
+              if (node.options.edges.length > 0) {
+                flag = true;
+                break;
+              } else {
+                flag = false;
+                break;
+              }
+            }
+            return flag;
+          };
+          const products = data.body?.data?.site?.route?.node?.products?.edges.map(
+            ({ node }) => ({
+              path: node.path,
+              title: node.name,
+              id: node.entityId,
+              description: node.description,
+              image:
+                node.defaultImage?.url ??
+                '/assets/storybook/SfProductCard/no-product.jpg',
+              price: {
+                regular: `${node.prices?.price?.currencyCode} ${node.prices?.price?.value}`
+              },
+              rating: {
+                max: 5,
+                score:
+                  node.reviewSummary?.summationOfRatings /
+                  node.reviewSummary?.numberOfReviews
+              },
+              reviewsCount: node.reviewSummary?.numberOfReviews,
+              isCartableOnCategoryPage: checkCartOnPage(node?.variants?.edges)
+            })
+          );
+          const pageInfo =
+            data.body?.data?.site?.route?.node?.products?.pageInfo;
+          commit('SET_START_CURSOR', pageInfo.startCursor);
+          commit('SET_END_CURSOR', pageInfo.endCursor);
+          commit('SET_PRODUCTS', products);
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
   },
   getProductBySlug({ commit }, slug) {
     commit('SET_LOADING', true);

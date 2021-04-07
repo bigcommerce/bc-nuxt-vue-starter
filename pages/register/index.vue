@@ -45,9 +45,7 @@
         :label="'Password'"
         :name="'password'"
         :valid="
-          $v.password.required &&
-          this.$v.password.minLength &&
-          pwdValidate(password)
+          $v.password.required && $v.password.minLength && pwdValidate(password)
         "
         :placeholder="'Input Password'"
         :error-message="pwdError"

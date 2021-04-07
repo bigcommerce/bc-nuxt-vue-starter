@@ -66,7 +66,7 @@
         </div>
         <SfButton
           style="width: 100%"
-          link="/shop-all"
+          link="/products"
           class="sf-button--full-width color-secondary"
         >
           Start shopping
