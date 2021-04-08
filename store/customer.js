@@ -1,8 +1,10 @@
+import axios from 'axios';
 import {
   setUser,
   getUser,
   removeUserAndCookie,
-  bigCommerce
+  setCookie,
+  getCookie
 } from '~/utils/auth';
 
 export const state = () => ({
@@ -38,33 +40,20 @@ export const mutations = {
 export const actions = {
   login({ dispatch, commit }, variables) {
     commit('SET_LOADING', true);
-    bigCommerce
-      .post('/graphql', {
-        query: this.$queries.customerLogin(),
+    axios
+      .post(`/customerLogin`, {
         variables
       })
-      .then(() => {
-        dispatch('getCustomer');
-      })
-      .catch(() => {
+      .then(({ data }) => {
+        if (data.status) {
+          const user = setUser(data.body.data.customer);
+          setCookie(data.body.cookie);
+          commit('SET_CUSTOMER', user);
+          dispatch('isLoggedIn');
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
-        this.$toast.error('Invalide credentials');
-      });
-  },
-  getCustomer({ commit, dispatch }) {
-    bigCommerce
-      .post('/graphql', {
-        query: this.$queries.getCustomer()
-      })
-      .then((response) => {
-        const user = setUser(response.data.data.customer);
-        commit('SET_LOADING', false);
-        commit('SET_CUSTOMER', user);
-        dispatch('isLoggedIn');
-      })
-      .catch(() => {
-        commit('SET_LOADING', false);
-        this.$toast.error('Can not get customer info');
       });
   },
   createCustomer({ commit }, data) {
@@ -84,8 +73,22 @@ export const actions = {
       });
   },
   async logOut({ commit }) {
-    removeUserAndCookie();
-    commit('SET_LOGGEDIN', false);
+    commit('SET_LOADING', true);
+    const cookie = getCookie();
+    console.log(cookie);
+    axios
+      .post('/customerLogOut', {
+        cookie
+      })
+      .then(({ data }) => {
+        if (data.status) {
+          commit('SET_LOGGEDIN', false);
+          removeUserAndCookie();
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
   },
   async isLoggedIn({ commit }) {
     const user = getUser();
