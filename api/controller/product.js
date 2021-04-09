@@ -1,6 +1,26 @@
 import queries from '../../utils/queries';
 import { customAxios } from '../utils/axios';
 
+export const searchProductByKey = async (req, res) => {
+  try {
+    const searchKey = req.query.key;
+    const result = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/catalog/products?keyword=${searchKey}&keyword_context=${searchKey}&include=primary_image`
+    );
+    res.json({
+      message: 'Successfully got products by the key.',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Getting products failed',
+      body: error,
+      status: false
+    });
+  }
+};
+
 export const getCategories = async (req, res) => {
   try {
     const result = await customAxios('graphql').post(`/graphql`, {

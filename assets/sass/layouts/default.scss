@@ -45,3 +45,34 @@ html {
   color: #fff;
   background-color: #35495e;
 }
+.sf-modal__container {
+  .sf-bar.sf-modal__bar {
+    display: none;
+  }
+  transform: none !important;
+  top: 100px !important;
+  .sf-modal__content {
+    padding: 0;
+    .product_list {
+      position: relative;
+      background: white;
+      list-style-type: none;
+      overflow: scroll;
+      overflow-x: hidden;
+      height: 20em;
+      line-height: 2em;
+      border: 1px solid #ccc;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      right: 0px;
+      top: 0px;
+    }
+    .list_item {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #ccc;
+    }
+  }
+}
