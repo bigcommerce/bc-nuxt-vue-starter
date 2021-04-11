@@ -46,6 +46,7 @@ html {
   background-color: #35495e;
 }
 .sf-modal__container {
+  z-index: 10000;
   .sf-bar.sf-modal__bar {
     display: none;
   }

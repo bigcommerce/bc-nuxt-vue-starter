@@ -101,27 +101,3 @@ export default {
   }
 };
 </script>
-<style scoped lang="css">
-.product_list {
-  position: relative;
-  background: white;
-  list-style-type: none;
-  overflow: scroll;
-  overflow-x: hidden;
-  height: 20em;
-  line-height: 2em;
-  border: 1px solid #ccc;
-  padding: 0;
-  margin: 0;
-  overflow: scroll;
-  width: 100%;
-  right: 0px;
-  top: 0px;
-}
-.list_item {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #ccc;
-}
-</style>
