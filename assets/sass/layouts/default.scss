@@ -1,6 +1,6 @@
+@import '~@storefront-ui/vue/styles';
+
 html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -47,13 +47,17 @@ html {
 }
 .sf-modal__container {
   z-index: 10000;
+  transform: none !important;
+  top: 100px !important;
+  box-shadow: 0 4px 10px rgba(168, 172, 176, 0.19);
+
   .sf-bar.sf-modal__bar {
     display: none;
   }
-  transform: none !important;
-  top: 100px !important;
+
   .sf-modal__content {
     padding: 0;
+
     .product_list {
       position: relative;
       background: white;
@@ -62,18 +66,36 @@ html {
       overflow-x: hidden;
       height: 20em;
       line-height: 2em;
-      border: 1px solid #ccc;
       padding: 0;
       margin: 0;
       width: 100%;
       right: 0px;
       top: 0px;
+
+      @include for-desktop {
+        border: 1px solid #eee;
+        border-radius: 3px;
+      }
     }
+
     .list_item {
       padding: 10px;
       display: flex;
       align-items: center;
-      border-top: 1px solid #ccc;
+      border-top: 1px solid #eee;
+      cursor: pointer;
+
+      .sf-image--wrapper {
+        margin-right: 0.5rem;
+      }
+
+      &:first-of-type {
+        border-top: none;
+      }
+
+      &:hover {
+        background-color: #eee;
+      }
     }
   }
 }

@@ -89,8 +89,10 @@ export default {
       }
     },
     runSearchQuery(key) {
-      this.visible = true;
-      this.searchProductByKey(key);
+      if (key.length >= 2) {
+        this.visible = true;
+        this.searchProductByKey(key);
+      }
     },
     handleCloseModal() {
       this.visible = false;
