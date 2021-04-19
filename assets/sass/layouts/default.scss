@@ -57,7 +57,10 @@ html {
 
   .sf-modal__content {
     padding: 0;
-
+    h2 {
+      text-align: center;
+      padding: 20px;
+    }
     .product_list {
       position: relative;
       background: white;

@@ -83,7 +83,9 @@
                 <SfPrice :regular="'$' + totalPrice" />
               </template>
             </SfProperty>
-            <SfButton class="sf-button--full-width color-secondary"
+            <SfButton
+              class="sf-button--full-width color-secondary"
+              @click="cartCheckout"
               >Go to checkout</SfButton
             >
           </div>
@@ -153,7 +155,8 @@ export default {
     ...mapActions({
       getCart: 'carts/getCart',
       deleteCartItem: 'carts/deleteCartItem',
-      updateCartItem: 'carts/updateCartItem'
+      updateCartItem: 'carts/updateCartItem',
+      cartCheckout: 'carts/cartCheckout'
     }),
     handleSidebarOpen() {
       this.$parent.handleSidebarOpen();

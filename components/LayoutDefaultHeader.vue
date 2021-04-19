@@ -27,14 +27,13 @@
       </template>
     </SfHeader>
     <SfModal
-      v-if="searchedProducts.length > 0"
       :visible="visible"
       :overlay="false"
       :cross="true"
       :persistent="false"
       @close="handleCloseModal"
     >
-      <ul class="product_list">
+      <ul v-if="searchedProducts.length > 0" class="product_list">
         <li
           v-for="(product, key) in searchedProducts"
           :key="key"
@@ -45,6 +44,7 @@
           <span>{{ product.name }}</span>
         </li>
       </ul>
+      <h2 v-else>No results!</h2>
     </SfModal>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      visible: true
+      visible: false
     };
   },
   computed: {
@@ -89,7 +89,7 @@ export default {
       }
     },
     runSearchQuery(key) {
-      if (key.length >= 2) {
+      if (key.length >= 3) {
         this.visible = true;
         this.searchProductByKey(key);
       }
@@ -98,6 +98,7 @@ export default {
       this.visible = false;
     },
     handleProductClick(path) {
+      this.visible = false;
       this.$router.push('/products' + path);
     }
   }
