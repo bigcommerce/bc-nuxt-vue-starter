@@ -88,7 +88,7 @@
             class="products__product-card"
             @click="gotoProduct(product)"
             @mouseover="handleProductHover(product.id)"
-            @mouseout="handleProductHoverOut(product.id)"
+            @mouseout="handleProductHover(product.id)"
             @click:add-to-cart="addToCart(1, product.id)"
           >
             <template v-if="product.isCartableOnCategoryPage" #add-to-cart>
@@ -175,6 +175,7 @@
           </SfSelect>
         </div>
       </div>
+      <CartSidebar :is-cart-sidebar-open="isCartSidebarOpen"></CartSidebar>
     </div>
   </div>
 </template>
@@ -193,6 +194,7 @@ import {
   SfSelect
 } from '@storefront-ui/vue';
 import { mapActions, mapGetters } from 'vuex';
+import CartSidebar from '@/components/CartSidebar';
 import { productsBreadcrumbs } from '~/constants';
 export default {
   components: {
@@ -206,7 +208,8 @@ export default {
     SfMenuItem,
     SfAccordion,
     SfBreadcrumbs,
-    SfSelect
+    SfSelect,
+    CartSidebar
   },
   data() {
     return {
@@ -216,7 +219,8 @@ export default {
       sidebarAccordion: [],
       showOnPage: ['5', '10', '20'],
       breadcrumbs: productsBreadcrumbs,
-      hoveredProduct: null
+      hoveredProduct: null,
+      isCartSidebarOpen: false
     };
   },
   computed: {
@@ -245,16 +249,6 @@ export default {
       getCategories: 'product/getCategories',
       getProductsByCategory: 'product/getProductsByCategory'
     }),
-    updateFilter() {},
-    clearAllFilters() {
-      const filters = Object.keys(this.filters);
-      filters.forEach((name) => {
-        const prop = this.filters[name];
-        prop.forEach((value) => {
-          value.selected = false;
-        });
-      });
-    },
     handleSidebar(path) {
       this.getProductsByCategory({ path });
     },
@@ -269,6 +263,7 @@ export default {
       this.$store.dispatch('product/getProductsByCategory', { page: action });
     },
     addToCart(qty, id) {
+      this.isCartSidebarOpen = true;
       this.$store.dispatch('carts/addToCart', {
         quantity: qty,
         product_id: id
@@ -287,8 +282,8 @@ export default {
     handleProductHover(id) {
       this.hoveredProduct = id;
     },
-    handleProductHoverOut(id) {
-      this.hoveredProduct = id;
+    handleSidebarOpen() {
+      this.isCartSidebarOpen = false;
     }
   }
 };

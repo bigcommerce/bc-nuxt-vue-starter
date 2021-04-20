@@ -2,7 +2,8 @@ import { Router } from 'express';
 import {
   getProductsByCategory,
   getProductBySlug,
-  getCategories
+  getCategories,
+  searchProductByKey
 } from '../controller/product';
 import { permissionMiddleware } from '../middleware';
 
@@ -15,5 +16,6 @@ router.get(
 );
 router.get('/getProductBySlug', permissionMiddleware, getProductBySlug);
 router.get('/getCategories', permissionMiddleware, getCategories);
+router.get('/searchProductByKey', permissionMiddleware, searchProductByKey);
 
 export default router;

@@ -198,7 +198,7 @@
     @include for-desktop {
       margin-bottom: 0;
       --product-card-max-width: 50%;
-      --product-card-title-margin: var(--spacer-base) 0 0 0;
+      --product-card-link-margin: var(--spacer-base) 0 0 0;
     }
     .product_add_to_cart {
       display: flex;

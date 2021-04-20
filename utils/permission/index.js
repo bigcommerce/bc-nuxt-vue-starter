@@ -11,7 +11,10 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_getAllAddresses',
   'PUT_updateAddress',
   'POST_addAddress',
-  'DELETE_deleteAddress'
+  'DELETE_deleteAddress',
+  'GET_searchProductByKey',
+  'POST_customerLogin',
+  'POST_customerLogOut'
 ];
 
 export const checkApiAccessPermission = (permission) => {

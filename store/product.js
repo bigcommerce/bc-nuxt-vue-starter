@@ -11,7 +11,8 @@ export const state = () => ({
   category: '/shop-all/',
   startCursor: '',
   endCursor: '',
-  showOnPage: 10
+  showOnPage: 10,
+  searchedProducts: []
 });
 
 export const getters = {
@@ -44,6 +45,9 @@ export const getters = {
   },
   showOnPage(state) {
     return state.showOnPage;
+  },
+  searchedProducts(state) {
+    return state.searchedProducts;
   }
 };
 
@@ -77,6 +81,9 @@ export const mutations = {
   },
   SET_SHOW_ON_PAGE(state, showOnPage) {
     state.showOnPage = showOnPage;
+  },
+  SET_SEARCHED_PRODUCTS(state, searchedProducts) {
+    state.searchedProducts = searchedProducts;
   }
 };
 
@@ -214,5 +221,23 @@ export const actions = {
       }
     });
     commit('SET_COLORS', colors);
+  },
+  searchProductByKey({ commit, state }, key) {
+    commit('SET_LOADING', true);
+    axios.get(`/searchProductByKey?key=${key}`).then(({ data }) => {
+      if (data.status) {
+        const products = data.body.data.map((item) => ({
+          path: item.custom_url?.url,
+          name: item.name,
+          image:
+            item.primary_image?.url_standard ??
+            '/assets/storybook/SfProductCard/no-product.jpg'
+        }));
+        commit('SET_SEARCHED_PRODUCTS', products);
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
   }
 };
