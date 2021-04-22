@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
+import { CHECKOUT_TYPE } from '~/constants/checkouttype';
 import { getCartCheckoutRedirectUrl, getUser } from '~/utils/auth';
 const productFilter = (cart) => {
   return cart && cart !== ''
@@ -150,11 +151,18 @@ export const actions = {
   },
 
   async cartCheckout({ state }) {
-    const user = getUser();
-    if (user) {
-      window.location = getCartCheckoutRedirectUrl(
-        state.redirectUrls.checkout_url
-      );
-    } else window.location = state.redirectUrls.checkout_url;
+    const checkoutType = process.env.CHECKOUT_TYPE;
+    if (checkoutType === CHECKOUT_TYPE.REDIRECTED) {
+      const user = getUser();
+      if (user) {
+        window.location = getCartCheckoutRedirectUrl(
+          state.redirectUrls.checkout_url
+        );
+      } else window.location = state.redirectUrls.checkout_url;
+    } else if (checkoutType === CHECKOUT_TYPE.EMBEDED) {
+      this.$router.push('/');
+    } else if (checkoutType === CHECKOUT_TYPE.CUSTOM) {
+      this.$router.push('/checkout');
+    }
   }
 };
