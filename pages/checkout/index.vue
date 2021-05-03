@@ -4,7 +4,10 @@
       <div class="checkout__main">
         <SfSteps :active="currentStep" @change="updateStep($event)">
           <SfStep name="Details">
-            <PersonalDetails />
+            <PersonalDetails
+              :value="personalDetails"
+              @input="personalDetails = $event"
+            />
           </SfStep>
           <SfStep name="Shipping">
             <Shipping
@@ -102,6 +105,7 @@ export default {
         'Pay for order',
         'Confirm and pay'
       ],
+      personalDetails: { firstName: '', lastName: '', email: '' },
       shipping: {
         firstName: '',
         lastName: '',
