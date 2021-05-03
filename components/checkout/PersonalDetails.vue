@@ -1,7 +1,9 @@
 <template>
   <div id="personal-details">
     <div class="log-in">
-      <SfButton class="log-in__button sf-button--full-width color-secondary"
+      <SfButton
+        link="/login"
+        class="log-in__button sf-button--full-width color-secondary"
         >Log into your account</SfButton
       >
       <p class="log-in__info">or fill the details below:</p>
