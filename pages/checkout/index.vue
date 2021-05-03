@@ -4,10 +4,7 @@
       <div class="checkout__main">
         <SfSteps :active="currentStep" @change="updateStep($event)">
           <SfStep name="Details">
-            <PersonalDetails
-              :value="personalDetails"
-              @input="personalDetails = $event"
-            />
+            <PersonalDetails />
           </SfStep>
           <SfStep name="Shipping">
             <Shipping
@@ -62,12 +59,12 @@
     <div class="actions">
       <SfButton
         class="sf-button--full-width actions__button"
-        @click="currentStep++"
+        @click="stepNavigate('next')"
         >{{ steps[currentStep] }}</SfButton
       >
       <SfButton
         class="sf-button--full-width sf-button--underlined actions__button smartphone-only"
-        @click="currentStep--"
+        @click="stepNavigate('back')"
         >Go back</SfButton
       >
     </div>
@@ -75,6 +72,7 @@
 </template>
 <script>
 import { SfSteps, SfButton } from '@storefront-ui/vue';
+import { mapActions } from 'vuex';
 import {
   PersonalDetails,
   Shipping,
@@ -82,7 +80,7 @@ import {
   ConfirmOrder,
   OrderSummary,
   OrderReview
-} from './_internal/index.js';
+} from '@/components/checkout';
 export default {
   name: 'Checkout',
   components: {
@@ -104,7 +102,6 @@ export default {
         'Pay for order',
         'Confirm and pay'
       ],
-      personalDetails: { firstName: '', lastName: '', email: '' },
       shipping: {
         firstName: '',
         lastName: '',
@@ -277,11 +274,23 @@ export default {
       };
     }
   },
+  mounted() {
+    this.checkLogin();
+  },
   methods: {
+    ...mapActions({
+      checkLogin: 'customer/isLoggedIn'
+    }),
     updateStep(next) {
-      // prevent to move next by SfStep header
       if (next < this.currentStep) {
         this.currentStep = next;
+      }
+    },
+    stepNavigate(action) {
+      if (action === 'next') {
+        if (this.currentStep !== 3) this.currentStep++;
+      } else if (action === 'back') {
+        if (this.currentStep !== 0) this.currentStep--;
       }
     }
   }

@@ -9,12 +9,16 @@ export const customerLogin = async (req, res) => {
       variables
     });
 
-    const customerResult = await customAxios(
-      'graphql',
-      loginRes.headers['set-cookie'][0]
-    ).post(`/graphql`, {
-      query: queries.getCustomer()
-    });
+    const cookies = loginRes.headers['set-cookie'].filter((item) =>
+      item.includes('SHOP_TOKEN')
+    );
+
+    const customerResult = await customAxios('graphql', cookies[0]).post(
+      `/graphql`,
+      {
+        query: queries.getCustomer()
+      }
+    );
 
     res.json({
       message: 'Successfully login!',
@@ -27,6 +31,27 @@ export const customerLogin = async (req, res) => {
   } catch (error) {
     res.json({
       message: 'Login failed',
+      body: error,
+      status: false
+    });
+  }
+};
+
+export const customerRegister = async (req, res) => {
+  try {
+    const variables = req.body.variables;
+    const result = await customAxios('api').post(
+      `/stores/${process.env.STORE_HASH}/v2/customers`,
+      variables
+    );
+    res.json({
+      message: 'Successfully registered',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'User registration failed',
       body: error,
       status: false
     });

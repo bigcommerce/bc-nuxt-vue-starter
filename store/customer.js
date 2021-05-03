@@ -56,26 +56,25 @@ export const actions = {
         commit('SET_LOADING', false);
       });
   },
-  createCustomer({ commit }, data) {
+  createCustomer({ commit }, variables) {
     commit('SET_LOADING', true);
-    this.$axios
-      .$post(`/api/stores/${process.env.storeHash}/v2/customers`, {
-        ...data
+    axios
+      .post(`/customerRegister`, {
+        variables
       })
-      .then(() => {
-        commit('SET_LOADING', false);
-        this.$toast.info('Successfully registered.');
-        this.$router.push('/login');
-      })
-      .catch(() => {
-        this.$toast.error('Customer create error.');
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.info(data.message);
+          this.$router.push('/login');
+        } else {
+          this.$toast.error(data.message);
+        }
         commit('SET_LOADING', false);
       });
   },
   async logOut({ commit }) {
     commit('SET_LOADING', true);
     const cookie = getCookie();
-    console.log(cookie);
     axios
       .post('/customerLogOut', {
         cookie

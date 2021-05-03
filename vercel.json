@@ -18,6 +18,7 @@
     { "source": "/updateCartItem", "destination": "/api/routes/cart" },
     { "source": "/deleteCartItem", "destination": "/api/routes/cart" },
     { "source": "/customerLogin", "destination": "/api/routes/customer" },
+    { "source": "/customerRegister", "destination": "/api/routes/customer" },
     { "source": "/customerLogOut", "destination": "/api/routes/customer" }
   ],
   "env": {

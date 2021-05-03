@@ -1,10 +1,11 @@
 <template>
   <div id="personal-details">
-    <div class="log-in">
-      <SfButton class="log-in__button sf-button--full-width color-secondary"
+    <div v-if="!loggedIn" class="log-in">
+      <SfButton
+        link="/login"
+        class="log-in__button sf-button--full-width color-secondary"
         >Log into your account</SfButton
       >
-      <p class="log-in__info">or fill the details below:</p>
     </div>
     <SfHeading
       title="Personal details"
@@ -13,99 +14,60 @@
     />
     <div class="form">
       <SfInput
-        v-model="firstName"
-        :value="firstName"
+        v-model="customer.firstName"
+        :value="customer.firstName"
         label="First name"
         name="firstName"
         class="form__element form__element--half"
-        required
-        @input="updateField('firstName', $event)"
       />
       <SfInput
-        v-model="lastName"
         :value="lastName"
         label="Last name"
         name="lastName"
         class="form__element form__element--half form__element--half-even"
-        required
-        @input="updateField('lastName', $event)"
+        :readonly="customer"
       />
       <SfInput
-        v-model="email"
         :value="email"
         label="Your email"
         name="email"
         class="form__element"
-        required
-        @input="updateField('email', $event)"
+        :readonly="customer"
       />
-      <div class="info">
-        <p class="info__heading">Enjoy these perks with your free account!</p>
-        <SfCharacteristic
-          v-for="(characteristic, key) in characteristics"
-          :key="key"
-          :description="characteristic.description"
-          :icon="characteristic.icon"
-          size-icon="24px"
-          class="info__characteristic"
-        />
-      </div>
-      <div>
-        <SfCheckbox
-          v-model="createAccount"
-          name="createAccount"
-          label="I want to create an account"
-          class="form__checkbox"
-        />
-      </div>
-      <transition name="sf-fade">
-        <SfInput
-          v-if="createAccount"
-          v-model="password"
-          :has-show-password="true"
-          type="password"
-          label="Create Password"
-          class="form__element"
-          required
-        />
-      </transition>
+    </div>
+    <div class="info">
+      <SfCharacteristic
+        v-for="(characteristic, key) in characteristics"
+        :key="key"
+        :description="characteristic.description"
+        :icon="characteristic.icon"
+        size-icon="24px"
+        class="info__characteristic"
+      />
     </div>
   </div>
 </template>
 <script>
 import {
   SfInput,
-  SfCheckbox,
   SfButton,
   SfHeading,
   SfCharacteristic
 } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
 export default {
   name: 'PersonalDetails',
   components: {
     SfInput,
-    SfCheckbox,
     SfButton,
     SfHeading,
     SfCharacteristic
-  },
-  props: {
-    value: {
-      type: Object,
-      default: () => ({})
-    },
-    buttonName: {
-      type: String,
-      default: ''
-    }
   },
   data() {
     return {
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
-      createAccount: false,
       characteristics: [
         { description: 'Faster checkout', icon: 'clock' },
         { description: 'Earn credits with every purchase', icon: 'credits' },
@@ -114,26 +76,8 @@ export default {
       ]
     };
   },
-  watch: {
-    personalDetails: {
-      handler() {
-        this.firstName = this.value.firstName;
-        this.lastName = this.value.lastName;
-        this.email = this.value.email;
-      },
-      immediate: true
-    },
-    createAccount(value) {
-      if (!value) this.password = '';
-    }
-  },
-  methods: {
-    updateField(fieldName, fieldValue) {
-      this.$emit('input', {
-        ...this.value,
-        [fieldName]: fieldValue
-      });
-    }
+  computed: {
+    ...mapGetters('customer', ['loggedIn', 'customer'])
   }
 };
 </script>

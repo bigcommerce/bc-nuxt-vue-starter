@@ -29,7 +29,7 @@
         :value="streetName"
         label="Street name"
         name="streetName"
-        class="form__element"
+        class="form__element form__element--half"
         required
         @input="updateField('streetName', $event)"
       />
@@ -38,43 +38,34 @@
         :value="city"
         label="City"
         name="city"
-        class="form__element form__element--half"
-        required
-        @input="updateField('city', $event)"
-      />
-      <SfInput
-        v-model="state"
-        :value="state"
-        label="State/Province"
-        name="state"
         class="form__element form__element--half form__element--half-even"
         required
-        @input="updateField('state', $event)"
+        @input="updateField('city', $event)"
       />
       <SfInput
         v-model="zipCode"
         :value="zipCode"
         label="Zip-code"
         name="zipCode"
-        class="form__element form__element--half"
+        class="form__element"
         required
         @input="updateField('zipCode', $event)"
       />
-      <SfSelect
+      <country-select
         v-model="country"
-        placeholder="Country"
-        class="form__element form__element--half form__element--half-even form__select sf-select--underlined"
-        :valid="true"
-        @input="updateField('country', $event)"
-      >
-        <SfSelectOption
-          v-for="countryOption in countries"
-          :key="countryOption"
-          :value="countryOption"
-        >
-          {{ countryOption }}
-        </SfSelectOption>
-      </SfSelect>
+        :country-name="true"
+        :country="country"
+        top-country="US"
+        class="country_select"
+      />
+      <region-select
+        v-model="state"
+        :country="country"
+        :region="state"
+        :region-name="true"
+        :country-name="true"
+        class="region_select"
+      />
       <SfInput
         v-model="phoneNumber"
         :value="phoneNumber"
@@ -135,20 +126,13 @@
   </div>
 </template>
 <script>
-import {
-  SfHeading,
-  SfInput,
-  SfButton,
-  SfSelect,
-  SfRadio
-} from '@storefront-ui/vue';
+import { SfHeading, SfInput, SfButton, SfRadio } from '@storefront-ui/vue';
 export default {
   name: 'Shipping',
   components: {
     SfHeading,
     SfInput,
     SfButton,
-    SfSelect,
     SfRadio
   },
   props: {
@@ -171,56 +155,7 @@ export default {
       zipCode: '',
       country: '',
       phoneNumber: '',
-      shippingMethod: '',
-      countries: [
-        'Austria',
-        'Azerbaijan',
-        'Belarus',
-        'Belgium',
-        'Bosnia and Herzegovina',
-        'Bulgaria',
-        'Croatia',
-        'Cyprus',
-        'Czech Republic',
-        'Denmark',
-        'Estonia',
-        'Finland',
-        'France',
-        'Georgia',
-        'Germany',
-        'Greece',
-        'Hungary',
-        'Iceland',
-        'Ireland',
-        'Italy',
-        'Kosovo',
-        'Latvia',
-        'Liechtenstein',
-        'Lithuania',
-        'Luxembourg',
-        'Macedonia',
-        'Malta',
-        'Moldova',
-        'Monaco',
-        'Montenegro',
-        'The Netherlands',
-        'Norway',
-        'Poland',
-        'Portugal',
-        'Romania',
-        'Russia',
-        'San Marino',
-        'Serbia',
-        'Slovakia',
-        'Slovenia',
-        'Spain',
-        'Sweden',
-        'Switzerland',
-        'Turkey',
-        'Ukraine',
-        'United Kingdom',
-        'Vatican City'
-      ]
+      shippingMethod: ''
     };
   },
   watch: {
@@ -264,6 +199,15 @@ export default {
   }
 }
 .form {
+  .country_select,
+  .region_select {
+    width: 100%;
+    font-size: 18px;
+    border: none;
+    border-bottom: 1px solid;
+    margin-bottom: 30px;
+    padding-bottom: 5px;
+  }
   &__element {
     margin: 0 0 var(--spacer-base) 0;
     &:last-of-type {
