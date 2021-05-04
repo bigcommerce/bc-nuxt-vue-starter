@@ -75,7 +75,6 @@
 </template>
 <script>
 import { SfSteps, SfButton } from '@storefront-ui/vue';
-import { mapActions } from 'vuex';
 import {
   PersonalDetails,
   Shipping,
@@ -278,13 +277,7 @@ export default {
       };
     }
   },
-  mounted() {
-    this.checkLogin();
-  },
   methods: {
-    ...mapActions({
-      checkLogin: 'customer/isLoggedIn'
-    }),
     updateStep(next) {
       if (next < this.currentStep) {
         this.currentStep = next;

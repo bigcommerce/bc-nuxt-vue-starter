@@ -89,13 +89,9 @@ export default {
     }
   },
   watch: {},
-  mounted() {
-    this.checkLogin();
-  },
   methods: {
     ...mapActions({
-      login: 'customer/login',
-      checkLogin: 'customer/isLoggedIn'
+      login: 'customer/login'
     }),
     async handleLogin() {
       await this.login({ email: this.email, password: this.password });

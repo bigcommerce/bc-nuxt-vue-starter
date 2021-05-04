@@ -10,7 +10,7 @@ import env from './config/env';
 import proxy from './config/proxy';
 
 export default {
-  ssr: true,
+  ssr: false,
   loading: false,
   components: false,
   parallel: true,

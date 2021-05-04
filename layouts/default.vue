@@ -14,6 +14,7 @@ export default {
   components: {
     LayoutDefaultHeader
   },
+  middleware: 'authenticated',
   data() {
     return {
       menu
