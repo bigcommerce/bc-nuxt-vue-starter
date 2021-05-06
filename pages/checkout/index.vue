@@ -277,6 +277,9 @@ export default {
       };
     }
   },
+  mounted() {
+    this.$store.dispatch('checkout/getCheckout');
+  },
   methods: {
     updateStep(next) {
       if (next < this.currentStep) {

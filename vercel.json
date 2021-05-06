@@ -19,7 +19,8 @@
     { "source": "/deleteCartItem", "destination": "/api/routes/cart" },
     { "source": "/customerLogin", "destination": "/api/routes/customer" },
     { "source": "/customerRegister", "destination": "/api/routes/customer" },
-    { "source": "/customerLogOut", "destination": "/api/routes/customer" }
+    { "source": "/customerLogOut", "destination": "/api/routes/customer" },
+    { "source": "/getCheckout", "destination": "/api/routes/checkout" }
   ],
   "env": {
     "APP_NAME": "BigCommerce Nuxt Vue Starter",

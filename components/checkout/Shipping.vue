@@ -5,75 +5,88 @@
       :level="3"
       class="sf-heading--left sf-heading--no-underline title"
     />
+    <SpDropdown
+      :consignments="old_consignments"
+      @click:setAddress="handleSetAddress"
+    ></SpDropdown>
     <div class="form">
       <SfInput
-        v-model="firstName"
-        :value="firstName"
+        v-model="shippingInfo.first_name"
+        :value="shippingInfo.first_name"
         label="First name"
-        name="firstName"
+        name="first_name"
         class="form__element form__element--half"
         required
-        @input="updateField('firstName', $event)"
       />
       <SfInput
-        v-model="lastName"
-        :value="lastName"
+        v-model="shippingInfo.last_name"
+        :value="shippingInfo.last_name"
         label="Last name"
-        name="lastName"
+        name="last_name"
         class="form__element form__element--half form__element--half-even"
         required
-        @input="updateField('lastName', $event)"
       />
       <SfInput
-        v-model="streetName"
-        :value="streetName"
-        label="Street name"
-        name="streetName"
+        v-model="shippingInfo.email"
+        :value="shippingInfo.email"
+        label="Email Address"
+        name="email"
         class="form__element form__element--half"
         required
-        @input="updateField('streetName', $event)"
       />
       <SfInput
-        v-model="city"
-        :value="city"
+        v-model="shippingInfo.address1"
+        :value="shippingInfo.address1"
+        label="Address 1"
+        name="address1"
+        class="form__element form__element--half form__element--half-even"
+        required
+      />
+      <SfInput
+        v-model="shippingInfo.address2"
+        :value="shippingInfo.address2"
+        label="Address 2"
+        name="address2"
+        class="form__element form__element--half"
+        required
+      />
+      <SfInput
+        v-model="shippingInfo.city"
+        :value="shippingInfo.city"
         label="City"
         name="city"
         class="form__element form__element--half form__element--half-even"
         required
-        @input="updateField('city', $event)"
       />
       <SfInput
-        v-model="zipCode"
-        :value="zipCode"
-        label="Zip-code"
-        name="zipCode"
+        v-model="shippingInfo.postal_code"
+        :value="shippingInfo.postal_code"
+        label="Postal-code"
+        name="postal_code"
         class="form__element"
         required
-        @input="updateField('zipCode', $event)"
       />
       <country-select
-        v-model="country"
+        v-model="shippingInfo.country"
         :country-name="true"
-        :country="country"
+        :country="shippingInfo.country"
         top-country="US"
         class="country_select"
       />
       <region-select
-        v-model="state"
-        :country="country"
-        :region="state"
-        :region-name="true"
+        v-model="shippingInfo.state_or_province"
+        :country="shippingInfo.country"
+        :region="shippingInfo.state_or_province"
         :country-name="true"
         class="region_select"
       />
       <SfInput
-        v-model="phoneNumber"
-        :value="phoneNumber"
+        v-model="shippingInfo.phone"
+        :value="shippingInfo.phone"
         label="Phone number"
         name="phone"
         class="form__element"
         required
-        @input="updateField('phoneNumber', $event)"
       />
     </div>
     <SfHeading
@@ -92,7 +105,6 @@
           name="shippingMethod"
           :description="item.description"
           class="form__radio shipping"
-          @input="updateField('shippingMethod', $event)"
         >
           <template #label="{ label }">
             <div class="sf-radio__label shipping__label">
@@ -127,13 +139,16 @@
 </template>
 <script>
 import { SfHeading, SfInput, SfButton, SfRadio } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
+import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
 export default {
   name: 'Shipping',
   components: {
     SfHeading,
     SfInput,
     SfButton,
-    SfRadio
+    SfRadio,
+    SpDropdown
   },
   props: {
     shippingMethods: {
@@ -147,39 +162,38 @@ export default {
   },
   data() {
     return {
-      firstName: '',
-      lastName: '',
-      streetName: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      phoneNumber: '',
+      consignmentId: null,
+      shippingInfo: {
+        first_name: '',
+        last_name: '',
+        email: '',
+        address1: '',
+        address2: '',
+        city: '',
+        state_or_province: '',
+        country: '',
+        postal_code: '',
+        phone: ''
+      },
       shippingMethod: ''
     };
   },
-  watch: {
-    shipping: {
-      handler() {
-        this.firstName = this.value.firstName;
-        this.lastName = this.value.lastName;
-        this.streetName = this.value.streetName;
-        this.city = this.value.city;
-        this.state = this.value.state;
-        this.zipCode = this.value.zipCode;
-        this.country = this.value.country;
-        this.phoneNumber = this.value.phoneNumber;
-        this.shippingMethod = this.value.shippingMethod;
-      },
-      immediate: true
-    }
+  computed: {
+    ...mapGetters('checkout', ['old_consignments'])
   },
   methods: {
-    updateField(fieldName, fieldValue) {
-      this.$emit('input', {
-        ...this.value,
-        [fieldName]: fieldValue
-      });
+    handleSetAddress(action) {
+      if (action) {
+        Object.keys(this.shippingInfo).map(
+          (key) => (this.shippingInfo[key] = action?.shipping_address[key])
+        );
+        this.consignmentId = action?.id;
+      } else {
+        Object.keys(this.shippingInfo).map(
+          (key) => (this.shippingInfo[key] = '')
+        );
+        this.consignmentId = null;
+      }
     }
   }
 };

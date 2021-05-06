@@ -14,7 +14,8 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'DELETE_deleteAddress',
   'GET_searchProductByKey',
   'POST_customerLogin',
-  'POST_customerLogOut'
+  'POST_customerRegister',
+  'GET_getCheckout'
 ];
 
 export const checkApiAccessPermission = (permission) => {
