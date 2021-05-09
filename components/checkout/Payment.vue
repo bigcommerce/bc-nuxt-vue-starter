@@ -12,103 +12,85 @@
         label="Copy address data from shipping"
         name="copyShippingAddress"
         class="form__element form__checkbox"
-        @change="updateField('sameAsShipping', $event)"
+        @change="setBillingAsShipping"
       />
       <SfInput
-        v-model="firstName"
-        :value="firstName"
+        v-model="billingInfo.first_name"
+        :value="billingInfo.first_name"
         label="First name"
-        name="firstName"
+        name="first_name"
         class="form__element form__element--half"
         required
-        @input="updateField('firstName', $event)"
       />
       <SfInput
-        v-model="lastName"
-        :value="lastName"
+        v-model="billingInfo.last_name"
+        :value="billingInfo.last_name"
         label="Last name"
-        name="lastName"
+        name="last_name"
         class="form__element form__element--half form__element--half-even"
         required
-        @input="updateField('lastName', $event)"
       />
       <SfInput
-        v-model="streetName"
-        :value="streetName"
-        label="Street name"
-        name="streetName"
-        class="form__element"
+        v-model="billingInfo.email"
+        :value="billingInfo.email"
+        label="Email Address"
+        name="email"
+        class="form__element form__element--half"
         required
-        @input="updateField('streetName', $event)"
       />
       <SfInput
-        v-model="apartment"
-        :value="apartment"
-        label="House/Apartment number"
-        name="apartment"
-        class="form__element"
+        v-model="billingInfo.address1"
+        :value="billingInfo.address1"
+        label="Address 1"
+        name="address1"
+        class="form__element form__element--half form__element--half-even"
         required
-        @input="updateField('apartment', $event)"
       />
       <SfInput
-        v-model="city"
-        :value="city"
+        v-model="billingInfo.address2"
+        :value="billingInfo.address2"
+        label="Address 2"
+        name="address2"
+        class="form__element form__element--half"
+        required
+      />
+      <SfInput
+        v-model="billingInfo.city"
+        :value="billingInfo.city"
         label="City"
         name="city"
-        class="form__element form__element--half"
-        required
-        @input="updateField('city', $event)"
-      />
-      <SfInput
-        v-model="state"
-        :value="state"
-        label="State/Province"
-        name="state"
         class="form__element form__element--half form__element--half-even"
         required
-        @input="updateField('state', $event)"
       />
       <SfInput
-        v-model="zipCode"
-        :value="zipCode"
-        label="Zip-code"
-        name="zipCode"
-        class="form__element form__element--half"
+        v-model="billingInfo.postal_code"
+        :value="billingInfo.postal_code"
+        label="Postal-code"
+        name="postal_code"
+        class="form__element"
         required
-        @input="updateField('zipCode', $event)"
       />
-      <SfSelect
-        v-model="country"
-        :value="country"
-        placeholder="Country"
-        class="form__element form__element--half form__element--half-even form__select sf-select--underlined"
-        required
-        @change="updateField('country', $event)"
-      >
-        <SfSelectOption
-          v-for="countryOption in countries"
-          :key="countryOption"
-          :value="countryOption"
-        >
-          {{ countryOption }}
-        </SfSelectOption>
-      </SfSelect>
+      <country-select
+        v-model="billingInfo.country"
+        :country-name="true"
+        :country="billingInfo.country"
+        top-country="US"
+        class="country_select"
+      />
+      <region-select
+        v-model="billingInfo.state_or_province"
+        :country="billingInfo.country"
+        :region="billingInfo.state_or_province"
+        :country-name="true"
+        class="region_select"
+      />
       <SfInput
-        v-model="phoneNumber"
-        :value="phoneNumber"
+        v-model="billingInfo.phone"
+        :value="billingInfo.phone"
         label="Phone number"
         name="phone"
         class="form__element"
         required
-        @input="updateField('phoneNumber', $event)"
-      />
-      <SfCheckbox
-        v-model="invoice"
-        :value="invoice"
-        label="I want to generate invoice"
-        name="getInvoice"
-        class="form__element form__checkbox"
-        @change="updateField('invoice', $event)"
       />
     </div>
     <SfHeading
@@ -127,7 +109,6 @@
           name="paymentMethod"
           :description="item.description"
           class="form__radio payment-method"
-          @input="updateField('paymentMethod', $event)"
         >
           <template #label>
             <div class="sf-radio__label">
@@ -160,7 +141,6 @@
             name="cardNumber"
             label="Card number"
             class="credit-card-form__input"
-            @input="updateField('cardNumber', $event)"
           />
           <SfInput
             v-model="cardHolder"
@@ -168,7 +148,6 @@
             label="Card holder"
             name="cardHolder"
             class="credit-card-form__input"
-            @input="updateField('cardHolder', $event)"
           />
           <div class="credit-card-form__group">
             <span
@@ -181,7 +160,6 @@
                 :value="cardMonth"
                 label="Month"
                 class="credit-card-form__input credit-card-form__input--with-spacer form__select sf-select--underlined"
-                @change="updateField('cardMonth', $event)"
               >
                 <SfSelectOption
                   v-for="monthOption in months"
@@ -196,7 +174,6 @@
                 :value="cardYear"
                 label="Year"
                 class="credit-card-form__input form__select sf-select--underlined"
-                @change="updateField('cardYear', $event)"
               >
                 <SfSelectOption
                   v-for="yearOption in years"
@@ -216,20 +193,11 @@
               label="Code CVC"
               name="cardCVC"
               class="credit-card-form__input credit-card-form__input--small credit-card-form__input--with-spacer"
-              @input="updateField('cardCVC', $event)"
             />
             <SfButton class="sf-button--text credit-card-form__button"
               >Where can I find CVC code</SfButton
             >
           </div>
-          <SfCheckbox
-            v-model="cardKeep"
-            :value="cardKeep"
-            name="keepcard"
-            label="Save this card for other purchases"
-            class="credit-card-form__element form__checkbox"
-            @change="updateField('cardKeep', $event)"
-          />
         </div>
       </transition>
     </div>
@@ -245,7 +213,7 @@ import {
   SfImage,
   SfCheckbox
 } from '@storefront-ui/vue';
-import axios from 'axios';
+import { mapGetters } from 'vuex';
 export default {
   name: 'Payment',
   components: {
@@ -274,23 +242,24 @@ export default {
   data() {
     return {
       sameAsShipping: false,
-      firstName: '',
-      lastName: '',
-      streetName: '',
-      apartment: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      phoneNumber: '',
+      billingInfo: {
+        first_name: '',
+        last_name: '',
+        email: '',
+        address1: '',
+        address2: '',
+        city: '',
+        state_or_province: '',
+        country: '',
+        postal_code: '',
+        phone: ''
+      },
       paymentMethod: '',
-      invoice: false,
       cardNumber: '',
       cardHolder: '',
       cardMonth: '',
       cardYear: '',
       cardCVC: '',
-      cardKeep: false,
       months: [
         'January',
         'February',
@@ -305,85 +274,24 @@ export default {
         'November',
         'December'
       ],
-      years: ['2020', '2021', '2022', '2025'],
-      countries: []
+      years: ['2020', '2021', '2022', '2025']
     };
   },
   computed: {
+    ...mapGetters('checkout', ['shippingAddress']),
     isCreditCard() {
       return ['debit', 'mastercard', 'electron'].includes(this.paymentMethod);
     }
   },
-  watch: {
-    payment: {
-      handler() {
-        this.sameAsShipping = this.value.sameAsShipping;
-        this.streetName = this.value.streetName;
-        this.apartment = this.value.apartment;
-        this.city = this.value.city;
-        this.state = this.value.state;
-        this.zipCode = this.value.zipCode;
-        this.country = this.value.country;
-        this.phoneNumber = this.value.phoneNumber;
-        this.paymentMethod = this.value.paymentMethod;
-        this.cardNumber = this.value.card.number;
-        this.cardHolder = this.value.card.holder;
-        this.cardMonth = this.value.card.month;
-        this.cardYear = this.value.card.year;
-        this.cardCVC = this.value.card.cvc;
-        this.cardKeep = this.value.card.keep;
-      },
-      immediate: true
-    },
-    sameAsShipping: {
-      handler(value) {
-        if (value) {
-          this.firstName = this.shipping.firstName;
-          this.lastName = this.shipping.lastName;
-          this.streetName = this.shipping.streetName;
-          this.apartment = this.shipping.apartment;
-          this.city = this.shipping.city;
-          this.state = this.shipping.state;
-          this.zipCode = this.shipping.zipCode;
-          this.country = this.shipping.country;
-          this.phoneNumber = this.shipping.phoneNumber;
-          this.paymentMethod = this.shipping.paymentMethod;
-        } else {
-          this.firstName = '';
-          this.lastName = '';
-          this.streetName = '';
-          this.apartment = '';
-          this.city = '';
-          this.state = '';
-          this.zipCode = '';
-          this.country = '';
-          this.phoneNumber = '';
-          this.paymentMethod = '';
-        }
-      },
-      immediate: true
-    }
-  },
-  mounted() {
-    this.getCountries();
-  },
+  mounted() {},
   methods: {
-    updateField(fieldName, fieldValue) {
-      this.$emit('input', {
-        ...this.value,
-        [fieldName]: fieldValue
-      });
-    },
-    getCountries() {
-      axios
-        .get('https://restcountries.eu/rest/v2/all?fields=name')
-        .then((response) => {
-          const countries = response.data.map((country) => country.name);
-          this.countries = countries;
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+    setBillingAsShipping() {
+      const bAddress = { ...this.shippingAddress };
+      if (this.sameAsShipping) this.billingInfo = bAddress;
+      else
+        Object.keys(this.billingInfo).map(
+          (key) => (this.billingInfo[key] = '')
+        );
     }
   }
 };
@@ -404,6 +312,15 @@ export default {
   }
 }
 .form {
+  .country_select,
+  .region_select {
+    width: 100%;
+    font-size: 18px;
+    border: none;
+    border-bottom: 1px solid;
+    margin-bottom: 30px;
+    padding-bottom: 5px;
+  }
   &__element {
     margin: 0 0 var(--spacer-base) 0;
     &:last-of-type {

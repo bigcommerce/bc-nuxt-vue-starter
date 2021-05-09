@@ -24,19 +24,10 @@
         <SfTableData class="table__image">
           <SfImage :src="product.image" :alt="product.title" />
         </SfTableData>
-        <SfTableData class="table__data"
-          >{{ product.configuration[0].value }}
-        </SfTableData>
-
         <SfTableData class="table__description">
           <div class="product-title">{{ product.title }}</div>
-          <div class="product-sku">{{ product.sku }}</div>
         </SfTableData>
         <SfTableData class="table__data">{{ product.qty }}</SfTableData>
-
-        <SfTableData class="table__data"
-          >{{ product.configuration[1].value }}
-        </SfTableData>
         <SfTableData class="table__data">
           <SfPrice
             :regular="product.price.regular"
@@ -114,6 +105,7 @@ import {
   SfProperty,
   SfLink
 } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
 export default {
   name: 'ReviewOrder',
   components: {
@@ -148,13 +140,11 @@ export default {
     return {
       terms: false,
       promoCode: '',
-      tableHeaders: ['Size', 'Description', 'Quantity', 'Colour', 'Amount']
+      tableHeaders: ['Description', 'Quantity', 'Amount']
     };
   },
   computed: {
-    products() {
-      return this.order.products;
-    },
+    ...mapGetters('carts', ['products']),
     shipping() {
       return this.order.shipping;
     },
@@ -176,13 +166,12 @@ export default {
       return method || { label: '' };
     },
     subtotal() {
-      const products = this.products;
-      const subtotal = products.reduce((previous, current) => {
+      const subtotal = this.products.reduce((previous, current) => {
         const qty = current.qty;
         const price = current.price.special
           ? current.price.special
           : current.price.regular;
-        const total = qty * parseFloat(price.replace('$', ''));
+        const total = qty * parseFloat(price);
         return previous + total;
       }, 0);
       return '$' + subtotal.toFixed(2);

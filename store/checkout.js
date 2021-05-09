@@ -14,6 +14,8 @@ export const state = () => ({
   isLoading: false,
   personalDetails: null,
   shippingAddress: null,
+  consignmentId: null,
+  shippingMethod: null,
   line_items: [],
   old_consignments: [],
   old_billing_address: []
@@ -25,6 +27,15 @@ export const getters = {
   },
   personalDetails(state) {
     return state.personalDetails;
+  },
+  shippingAddress(state) {
+    return state.shippingAddress;
+  },
+  consignmentId(state) {
+    return state.consignmentId;
+  },
+  shippingMethod(state) {
+    return state.shippingMethod;
   },
   line_items(state) {
     return state.line_items;
@@ -43,6 +54,15 @@ export const mutations = {
   },
   SET_PERSONAL_DETAILS(state, personalDetails) {
     state.personalDetails = personalDetails;
+  },
+  SET_SHIPPING_ADDRESS(state, shippingAddress) {
+    state.shippingAddress = shippingAddress;
+  },
+  SET_CONSIGNMENT_ID(state, consignmentId) {
+    state.consignmentId = consignmentId;
+  },
+  SET_SHIPPING_METHOD(state, shippingMethod) {
+    state.shippingMethod = shippingMethod;
   },
   SET_LINE_ITEMS(state, line_items) {
     state.line_items = line_items;

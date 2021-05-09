@@ -99,7 +99,7 @@
         <SfRadio
           v-for="item in shippingMethods"
           :key="item.value"
-          v-model="shippingMethod"
+          v-model="shMethod"
           :label="item.label"
           :value="item.value"
           name="shippingMethod"
@@ -162,7 +162,7 @@ export default {
   },
   data() {
     return {
-      consignmentId: null,
+      cmentId: null,
       shippingInfo: {
         first_name: '',
         last_name: '',
@@ -175,11 +175,34 @@ export default {
         postal_code: '',
         phone: ''
       },
-      shippingMethod: ''
+      shMethod: null
     };
   },
   computed: {
-    ...mapGetters('checkout', ['old_consignments'])
+    ...mapGetters('checkout', [
+      'old_consignments',
+      'line_items',
+      'shippingAddress',
+      'consignmentId',
+      'shippingMethod'
+    ])
+  },
+  mounted() {
+    if (this.shippingAddress) {
+      this.shippingInfo = { ...this.shippingAddress };
+    }
+    if (this.consignmentId) {
+      this.cmentId = this.consignmentId;
+    }
+    if (this.shippingMethod) {
+      this.shMethod = this.shippingMethod;
+    }
+  },
+  destroyed() {
+    console.log(this.shMethod);
+    this.$store.commit('checkout/SET_SHIPPING_ADDRESS', this.shippingInfo);
+    this.$store.commit('checkout/SET_CONSIGNMENT_ID', this.cmentId);
+    this.$store.commit('checkout/SET_SHIPPING_METHOD', this.shMethod);
   },
   methods: {
     handleSetAddress(action) {
@@ -187,12 +210,12 @@ export default {
         Object.keys(this.shippingInfo).map(
           (key) => (this.shippingInfo[key] = action?.shipping_address[key])
         );
-        this.consignmentId = action?.id;
+        this.cmentId = action?.id;
       } else {
         Object.keys(this.shippingInfo).map(
           (key) => (this.shippingInfo[key] = '')
         );
-        this.consignmentId = null;
+        this.cmentId = null;
       }
     }
   }

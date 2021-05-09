@@ -7,7 +7,7 @@
     />
     <div class="highlighted highlighted--total">
       <SfProperty
-        name="Products"
+        name="proItems"
         :value="totalItems"
         class="sf-property--full-width sf-property--large property"
       />
@@ -103,13 +103,13 @@ export default {
     };
   },
   computed: {
-    products() {
-      return this.order.products;
+    proItems() {
+      return this.order.proItems;
     },
     totalItems() {
       return (
         '' +
-        this.products.reduce((previous, current) => {
+        this.proItems.reduce((previous, current) => {
           return previous + current.qty;
         }, 0)
       );
@@ -135,8 +135,8 @@ export default {
       return method || { label: '' };
     },
     subtotal() {
-      const products = this.products;
-      const subtotal = products.reduce((previous, current) => {
+      const proItems = this.proItems;
+      const subtotal = proItems.reduce((previous, current) => {
         const qty = current.qty;
         const price = current.price.special
           ? current.price.special

@@ -147,7 +147,7 @@ export default {
           shipping: '$9.00',
           total: '$159.00'
         },
-        products: [
+        proItems: [
           {
             title: 'Cream Beach Bag',
             image: '/assets/storybook/Home/productA.jpg',
