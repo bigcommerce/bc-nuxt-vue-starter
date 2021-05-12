@@ -16,7 +16,8 @@
         label="First name"
         name="first_name"
         class="form__element form__element--half"
-        required
+        :valid="$v.shippingInfo.first_name.required"
+        :error-message="'First name is required'"
       />
       <SfInput
         v-model="shippingInfo.last_name"
@@ -24,7 +25,8 @@
         label="Last name"
         name="last_name"
         class="form__element form__element--half form__element--half-even"
-        required
+        :valid="$v.shippingInfo.last_name.required"
+        :error-message="'Last name is required'"
       />
       <SfInput
         v-model="shippingInfo.email"
@@ -32,7 +34,8 @@
         label="Email Address"
         name="email"
         class="form__element form__element--half"
-        required
+        :valid="$v.shippingInfo.email.required"
+        :error-message="'Email is invalid'"
       />
       <SfInput
         v-model="shippingInfo.address1"
@@ -40,7 +43,8 @@
         label="Address 1"
         name="address1"
         class="form__element form__element--half form__element--half-even"
-        required
+        :valid="$v.shippingInfo.address1.required"
+        :error-message="'Address 1 is required'"
       />
       <SfInput
         v-model="shippingInfo.address2"
@@ -48,7 +52,8 @@
         label="Address 2"
         name="address2"
         class="form__element form__element--half"
-        required
+        :valid="$v.shippingInfo.address2.required"
+        :error-message="'Address 2 is required'"
       />
       <SfInput
         v-model="shippingInfo.city"
@@ -56,7 +61,8 @@
         label="City"
         name="city"
         class="form__element form__element--half form__element--half-even"
-        required
+        :valid="$v.shippingInfo.city.required"
+        :error-message="'City is required'"
       />
       <SfInput
         v-model="shippingInfo.postal_code"
@@ -64,7 +70,8 @@
         label="Postal-code"
         name="postal_code"
         class="form__element"
-        required
+        :valid="$v.shippingInfo.postal_code.required"
+        :error-message="'Postal code is required'"
       />
       <country-select
         v-model="shippingInfo.country"
@@ -73,6 +80,11 @@
         top-country="US"
         class="country_select"
       />
+      <span
+        v-if="!$v.shippingInfo.country.required"
+        style="margin-top: -20px; color: red; font-size: 14px"
+        >Country is required</span
+      >
       <region-select
         v-model="shippingInfo.state_or_province"
         :country="shippingInfo.country"
@@ -80,13 +92,19 @@
         :country-name="true"
         class="region_select"
       />
+      <span
+        v-if="!$v.shippingInfo.state_or_province.required"
+        style="margin-top: -20px; color: red; font-size: 14px"
+        >State is required</span
+      >
       <SfInput
         v-model="shippingInfo.phone"
         :value="shippingInfo.phone"
         label="Phone number"
         name="phone"
         class="form__element"
-        required
+        :valid="$v.shippingInfo.phone.required"
+        :error-message="'Phone is required'"
       />
     </div>
     <SfHeading
@@ -97,7 +115,7 @@
     <div class="form">
       <div class="form__radio-group">
         <SfRadio
-          v-for="item in shippingMethods"
+          v-for="item in []"
           :key="item.value"
           v-model="shMethod"
           :label="item.label"
@@ -141,6 +159,7 @@
 import { SfHeading, SfInput, SfButton, SfRadio } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
+import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'Shipping',
   components: {
@@ -149,16 +168,6 @@ export default {
     SfButton,
     SfRadio,
     SpDropdown
-  },
-  props: {
-    shippingMethods: {
-      type: Array,
-      default: () => []
-    },
-    value: {
-      type: Object,
-      default: () => ({})
-    }
   },
   data() {
     return {
@@ -177,6 +186,40 @@ export default {
       },
       shMethod: null
     };
+  },
+  validations: {
+    shippingInfo: {
+      first_name: {
+        required
+      },
+      last_name: {
+        required
+      },
+      email: {
+        required
+      },
+      address1: {
+        required
+      },
+      address2: {
+        required
+      },
+      city: {
+        required
+      },
+      state_or_province: {
+        required
+      },
+      country: {
+        required
+      },
+      postal_code: {
+        required
+      },
+      phone: {
+        required
+      }
+    }
   },
   computed: {
     ...mapGetters('checkout', [
@@ -199,7 +242,6 @@ export default {
     }
   },
   destroyed() {
-    console.log(this.shMethod);
     this.$store.commit('checkout/SET_SHIPPING_ADDRESS', this.shippingInfo);
     this.$store.commit('checkout/SET_CONSIGNMENT_ID', this.cmentId);
     this.$store.commit('checkout/SET_SHIPPING_METHOD', this.shMethod);
@@ -217,6 +259,9 @@ export default {
         );
         this.cmentId = null;
       }
+    },
+    runAction() {
+      return !this.$v.$invalid;
     }
   }
 };

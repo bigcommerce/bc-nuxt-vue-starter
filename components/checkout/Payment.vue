@@ -20,7 +20,8 @@
         label="First name"
         name="first_name"
         class="form__element form__element--half"
-        required
+        :valid="$v.billingInfo.first_name.required"
+        :error-message="'First name is required'"
       />
       <SfInput
         v-model="billingInfo.last_name"
@@ -28,7 +29,8 @@
         label="Last name"
         name="last_name"
         class="form__element form__element--half form__element--half-even"
-        required
+        :valid="$v.billingInfo.last_name.required"
+        :error-message="'Last name is required'"
       />
       <SfInput
         v-model="billingInfo.email"
@@ -36,7 +38,8 @@
         label="Email Address"
         name="email"
         class="form__element form__element--half"
-        required
+        :valid="$v.billingInfo.email.required"
+        :error-message="'Email is invalid'"
       />
       <SfInput
         v-model="billingInfo.address1"
@@ -44,7 +47,8 @@
         label="Address 1"
         name="address1"
         class="form__element form__element--half form__element--half-even"
-        required
+        :valid="$v.billingInfo.address1.required"
+        :error-message="'Address 1 is required'"
       />
       <SfInput
         v-model="billingInfo.address2"
@@ -52,7 +56,8 @@
         label="Address 2"
         name="address2"
         class="form__element form__element--half"
-        required
+        :valid="$v.billingInfo.address2.required"
+        :error-message="'Address 2 is required'"
       />
       <SfInput
         v-model="billingInfo.city"
@@ -60,7 +65,8 @@
         label="City"
         name="city"
         class="form__element form__element--half form__element--half-even"
-        required
+        :valid="$v.billingInfo.city.required"
+        :error-message="'City is required'"
       />
       <SfInput
         v-model="billingInfo.postal_code"
@@ -68,7 +74,8 @@
         label="Postal-code"
         name="postal_code"
         class="form__element"
-        required
+        :valid="$v.billingInfo.postal_code.required"
+        :error-message="'Postal code is required'"
       />
       <country-select
         v-model="billingInfo.country"
@@ -77,6 +84,11 @@
         top-country="US"
         class="country_select"
       />
+      <span
+        v-if="!$v.billingInfo.country.required"
+        style="margin-top: -20px; color: red; font-size: 14px"
+        >Country is required</span
+      >
       <region-select
         v-model="billingInfo.state_or_province"
         :country="billingInfo.country"
@@ -84,13 +96,19 @@
         :country-name="true"
         class="region_select"
       />
+      <span
+        v-if="!$v.billingInfo.state_or_province.required"
+        style="margin-top: -20px; color: red; font-size: 14px"
+        >State is required</span
+      >
       <SfInput
         v-model="billingInfo.phone"
         :value="billingInfo.phone"
         label="Phone number"
         name="phone"
         class="form__element"
-        required
+        :valid="$v.billingInfo.phone.required"
+        :error-message="'Phone is required'"
       />
     </div>
     <SfHeading
@@ -214,6 +232,7 @@ import {
   SfCheckbox
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
+import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'Payment',
   components: {
@@ -277,13 +296,60 @@ export default {
       years: ['2020', '2021', '2022', '2025']
     };
   },
+  validations: {
+    shippingInfo: {
+      first_name: {
+        required
+      },
+      last_name: {
+        required
+      },
+      email: {
+        required
+      },
+      address1: {
+        required
+      },
+      address2: {
+        required
+      },
+      city: {
+        required
+      },
+      state_or_province: {
+        required
+      },
+      country: {
+        required
+      },
+      postal_code: {
+        required
+      },
+      phone: {
+        required
+      }
+    }
+  },
   computed: {
-    ...mapGetters('checkout', ['shippingAddress']),
+    ...mapGetters('checkout', [
+      'shippingAddress',
+      'billingAddress',
+      'old_billing_address'
+    ]),
     isCreditCard() {
       return ['debit', 'mastercard', 'electron'].includes(this.paymentMethod);
     }
   },
-  mounted() {},
+  mounted() {
+    if (this.billingAddress) {
+      this.billingInfo = { ...this.billingAddress };
+    } else if (this.old_billing_address !== {}) {
+      this.billingInfo = { ...this.old_billing_address };
+    }
+  },
+  destroyed() {
+    this.$store.commit('checkout/SET_BILLING_ADDRESS', this.billingInfo);
+  },
   methods: {
     setBillingAsShipping() {
       const bAddress = { ...this.shippingAddress };
@@ -292,6 +358,9 @@ export default {
         Object.keys(this.billingInfo).map(
           (key) => (this.billingInfo[key] = '')
         );
+    },
+    runAction() {
+      return this.$v.$invalid;
     }
   }
 };

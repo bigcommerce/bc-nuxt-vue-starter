@@ -182,6 +182,11 @@ export default {
       const total = subtotal + (isNaN(shipping) ? 0 : shipping);
       return '$' + total.toFixed(2);
     }
+  },
+  methods: {
+    runAction() {
+      console.log('order action is ran');
+    }
   }
 };
 </script>

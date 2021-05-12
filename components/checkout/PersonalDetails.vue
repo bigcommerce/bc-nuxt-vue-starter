@@ -20,8 +20,9 @@
         label="First name"
         name="firstName"
         class="form__element form__element--half"
-        required
         :readonly="loggedIn"
+        :valid="$v.personalInfo.firstName.required"
+        :error-message="'First name is required'"
       />
       <SfInput
         v-model="personalInfo.lastName"
@@ -29,8 +30,9 @@
         label="Last name"
         name="lastName"
         class="form__element form__element--half form__element--half-even"
-        required
         :readonly="loggedIn"
+        :valid="$v.personalInfo.lastName.required"
+        :error-message="'Last name is required'"
       />
       <SfInput
         v-model="personalInfo.email"
@@ -38,8 +40,9 @@
         label="Your email"
         name="email"
         class="form__element"
-        required
         :readonly="loggedIn"
+        :valid="$v.personalInfo.email.required"
+        :error-message="'Email is required'"
       />
       <div class="info">
         <p class="info__heading">Enjoy these perks with your free account!</p>
@@ -63,6 +66,7 @@ import {
   SfCharacteristic
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
+import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'PersonalDetails',
   components: {
@@ -70,12 +74,6 @@ export default {
     SfButton,
     SfHeading,
     SfCharacteristic
-  },
-  props: {
-    value: {
-      type: Object,
-      default: () => ({})
-    }
   },
   data() {
     return {
@@ -87,6 +85,19 @@ export default {
         { description: 'Manage your wishlist', icon: 'heart' }
       ]
     };
+  },
+  validations: {
+    personalInfo: {
+      firstName: {
+        required
+      },
+      lastName: {
+        required
+      },
+      email: {
+        required
+      }
+    }
   },
   computed: {
     ...mapGetters('checkout', ['personalDetails']),
@@ -105,6 +116,11 @@ export default {
   },
   destroyed() {
     this.$store.commit('checkout/SET_PERSONAL_DETAILS', this.personalInfo);
+  },
+  methods: {
+    runAction() {
+      return !this.$v.$invalid;
+    }
   }
 };
 </script>

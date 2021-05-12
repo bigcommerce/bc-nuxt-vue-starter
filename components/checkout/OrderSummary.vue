@@ -7,7 +7,7 @@
     />
     <div class="highlighted highlighted--total">
       <SfProperty
-        name="proItems"
+        name="Product Items"
         :value="totalItems"
         class="sf-property--full-width sf-property--large property"
       />
@@ -63,6 +63,7 @@ import {
   SfCharacteristic,
   SfInput
 } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
 export default {
   name: 'OrderSummary',
   components: {
@@ -103,13 +104,11 @@ export default {
     };
   },
   computed: {
-    proItems() {
-      return this.order.proItems;
-    },
+    ...mapGetters('carts', ['products']),
     totalItems() {
       return (
         '' +
-        this.proItems.reduce((previous, current) => {
+        this.products.reduce((previous, current) => {
           return previous + current.qty;
         }, 0)
       );
@@ -135,13 +134,12 @@ export default {
       return method || { label: '' };
     },
     subtotal() {
-      const proItems = this.proItems;
-      const subtotal = proItems.reduce((previous, current) => {
+      const subtotal = this.products.reduce((previous, current) => {
         const qty = current.qty;
         const price = current.price.special
           ? current.price.special
           : current.price.regular;
-        const total = qty * parseFloat(price.replace('$', ''));
+        const total = qty * parseFloat(price);
         return previous + total;
       }, 0);
       return '$' + subtotal.toFixed(2);

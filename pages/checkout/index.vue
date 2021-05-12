@@ -4,20 +4,14 @@
       <div class="checkout__main">
         <SfSteps :active="currentStep" @change="updateStep($event)">
           <SfStep name="Details">
-            <PersonalDetails
-              :value="personalDetails"
-              @input="personalDetails = $event"
-            />
+            <PersonalDetails ref="Personal" />
           </SfStep>
           <SfStep name="Shipping">
-            <Shipping
-              :value="shipping"
-              :shipping-methods="shippingMethods"
-              @input="shipping = $event"
-            />
+            <Shipping ref="Shipping" />
           </SfStep>
           <SfStep name="Payment">
             <Payment
+              ref="Payment"
               :value="payment"
               :payment-methods="paymentMethods"
               :shipping="shipping"
@@ -26,6 +20,7 @@
           </SfStep>
           <SfStep name="Review">
             <ConfirmOrder
+              ref="ConfirmOrder"
               :shipping-methods="shippingMethods"
               :order="getOrder"
               :payment-methods="paymentMethods"
@@ -95,6 +90,7 @@ export default {
     OrderReview,
     SfButton
   },
+  middleware: 'getcart',
   data() {
     return {
       currentStep: 0,
@@ -287,10 +283,33 @@ export default {
       }
     },
     stepNavigate(action) {
-      if (action === 'next') {
-        if (this.currentStep !== 3) this.currentStep++;
-      } else if (action === 'back') {
-        if (this.currentStep !== 0) this.currentStep--;
+      let isRunAction = false;
+      switch (this.currentStep) {
+        case 0:
+          isRunAction = true;
+          isRunAction = this.$refs.Personal.runAction();
+          break;
+        case 1: {
+          isRunAction = this.$refs.Shipping.runAction();
+          break;
+        }
+        case 2: {
+          isRunAction = this.$refs.Payment.runAction();
+          break;
+        }
+        case 3: {
+          isRunAction = this.$refs.ConfirmOrder.runAction();
+          break;
+        }
+      }
+      if (isRunAction) {
+        if (action === 'next') {
+          if (this.currentStep !== 3) this.currentStep++;
+        } else if (action === 'back') {
+          if (this.currentStep !== 0) this.currentStep--;
+        }
+      } else {
+        this.$toast.error('Please fill out missed fields');
       }
     }
   }

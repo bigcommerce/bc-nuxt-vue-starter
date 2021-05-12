@@ -11,19 +11,11 @@
         >Edit
       </SfButton>
     </div>
-    <p class="content">{{ order.firstName }} {{ order.lastName }}<br /></p>
     <p class="content">
-      {{ shipping.streetName }} {{ shipping.apartment }}, {{ shipping.zipCode
-      }}<br />
-      {{ shipping.city }}, {{ shipping.country }}
+      {{ personalDetails.firstName }} {{ personalDetails.lastName }}<br />
     </p>
     <br />
-    <p class="content">
-      {{ order.email }}
-    </p>
-    <p class="content">
-      {{ shipping.phoneNumber }}
-    </p>
+    <p class="content">{{ order.email }}</p>
     <div class="review__header">
       <p class="review__title">Shipping details</p>
       <SfButton class="sf-button--text" @click="$emit('click:edit', 1)"
@@ -35,9 +27,9 @@
         shippingMethod.label
       }}</span
       ><br />
-      {{ shipping.streetName }} {{ shipping.apartment }}, {{ shipping.zipCode
-      }}<br />
-      {{ shipping.city }}, {{ shipping.country }}
+      {{ shippingAddress.address1 }} {{ shippingAddress.address2 }},
+      {{ shippingAddress.postal_code }}<br />
+      {{ shippingAddress.city }}, {{ shippingAddress.country }}
     </p>
     <div class="review__header">
       <p class="review__title">Billing address</p>
@@ -45,19 +37,14 @@
         >Edit
       </SfButton>
     </div>
-    <p v-if="payment.sameAsShipping" class="content">
-      Same as shipping address
+    <p class="content">
+      <span class="content__label">{{ payment.shippingMethod }}</span
+      ><br />
+      {{ billingAddress.address1 }} {{ billingAddress.address2 }},
+      {{ billingAddress.postal_code }}<br />
+      {{ billingAddress.city }}, {{ billingAddress.country }}
     </p>
-    <template v-else>
-      <p class="content">
-        <span class="content__label">{{ payment.shippingMethod }}</span
-        ><br />
-        {{ payment.streetName }} {{ payment.apartment }}, {{ payment.zipCode
-        }}<br />
-        {{ payment.city }}, {{ payment.country }}
-      </p>
-      <p class="content">{{ payment.phoneNumber }}</p>
-    </template>
+    <p class="content">{{ billingAddress.phone }}</p>
     <div class="review__header">
       <p class="review__title">Payment method</p>
       <SfButton class="sf-button--text" @click="$emit('click:edit', 2)"
@@ -96,6 +83,7 @@ import {
   SfCharacteristic,
   SfInput
 } from '@storefront-ui/vue';
+import { mapGetters } from 'vuex';
 export default {
   name: 'OrderReview',
   components: {
@@ -128,6 +116,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('checkout', [
+      'personalDetails',
+      'shippingAddress',
+      'billingAddress'
+    ]),
     shipping() {
       return this.order.shipping;
     },
