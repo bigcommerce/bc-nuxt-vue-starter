@@ -5,7 +5,7 @@ const getLineItems = (item) => {
   if (item) {
     const { custom_items, digital_items, physical_items } = item;
     const items = [...custom_items, ...digital_items, ...physical_items];
-    return items.map(({ id, quantity }) => ({ id, quantity }));
+    return items.map(({ id, quantity }) => ({ item_id: id, quantity }));
   }
   return [];
 };
@@ -15,7 +15,6 @@ export const state = () => ({
   // new
   personalDetails: null,
   shippingAddress: null,
-  consignmentId: null,
   shippingMethod: null,
   billingAddress: null,
   // old
@@ -34,9 +33,6 @@ export const getters = {
   },
   shippingAddress(state) {
     return state.shippingAddress;
-  },
-  consignmentId(state) {
-    return state.consignmentId;
   },
   shippingMethod(state) {
     return state.shippingMethod;
@@ -66,9 +62,6 @@ export const mutations = {
   },
   SET_SHIPPING_ADDRESS(state, shippingAddress) {
     state.shippingAddress = shippingAddress;
-  },
-  SET_CONSIGNMENT_ID(state, consignmentId) {
-    state.consignmentId = consignmentId;
   },
   SET_SHIPPING_METHOD(state, shippingMethod) {
     state.shippingMethod = shippingMethod;
@@ -106,41 +99,24 @@ export const actions = {
       });
     }
   },
-  setShippingAddress({ commit, getters }) {
+  setShippingAddress({ commit, getters, dispatch }, shipping_address) {
     const checkoutId = window.localStorage.getItem('cartId');
-    const consignmentId = getters.consignmentId;
-    const data = {
-      shipping_address: getters.shippingAddress,
-      line_items: getters.line_items
-    };
-
-    if (consignmentId) {
-      axios
-        .put(
-          `updateConsignmentToCheckout?checkoutId=${checkoutId}&consignmentId=${consignmentId}`,
-          { data }
-        )
-        .then(({ data }) => {
-          if (data.status) {
-            const body = data.body;
-            console.log(body);
-          } else {
-            this.$toast.error(data.message);
-          }
-          commit('SET_LOADING', false);
-        });
-    } else {
-      axios
-        .post(`addConsignmentToCheckout?checkoutId=${checkoutId}`, { data })
-        .then(({ data }) => {
-          if (data.status) {
-            const body = data.body;
-            console.log(body);
-          } else {
-            this.$toast.error(data.message);
-          }
-          commit('SET_LOADING', false);
-        });
-    }
+    const data = [
+      {
+        shipping_address,
+        line_items: getters.line_items
+      }
+    ];
+    axios
+      .post(`setConsignmentToCheckout?checkoutId=${checkoutId}`, { data })
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
+          dispatch('getCheckout');
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
   }
 };

@@ -315,66 +315,8 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-@import '~@storefront-ui/vue/styles';
-#checkout {
-  padding: 50px;
-  box-sizing: border-box;
-  @include for-desktop {
-    padding: 0 var(--spacer-sm);
-    max-width: 1272px;
-    margin: 0 auto;
-  }
-}
-.checkout {
-  --steps-content-padding: 0 var(--spacer-sm);
-  @include for-desktop {
-    --steps-content-padding: 0;
-    display: flex;
-  }
-  &__main {
-    ::v-deep .sf-steps__step.is-done {
-      --steps-step-color: var(--c-primary);
-    }
-    @include for-desktop {
-      flex: 1;
-      padding: var(--spacer-xl) 0 0 0;
-    }
-  }
-  &__aside {
-    @include for-desktop {
-      flex: 0 0 26.8125rem;
-      margin: 0 0 0 var(--spacer-base);
-    }
-    &-order {
-      box-sizing: border-box;
-      width: 100%;
-      background: var(--c-light);
-      padding: var(--spacer-base) var(--spacer-sm) var(--spacer-xl);
-      @include for-desktop {
-        padding: var(--spacer-xl);
-      }
-    }
-  }
-}
-.actions {
-  background: var(--c-white);
-  padding: var(--spacer-sm);
-  box-shadow: 0px -2px 10px rgba(154, 154, 154, 0.15);
-  text-align: center;
-  position: sticky;
-  bottom: 0;
-  &__button {
-    margin-bottom: var(--spacer-sm);
-  }
-  @include for-desktop {
-    position: relative;
-    box-shadow: none;
-    padding: var(--spacer-lg);
-    width: 25rem;
-    &__button {
-      margin: 0;
-    }
-  }
-}
-</style>
+<style
+  src="~/assets/sass/components/checkout/checkout.scss"
+  lang="scss"
+  scoped
+></style>

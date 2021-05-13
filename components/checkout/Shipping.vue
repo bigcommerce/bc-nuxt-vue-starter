@@ -69,9 +69,18 @@
         :value="shippingInfo.postal_code"
         label="Postal-code"
         name="postal_code"
-        class="form__element"
+        class="form__element form__element--half"
         :valid="$v.shippingInfo.postal_code.required"
         :error-message="'Postal code is required'"
+      />
+      <SfInput
+        v-model="shippingInfo.country_code"
+        :value="shippingInfo.country_code"
+        label="Country code"
+        name="country_code"
+        class="form__element form__element--half form__element--half-even"
+        :valid="$v.shippingInfo.country_code.required"
+        :error-message="'Country code is required'"
       />
       <country-select
         v-model="shippingInfo.country"
@@ -171,18 +180,18 @@ export default {
   },
   data() {
     return {
-      cmentId: null,
       shippingInfo: {
-        first_name: '',
-        last_name: '',
-        email: '',
-        address1: '',
-        address2: '',
-        city: '',
-        state_or_province: '',
-        country: '',
-        postal_code: '',
-        phone: ''
+        first_name: 'leo',
+        last_name: 'pard',
+        email: 'leopard@gmail.com',
+        address1: '123',
+        address2: '234',
+        city: 'Burnaby',
+        state_or_province: 'ON',
+        country: 'Canada',
+        country_code: 'CA',
+        postal_code: '123123',
+        phone: '123123123'
       },
       shMethod: null
     };
@@ -213,6 +222,9 @@ export default {
       country: {
         required
       },
+      country_code: {
+        required
+      },
       postal_code: {
         required
       },
@@ -226,7 +238,6 @@ export default {
       'old_consignments',
       'line_items',
       'shippingAddress',
-      'consignmentId',
       'shippingMethod'
     ])
   },
@@ -234,16 +245,12 @@ export default {
     if (this.shippingAddress) {
       this.shippingInfo = { ...this.shippingAddress };
     }
-    if (this.consignmentId) {
-      this.cmentId = this.consignmentId;
-    }
     if (this.shippingMethod) {
       this.shMethod = this.shippingMethod;
     }
   },
   destroyed() {
     this.$store.commit('checkout/SET_SHIPPING_ADDRESS', this.shippingInfo);
-    this.$store.commit('checkout/SET_CONSIGNMENT_ID', this.cmentId);
     this.$store.commit('checkout/SET_SHIPPING_METHOD', this.shMethod);
   },
   methods: {
@@ -252,145 +259,23 @@ export default {
         Object.keys(this.shippingInfo).map(
           (key) => (this.shippingInfo[key] = action?.shipping_address[key])
         );
-        this.cmentId = action?.id;
       } else {
         Object.keys(this.shippingInfo).map(
           (key) => (this.shippingInfo[key] = '')
         );
-        this.cmentId = null;
       }
     },
     runAction() {
+      if (!this.$v.$invalid) {
+        this.$store.dispatch('checkout/setShippingAddress', this.shippingInfo);
+      }
       return !this.$v.$invalid;
     }
   }
 };
 </script>
-<style lang="scss" scoped>
-@import '~@storefront-ui/vue/styles';
-.title {
-  --heading-padding: var(--spacer-xl) 0 var(--spacer-lg);
-  --heading-title-font-weight: var(--font-weight--bold);
-  &:not(:first-of-type) {
-    --heading-padding: var(--spacer-base) 0;
-  }
-  @include for-desktop {
-    --heading-title-font-size: var(--h3-font-size);
-    --heading-title-font-weight: var(--font-weight--semibold);
-    --heading-padding: var(--spacer-xl) 0;
-  }
-}
-.form {
-  .country_select,
-  .region_select {
-    width: 100%;
-    font-size: 18px;
-    border: none;
-    border-bottom: 1px solid;
-    margin-bottom: 30px;
-    padding-bottom: 5px;
-  }
-  &__element {
-    margin: 0 0 var(--spacer-base) 0;
-    &:last-of-type {
-      margin: 0;
-    }
-  }
-  &__group {
-    display: flex;
-    align-items: center;
-  }
-  &__select {
-    display: flex;
-    align-items: center;
-    --select-option-font-size: var(--font-size--base);
-    --select-dropdown-color: blue;
-    ::v-deep .sf-select__dropdown {
-      margin: 0 0 2px 0;
-      font-size: var(--font-size--base);
-      font-family: var(--font-family--secondary);
-      color: var(--c-link);
-    }
-  }
-  &__radio {
-    margin: var(--spacer-xs) 0;
-    &:last-of-type {
-      margin: var(--spacer-xs) 0 var(--spacer-xl);
-    }
-    ::v-deep .sf-radio__container {
-      --radio-container-padding: var(--spacer-xs);
-      @include for-desktop {
-        --radio-container-padding: var(--spacer-xs) var(--spacer-xs)
-          var(--spacer-xs) var(--spacer-sm);
-      }
-    }
-  }
-  @include for-desktop {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    &:last-of-type {
-      margin: 0 calc(var(--spacer-2xl) - var(--spacer-sm)) 0 0;
-    }
-    &__element {
-      margin: 0 0 var(--spacer-sm) 0;
-      flex: 0 0 100%;
-      &--half {
-        flex: 1 1 50%;
-        &-even {
-          padding: 0 0 0 var(--spacer-base);
-        }
-      }
-    }
-    &__radio-group {
-      flex: 0 0 calc(100% + var(--spacer-sm));
-      margin: 0 calc(var(--spacer-sm) * -1);
-    }
-  }
-}
-.shipping {
-  --radio-container-padding: var(--spacer-sm);
-  &__label {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    &-price {
-      font-size: var(--font-size--lg);
-      text-transform: uppercase;
-    }
-  }
-  &__description {
-    --radio-description-margin: 0;
-  }
-  &__delivery {
-    color: var(--c-text-muted);
-    font-weight: var(--font-weight--normal);
-    display: flex;
-    width: 10.625rem;
-    @include for-desktop {
-      font-weight: var(--font-weight--light);
-    }
-  }
-  &__action {
-    margin: 0 0 0 var(--spacer-xs);
-    &::before {
-      content: '+';
-    }
-    &--is-active {
-      --button-color: var(--c-primary);
-      --button-transition: color 150ms linear;
-      &::before {
-        content: '-';
-      }
-    }
-  }
-  @include for-desktop {
-    &__label {
-      justify-content: space-between;
-    }
-    &__delivery {
-      width: 100%;
-    }
-  }
-}
-</style>
+<style
+  src="~/assets/sass/components/checkout/shipping.scss"
+  lang="scss"
+  scoped
+></style>
