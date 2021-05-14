@@ -125,9 +125,9 @@
     <div class="form">
       <div class="form__radio-group">
         <SfRadio
-          v-for="item in sMethods"
+          v-for="item in shippingOptions"
           :key="item.id"
-          v-model="shMethod"
+          v-model="shippingOptionId"
           :label="item.type"
           :value="item.id"
           name="shippingMethods"
@@ -187,7 +187,8 @@ export default {
         postal_code: '235654',
         phone: '2356346674'
       },
-      shMethod: null
+      shippingOptionId: null,
+      shippingOptions: []
     };
   },
   validations: {
@@ -232,22 +233,21 @@ export default {
       'old_consignments',
       'line_items',
       'shippingAddress'
-    ]),
-    sMethods() {
-      if (this.old_consignments.length) {
-        return this.old_consignments[0].available_shipping_options;
-      }
-      return [];
-    }
+    ])
   },
   mounted() {
     if (this.shippingAddress) {
       this.shippingInfo = { ...this.shippingAddress };
     }
+    if (this.old_consignments.length) {
+      const consignment = this.old_consignments[0];
+      this.shippingOptions = consignment.available_shipping_options;
+      if (consignment.selected_shipping_option)
+        this.shippingOptionId = consignment.selected_shipping_option.id;
+    }
   },
   destroyed() {
     this.$store.commit('checkout/SET_SHIPPING_ADDRESS', this.shippingInfo);
-    this.$store.commit('checkout/SET_SHIPPING_METHODS', this.shMethod);
   },
   methods: {
     handleSetAddress(action) {
@@ -265,7 +265,7 @@ export default {
       if (!this.$v.$invalid) {
         this.$store.dispatch('checkout/setShippingAddress', {
           shipping_address: this.shippingInfo,
-          shippingOptionId: this.shMethod
+          shippingOptionId: this.shippingOptionId
         });
       }
       return !this.$v.$invalid;

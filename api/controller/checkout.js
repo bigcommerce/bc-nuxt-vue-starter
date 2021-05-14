@@ -54,13 +54,13 @@ export const updateShippingOption = async (req, res) => {
       { shipping_option_id: shippingOptionId }
     );
     res.json({
-      message: 'Successfully added consignment on checkout',
+      message: 'Successfully added shipping option',
       body: result.data,
       status: true
     });
   } catch (error) {
     res.json({
-      message: 'Adding consigmnent to checkout failed',
+      message: 'Adding shipping option to checkout failed',
       body: error,
       status: false
     });

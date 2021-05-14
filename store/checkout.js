@@ -15,7 +15,6 @@ export const state = () => ({
   // new
   personalDetails: null,
   shippingAddress: null,
-  shippingMethods: null,
   billingAddress: null,
   // old
   line_items: [],
@@ -33,9 +32,6 @@ export const getters = {
   },
   shippingAddress(state) {
     return state.shippingAddress;
-  },
-  shippingMethods(state) {
-    return state.shippingMethods;
   },
   billingAddress(state) {
     return state.billingAddress;
@@ -62,9 +58,6 @@ export const mutations = {
   },
   SET_SHIPPING_ADDRESS(state, shippingAddress) {
     state.shippingAddress = shippingAddress;
-  },
-  SET_SHIPPING_METHODS(state, shippingMethods) {
-    state.shippingMethods = shippingMethods;
   },
   SET_BILLING_ADDRESS(state, billingAddress) {
     state.billingAddress = billingAddress;
@@ -134,7 +127,6 @@ export const actions = {
     { commit, dispatch },
     { shippingOptionId, consignmentId }
   ) {
-    debugger;
     const checkoutId = window.localStorage.getItem('cartId');
     axios
       .put(
