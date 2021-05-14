@@ -103,6 +103,7 @@
         :country="billingInfo.country"
         :region="billingInfo.state_or_province"
         :country-name="true"
+        :region-name="true"
         class="region_select"
       />
       <span
@@ -373,6 +374,9 @@ export default {
         );
     },
     runAction() {
+      if (!this.$v.$invalid) {
+        this.$store.dispatch('checkout/setBillingAddress', this.billingInfo);
+      }
       return !this.$v.$invalid;
     }
   }

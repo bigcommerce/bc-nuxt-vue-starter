@@ -185,7 +185,8 @@ export default {
   },
   methods: {
     runAction() {
-      console.log('order action is ran');
+      this.$store.dispatch('checkout/createOrder');
+      return true;
     }
   }
 };

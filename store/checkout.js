@@ -15,7 +15,7 @@ export const state = () => ({
   // new
   personalDetails: null,
   shippingAddress: null,
-  shippingMethod: null,
+  shippingMethods: null,
   billingAddress: null,
   // old
   line_items: [],
@@ -34,8 +34,8 @@ export const getters = {
   shippingAddress(state) {
     return state.shippingAddress;
   },
-  shippingMethod(state) {
-    return state.shippingMethod;
+  shippingMethods(state) {
+    return state.shippingMethods;
   },
   billingAddress(state) {
     return state.billingAddress;
@@ -63,8 +63,8 @@ export const mutations = {
   SET_SHIPPING_ADDRESS(state, shippingAddress) {
     state.shippingAddress = shippingAddress;
   },
-  SET_SHIPPING_METHOD(state, shippingMethod) {
-    state.shippingMethod = shippingMethod;
+  SET_SHIPPING_METHODS(state, shippingMethods) {
+    state.shippingMethods = shippingMethods;
   },
   SET_BILLING_ADDRESS(state, billingAddress) {
     state.billingAddress = billingAddress;
@@ -99,7 +99,10 @@ export const actions = {
       });
     }
   },
-  setShippingAddress({ commit, getters, dispatch }, shipping_address) {
+  setShippingAddress(
+    { commit, getters, dispatch },
+    { shipping_address, shippingOptionId }
+  ) {
     const checkoutId = window.localStorage.getItem('cartId');
     const data = [
       {
@@ -112,11 +115,67 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
+          if (shippingOptionId) {
+            const consignmentId = data.body?.data?.consignments[0].id;
+            dispatch('updateShippingOption', {
+              shippingOptionId,
+              consignmentId
+            });
+          } else {
+            dispatch('getCheckout');
+          }
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
+  },
+  updateShippingOption(
+    { commit, dispatch },
+    { shippingOptionId, consignmentId }
+  ) {
+    debugger;
+    const checkoutId = window.localStorage.getItem('cartId');
+    axios
+      .put(
+        `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
+      )
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
           dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
         commit('SET_LOADING', false);
       });
+  },
+  setBillingAddress({ commit, dispatch }, billing_address) {
+    const checkoutId = window.localStorage.getItem('cartId');
+    axios
+      .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
+        data: billing_address
+      })
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
+          dispatch('getCheckout');
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
+  },
+  createOrder({ commit }) {
+    const checkoutId = window.localStorage.getItem('cartId');
+
+    axios.post(`createOrder?checkoutId=${checkoutId}`).then(({ data }) => {
+      if (data.status) {
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
   }
 };

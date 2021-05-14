@@ -99,6 +99,7 @@
         :country="shippingInfo.country"
         :region="shippingInfo.state_or_province"
         :country-name="true"
+        :region-name="true"
         class="region_select"
       />
       <span
@@ -124,12 +125,12 @@
     <div class="form">
       <div class="form__radio-group">
         <SfRadio
-          v-for="item in []"
-          :key="item.value"
+          v-for="item in sMethods"
+          :key="item.id"
           v-model="shMethod"
-          :label="item.label"
-          :value="item.value"
-          name="shippingMethod"
+          :label="item.type"
+          :value="item.id"
+          name="shippingMethods"
           :description="item.description"
           class="form__radio shipping"
         >
@@ -137,12 +138,6 @@
             <div class="sf-radio__label shipping__label">
               <div>
                 {{ label }}
-                <SfButton
-                  class="sf-button--text shipping__action desktop-only"
-                  :class="{ 'shipping__action--is-active': item.isOpen }"
-                  @click="item.isOpen = !item.isOpen"
-                  >{{ item.isOpen ? '- info' : '+ info' }}
-                </SfButton>
               </div>
               <div class="shipping__label-price">{{ item.price }}</div>
             </div>
@@ -153,7 +148,7 @@
                 <span>{{ item.delivery }}</span>
               </div>
               <transition name="sf-fade">
-                <div v-if="item.isOpen" class="shipping__info">
+                <div class="shipping__info">
                   {{ description }}
                 </div>
               </transition>
@@ -165,7 +160,7 @@
   </div>
 </template>
 <script>
-import { SfHeading, SfInput, SfButton, SfRadio } from '@storefront-ui/vue';
+import { SfHeading, SfInput, SfRadio } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
 import { required } from 'vuelidate/lib/validators';
@@ -174,7 +169,6 @@ export default {
   components: {
     SfHeading,
     SfInput,
-    SfButton,
     SfRadio,
     SpDropdown
   },
@@ -184,14 +178,14 @@ export default {
         first_name: 'leo',
         last_name: 'pard',
         email: 'leopard@gmail.com',
-        address1: '123',
-        address2: '234',
+        address1: 'street 1',
+        address2: 'street 2',
         city: 'Burnaby',
-        state_or_province: 'ON',
+        state_or_province: 'Ontario',
         country: 'Canada',
         country_code: 'CA',
-        postal_code: '123123',
-        phone: '123123123'
+        postal_code: '235654',
+        phone: '2356346674'
       },
       shMethod: null
     };
@@ -237,21 +231,23 @@ export default {
     ...mapGetters('checkout', [
       'old_consignments',
       'line_items',
-      'shippingAddress',
-      'shippingMethod'
-    ])
+      'shippingAddress'
+    ]),
+    sMethods() {
+      if (this.old_consignments.length) {
+        return this.old_consignments[0].available_shipping_options;
+      }
+      return [];
+    }
   },
   mounted() {
     if (this.shippingAddress) {
       this.shippingInfo = { ...this.shippingAddress };
     }
-    if (this.shippingMethod) {
-      this.shMethod = this.shippingMethod;
-    }
   },
   destroyed() {
     this.$store.commit('checkout/SET_SHIPPING_ADDRESS', this.shippingInfo);
-    this.$store.commit('checkout/SET_SHIPPING_METHOD', this.shMethod);
+    this.$store.commit('checkout/SET_SHIPPING_METHODS', this.shMethod);
   },
   methods: {
     handleSetAddress(action) {
@@ -267,7 +263,10 @@ export default {
     },
     runAction() {
       if (!this.$v.$invalid) {
-        this.$store.dispatch('checkout/setShippingAddress', this.shippingInfo);
+        this.$store.dispatch('checkout/setShippingAddress', {
+          shipping_address: this.shippingInfo,
+          shippingOptionId: this.shMethod
+        });
       }
       return !this.$v.$invalid;
     }
