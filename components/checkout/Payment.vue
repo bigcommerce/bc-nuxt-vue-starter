@@ -255,14 +255,6 @@ export default {
     SfCheckbox
   },
   props: {
-    paymentMethods: {
-      type: Array,
-      default: () => []
-    },
-    shipping: {
-      type: Object,
-      default: () => ({})
-    },
     value: {
       type: Object,
       default: () => ({})
@@ -304,7 +296,29 @@ export default {
         'November',
         'December'
       ],
-      years: ['2020', '2021', '2022', '2025']
+      years: ['2020', '2021', '2022', '2025'],
+      paymentMethods: [
+        {
+          label: 'Visa Debit',
+          value: 'debit'
+        },
+        {
+          label: 'MasterCard',
+          value: 'mastercard'
+        },
+        {
+          label: 'Visa Electron',
+          value: 'electron'
+        },
+        {
+          label: 'Cash on delivery',
+          value: 'cash'
+        },
+        {
+          label: 'Check',
+          value: 'check'
+        }
+      ]
     };
   },
   validations: {
