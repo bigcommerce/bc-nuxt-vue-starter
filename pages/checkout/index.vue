@@ -12,16 +12,13 @@
           <SfStep name="Payment">
             <Payment
               ref="Payment"
-              :value="payment"
               :payment-methods="paymentMethods"
-              :shipping="shipping"
               @input="payment = $event"
             />
           </SfStep>
           <SfStep name="Review">
             <ConfirmOrder
               ref="ConfirmOrder"
-              :shipping-methods="shippingMethods"
               :order="getOrder"
               :payment-methods="paymentMethods"
               :characteristics="characteristics"
@@ -100,74 +97,74 @@ export default {
         'Pay for order',
         'Confirm and pay'
       ],
-      personalDetails: { firstName: '', lastName: '', email: '' },
-      shipping: {
-        firstName: '',
-        lastName: '',
-        streetName: '',
-        apartment: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: '',
-        phoneNumber: '',
-        shippingMethod: ''
-      },
-      payment: {
-        sameAsShipping: false,
-        firstName: '',
-        lastName: '',
-        streetName: '',
-        apartment: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: '',
-        phoneNumber: '',
-        paymentMethod: '',
-        invoice: false,
-        card: {
-          number: '',
-          holder: '',
-          month: '',
-          year: '',
-          cvc: '',
-          keep: false
-        }
-      },
-      order: {
-        password: '',
-        createAccount: false,
-        review: {
-          subtotal: '$150.00',
-          shipping: '$9.00',
-          total: '$159.00'
-        },
-        proItems: [
-          {
-            title: 'Cream Beach Bag',
-            image: '/assets/storybook/Home/productA.jpg',
-            price: { regular: '$50.00' },
-            configuration: [
-              { name: 'Size', value: 'XS' },
-              { name: 'Color', value: 'White' }
-            ],
-            qty: 1,
-            sku: 'MSD23-345-324'
-          },
-          {
-            title: 'Vila stripe maxi dress',
-            image: '/assets/storybook/Home/productB.jpg',
-            price: { regular: '$50.00', special: '$20.05' },
-            configuration: [
-              { name: 'Size', value: 'XS' },
-              { name: 'Color', value: 'White' }
-            ],
-            qty: 2,
-            sku: 'MSD23-345-325'
-          }
-        ]
-      },
+      // personalDetails: { firstName: '', lastName: '', email: '' },
+      // shipping: {
+      //   firstName: '',
+      //   lastName: '',
+      //   streetName: '',
+      //   apartment: '',
+      //   city: '',
+      //   state: '',
+      //   zipCode: '',
+      //   country: '',
+      //   phoneNumber: '',
+      //   shippingMethod: ''
+      // },
+      // payment: {
+      //   sameAsShipping: false,
+      //   firstName: '',
+      //   lastName: '',
+      //   streetName: '',
+      //   apartment: '',
+      //   city: '',
+      //   state: '',
+      //   zipCode: '',
+      //   country: '',
+      //   phoneNumber: '',
+      //   paymentMethod: '',
+      //   invoice: false,
+      //   card: {
+      //     number: '',
+      //     holder: '',
+      //     month: '',
+      //     year: '',
+      //     cvc: '',
+      //     keep: false
+      //   }
+      // },
+      // order: {
+      //   password: '',
+      //   createAccount: false,
+      //   review: {
+      //     subtotal: '$150.00',
+      //     shipping: '$9.00',
+      //     total: '$159.00'
+      //   },
+      //   proItems: [
+      //     {
+      //       title: 'Cream Beach Bag',
+      //       image: '/assets/storybook/Home/productA.jpg',
+      //       price: { regular: '$50.00' },
+      //       configuration: [
+      //         { name: 'Size', value: 'XS' },
+      //         { name: 'Color', value: 'White' }
+      //       ],
+      //       qty: 1,
+      //       sku: 'MSD23-345-324'
+      //     },
+      //     {
+      //       title: 'Vila stripe maxi dress',
+      //       image: '/assets/storybook/Home/productB.jpg',
+      //       price: { regular: '$50.00', special: '$20.05' },
+      //       configuration: [
+      //         { name: 'Size', value: 'XS' },
+      //         { name: 'Color', value: 'White' }
+      //       ],
+      //       qty: 2,
+      //       sku: 'MSD23-345-325'
+      //     }
+      //   ]
+      // },
       paymentMethods: [
         {
           label: 'Visa Debit',

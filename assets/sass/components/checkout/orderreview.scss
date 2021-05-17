@@ -1,0 +1,73 @@
+@import '~@storefront-ui/vue/styles';
+.title {
+  --heading-title-margin: 0 0 var(--spacer-xl) 0;
+  --heading-title-font-weight: var(--font-weight--bold);
+  border-bottom: 1px solid var(--c-white);
+}
+.review {
+  box-sizing: border-box;
+  width: 100%;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__title {
+    font-family: var(--font-family--secondary);
+    font-weight: var(--font-weight--medium);
+    font-size: var(--font-size--base);
+  }
+}
+.promo-code {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: var(--spacer-lg);
+  margin-top: var(--spacer-lg);
+  border-top: var(--c-white) solid 1px;
+  &__input {
+    --input-background: var(--c-white);
+    --input-label-font-size: var(--font-size--base);
+    flex: 1;
+  }
+  &__button {
+    --button-height: 1.875rem;
+  }
+}
+.promo-code {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--spacer-lg) 0 var(--spacer-base) 0;
+  margin-top: var(--spacer-lg);
+  border-top: var(--c-white) solid 1px;
+  &__input {
+    --input-background: var(--c-white);
+    flex: 1;
+  }
+  &__button {
+    --button-height: 30px;
+  }
+}
+.characteristics {
+  &__item {
+    margin: var(--spacer-base) 0;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+.content {
+  font-family: var(--font-family--primary);
+  font-size: var(--font-size--sm);
+  line-height: 1.6;
+  font-weight: var(--font-weight--normal);
+  margin: 0;
+  color: var(--c-dark-variant);
+  &__label {
+    color: var(--c-text);
+  }
+  &__shipping {
+    font-weight: var(--font-weight--bold);
+  }
+}

@@ -119,18 +119,6 @@ export default {
     SfLink
   },
   props: {
-    order: {
-      type: Object,
-      default: () => ({})
-    },
-    shippingMethods: {
-      type: Array,
-      default: () => []
-    },
-    paymentMethods: {
-      type: Array,
-      default: () => []
-    },
     characteristics: {
       type: Array,
       default: () => []
@@ -145,25 +133,11 @@ export default {
   },
   computed: {
     ...mapGetters('carts', ['products']),
-    shipping() {
-      return this.order.shipping;
-    },
     shippingMethod() {
-      const shippingMethod = this.shipping.shippingMethod;
-      const method = this.shippingMethods.find(
-        (method) => method.value === shippingMethod
-      );
-      return method || { price: '$0.00' };
-    },
-    payment() {
-      return this.order.payment;
+      return { price: '$0.00' };
     },
     paymentMethod() {
-      const paymentMethod = this.payment.paymentMethod;
-      const method = this.paymentMethods.find(
-        (method) => method.value === paymentMethod
-      );
-      return method || { label: '' };
+      return { label: '' };
     },
     subtotal() {
       const subtotal = this.products.reduce((previous, current) => {

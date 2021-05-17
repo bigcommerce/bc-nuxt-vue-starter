@@ -75,25 +75,9 @@ export default {
     SfInput
   },
   props: {
-    order: {
-      type: Object,
-      default: () => ({})
-    },
-    shippingMethods: {
-      type: Array,
-      default: () => []
-    },
-    paymentMethods: {
-      type: Array,
-      default: () => []
-    },
     characteristics: {
       type: Array,
       default: () => []
-    },
-    buttonName: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -113,25 +97,11 @@ export default {
         }, 0)
       );
     },
-    shipping() {
-      return this.order.shipping;
-    },
     shippingMethod() {
-      const shippingMethod = this.shipping.shippingMethod;
-      const method = this.shippingMethods.find(
-        (method) => method.value === shippingMethod
-      );
-      return method || { price: '$0.00' };
-    },
-    payment() {
-      return this.order.payment;
+      return { price: '$0.00' };
     },
     paymentMethod() {
-      const paymentMethod = this.payment.paymentMethod;
-      const method = this.paymentMethods.find(
-        (method) => method.value === paymentMethod
-      );
-      return method || { label: '' };
+      return { label: '' };
     },
     subtotal() {
       const subtotal = this.products.reduce((previous, current) => {
@@ -153,49 +123,8 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-@import '~@storefront-ui/vue/styles';
-.title {
-  --heading-title-margin: 0 0 var(--spacer-xl) 0;
-  --heading-title-font-weight: var(--font-weight--bold);
-  --heading-padding: 0;
-  --heading-title-margin: 0 0 var(--spacer-xl) 0;
-  @include for-desktop {
-    --heading-title-font-weight: var(--font-weight--semibold);
-  }
-}
-.property {
-  margin: var(--spacer-base) 0;
-  --property-name-font-weight: var(--font-weight--medium);
-  --property-value-font-weight: var(--font-weight--bold);
-  &:last-of-type {
-    margin: var(--spacer-base) 0 var(--spacer-xl);
-    --property-name-color: var(--c-text);
-  }
-}
-.divider {
-  --divider-border-color: var(--c-white);
-  --divider-margin: var(--spacer-xl) 0 0 0;
-}
-.promo-code {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  &__input {
-    --input-background: var(--c-white);
-    --input-label-font-size: var(--font-size--base);
-    flex: 1;
-  }
-  &__button {
-    --button-height: 1.875rem;
-  }
-}
-.characteristics {
-  &__item {
-    margin: var(--spacer-base) 0;
-    &:last-of-type {
-      margin: 0;
-    }
-  }
-}
-</style>
+<style
+  src="~/assets/sass/components/checkout/ordersummary.scss"
+  lang="scss"
+  scoped
+></style>
