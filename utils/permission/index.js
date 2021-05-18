@@ -6,6 +6,7 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'POST_createCart',
   'POST_addCartItem',
   'PUT_updateCartItem',
+  'PUT_updateCartWithCustomerId',
   'DELETE_deleteCartItem',
   'GET_getAllOrders',
   'GET_getAllAddresses',
@@ -17,6 +18,7 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'POST_customerRegister',
   'GET_getCheckout',
   'POST_setConsignmentToCheckout',
+  'PUT_updateConsignmentToCheckout',
   'PUT_updateShippingOption',
   'POST_setBillingAddressToCheckout',
   'POST_createOrder'

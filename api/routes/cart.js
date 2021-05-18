@@ -4,7 +4,8 @@ import {
   createCart,
   addCartItem,
   updateCartItem,
-  deleteCartItem
+  deleteCartItem,
+  updateCartWithCustomerId
 } from '../controller/cart';
 import { permissionMiddleware } from '../middleware';
 
@@ -15,5 +16,10 @@ router.post('/createCart', permissionMiddleware, createCart);
 router.post('/addCartItem', permissionMiddleware, addCartItem);
 router.put('/updateCartItem', permissionMiddleware, updateCartItem);
 router.delete('/deleteCartItem', permissionMiddleware, deleteCartItem);
+router.put(
+  '/updateCartWithCustomerId',
+  permissionMiddleware,
+  updateCartWithCustomerId
+);
 
 export default router;

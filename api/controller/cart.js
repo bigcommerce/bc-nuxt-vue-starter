@@ -106,3 +106,27 @@ export const deleteCartItem = async (req, res) => {
     });
   }
 };
+
+export const updateCartWithCustomerId = async (req, res) => {
+  try {
+    const cartId = req.query.cartId;
+    const customerId = req.query.customerId;
+    const result = await customAxios('api').put(
+      `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}`,
+      {
+        customer_id: customerId
+      }
+    );
+    res.json({
+      message: 'Successfully updated cart with customer',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Updating cart with this customer failed',
+      body: error,
+      status: false
+    });
+  }
+};

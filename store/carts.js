@@ -1,7 +1,12 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 import { CHECKOUT_TYPE } from '~/constants/checkouttype';
-import { getCartCheckoutRedirectUrl, getUser } from '~/utils/auth';
+import {
+  getCartCheckoutRedirectUrl,
+  getSecuredData,
+  getUser
+} from '~/utils/auth';
+import { cartId } from '~/utils/storage';
 const productFilter = (cart) => {
   return cart && cart !== ''
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -48,7 +53,6 @@ export const mutations = {
 
 export const actions = {
   addToCart({ dispatch }, data) {
-    const cartId = window.localStorage.getItem('cartId');
     if (cartId) dispatch('addCartItem', data);
     else dispatch('createCart', data);
   },
@@ -66,7 +70,7 @@ export const actions = {
         window.localStorage.setItem('cartId', cartId);
         commit('SET_CART', productFilter(body));
         commit('SET_REDIRECTURLS', body.data.redirect_urls);
-        this.$toast.info(data.message);
+        this.$toast.success(data.message);
       } else {
         this.$toast.error(data.message);
       }
@@ -75,7 +79,6 @@ export const actions = {
   },
 
   addCartItem({ commit }, addData) {
-    const cartId = window.localStorage.getItem('cartId');
     const cartData = { line_items: [{ ...addData }] };
     commit('SET_LOADING', true);
     axios
@@ -85,7 +88,7 @@ export const actions = {
           const body = data.body;
           commit('SET_CART', productFilter(body));
           commit('SET_REDIRECTURLS', body.data.redirect_urls);
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
         }
@@ -94,7 +97,6 @@ export const actions = {
   },
 
   updateCartItem({ commit }, { updateData, item_id }) {
-    const cartId = window.localStorage.getItem('cartId');
     const cartData = { line_item: { ...updateData } };
     commit('SET_LOADING', true);
     axios
@@ -104,7 +106,7 @@ export const actions = {
           const body = data.body;
           commit('SET_CART', productFilter(body));
           commit('SET_REDIRECTURLS', body.data.redirect_urls);
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
         }
@@ -113,7 +115,6 @@ export const actions = {
   },
 
   deleteCartItem({ commit }, itemId) {
-    const cartId = window.localStorage.getItem('cartId');
     commit('SET_LOADING', true);
     axios
       .delete(`/deleteCartItem?cartId=${cartId}&itemId=${itemId}`)
@@ -124,7 +125,7 @@ export const actions = {
           commit('SET_CART', cart);
           commit('SET_REDIRECTURLS', body ? body.data.redirect_urls : null);
           if (cart.length === 0) window.localStorage.removeItem('cartId');
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
         }
@@ -133,7 +134,6 @@ export const actions = {
   },
 
   getCart({ commit }) {
-    const cartId = window.localStorage.getItem('cartId');
     if (cartId) {
       commit('SET_LOADING', true);
       axios.get(`/getCart?cartId=${cartId}`).then(({ data }) => {
@@ -147,6 +147,23 @@ export const actions = {
         }
         commit('SET_LOADING', false);
       });
+    }
+  },
+
+  updateCartWithCustomerId({ commit }, securedData) {
+    const { id } = getSecuredData(securedData);
+    if (cartId) {
+      commit('SET_LOADING', true);
+      axios
+        .put(`/updateCartWithCustomerId?cartId=${cartId}&customerId=${id}`)
+        .then(({ data }) => {
+          if (data.status) {
+            this.$toast.success(data.message);
+          } else {
+            this.$toast.error(data.message);
+          }
+          commit('SET_LOADING', false);
+        });
     }
   },
 

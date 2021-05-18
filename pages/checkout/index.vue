@@ -15,7 +15,6 @@
           <SfStep name="Review">
             <ConfirmOrder
               ref="ConfirmOrder"
-              :order="getOrder"
               :characteristics="characteristics"
               @click:edit="currentStep = $event"
             />
@@ -76,7 +75,7 @@ export default {
     OrderReview,
     SfButton
   },
-  middleware: 'getcart',
+  middleware: 'getCheckout',
   data() {
     return {
       currentStep: 0,
@@ -85,12 +84,6 @@ export default {
         'Go to payment',
         'Pay for order',
         'Confirm and pay'
-      ],
-      buttonNames: [
-        { name: 'Go to shipping' },
-        { name: 'Go to payment' },
-        { name: 'Review Order' },
-        { name: 'Place my order' }
       ],
       characteristics: [
         {
@@ -111,19 +104,6 @@ export default {
         }
       ]
     };
-  },
-  computed: {
-    getOrder() {
-      return {
-        ...this.order,
-        ...this.personalDetails,
-        shipping: { ...this.shipping },
-        payment: { ...this.payment }
-      };
-    }
-  },
-  mounted() {
-    this.$store.dispatch('checkout/getCheckout');
   },
   methods: {
     updateStep(next) {

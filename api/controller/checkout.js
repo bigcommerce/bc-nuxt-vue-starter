@@ -42,6 +42,29 @@ export const setConsignmentToCheckout = async (req, res) => {
   }
 };
 
+export const updateConsignmentToCheckout = async (req, res) => {
+  try {
+    const checkoutId = req.query.checkoutId;
+    const consignmentId = req.query.consignmentId;
+    const data = req.body.data;
+    const result = await customAxios('api').put(
+      `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
+      data
+    );
+    res.json({
+      message: 'Successfully updated consignment on checkout',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Updating consigmnent to checkout failed',
+      body: error,
+      status: false
+    });
+  }
+};
+
 export const updateShippingOption = async (req, res) => {
   try {
     const checkoutId = req.query.checkoutId;

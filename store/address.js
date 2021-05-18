@@ -68,7 +68,7 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           dispatch('getAllAddresses');
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
         }
@@ -86,7 +86,7 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           dispatch('getAllAddresses');
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
         }
@@ -100,7 +100,7 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           dispatch('getAllAddresses');
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
         }

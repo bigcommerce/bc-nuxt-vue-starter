@@ -18,7 +18,7 @@
       />
       <SfProperty
         name="Shipping"
-        :value="shippingMethod.price"
+        :value="shippingMethod ? '$' + shippingMethod.cost : '$0'"
         class="sf-property--full-width sf-property--large property"
       />
       <SfDivider class="divider" />
@@ -89,6 +89,7 @@ export default {
   },
   computed: {
     ...mapGetters('carts', ['products']),
+    ...mapGetters('checkout', ['shippingMethod']),
     totalItems() {
       return (
         '' +
@@ -96,9 +97,6 @@ export default {
           return previous + current.qty;
         }, 0)
       );
-    },
-    shippingMethod() {
-      return { price: '$0.00' };
     },
     paymentMethod() {
       return { label: '' };
@@ -116,10 +114,13 @@ export default {
     },
     total() {
       const subtotal = parseFloat(this.subtotal.replace('$', ''));
-      const shipping = parseFloat(this.shippingMethod.price.replace('$', ''));
-      const total = subtotal + (isNaN(shipping) ? 0 : shipping);
+      const shipping = parseFloat(this.shippingMethod?.cost ?? 0);
+      const total = subtotal + shipping;
       return '$' + total.toFixed(2);
     }
+  },
+  mounted() {
+    this.$store.dispatch('carts/getCart');
   }
 };
 </script>

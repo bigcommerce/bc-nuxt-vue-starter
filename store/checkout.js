@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
+import { cartId } from '~/utils/storage';
 
 const getLineItems = (item) => {
   if (item) {
@@ -10,11 +11,20 @@ const getLineItems = (item) => {
   return [];
 };
 
+const getShippingMethod = (consignments) => {
+  let method = null;
+  if (consignments.length) {
+    method = consignments[0].selected_shipping_option ?? null;
+  }
+  return method;
+};
+
 export const state = () => ({
   isLoading: false,
   // new
   personalDetails: null,
   shippingAddress: null,
+  shippingMethod: null,
   billingAddress: null,
   // old
   line_items: [],
@@ -33,8 +43,14 @@ export const getters = {
   shippingAddress(state) {
     return state.shippingAddress;
   },
+  shippingMethod(state) {
+    return state.shippingMethod;
+  },
   billingAddress(state) {
     return state.billingAddress;
+  },
+  paymentMethod(state) {
+    return state.paymentMethod;
   },
   // For getting old data from checkout
   line_items(state) {
@@ -59,8 +75,14 @@ export const mutations = {
   SET_SHIPPING_ADDRESS(state, shippingAddress) {
     state.shippingAddress = shippingAddress;
   },
+  SET_SHIPPING_METHOD(state, shippingMethod) {
+    state.shippingMethod = shippingMethod;
+  },
   SET_BILLING_ADDRESS(state, billingAddress) {
     state.billingAddress = billingAddress;
+  },
+  SET_PAYMENT_METHOD(state, paymentMethod) {
+    state.paymentMethod = paymentMethod;
   },
   // old
   SET_LINE_ITEMS(state, line_items) {
@@ -76,14 +98,17 @@ export const mutations = {
 
 export const actions = {
   getCheckout({ commit }) {
-    const checkoutId = window.localStorage.getItem('cartId');
-    if (checkoutId) {
+    if (cartId) {
       commit('SET_LOADING', true);
-      axios.get(`/getCheckout?checkoutId=${checkoutId}`).then(({ data }) => {
+      axios.get(`/getCheckout?checkoutId=${cartId}`).then(({ data }) => {
         if (data.status) {
           const body = data.body;
           commit('SET_LINE_ITEMS', getLineItems(body?.data?.cart?.line_items));
           commit('SET_OLD_CONSIGNMENTS', body?.data?.consignments);
+          commit(
+            'SET_SHIPPING_METHOD',
+            getShippingMethod(body?.data?.consignments)
+          );
           commit('SET_OLD_BILLING_ADDRESS', body?.data?.billing_address);
         } else {
           this.$toast.error(data.message);
@@ -92,11 +117,11 @@ export const actions = {
       });
     }
   },
-  setShippingAddress(
+
+  setConsignmentToCheckout(
     { commit, getters, dispatch },
     { shipping_address, shippingOptionId }
   ) {
-    const checkoutId = window.localStorage.getItem('cartId');
     const data = [
       {
         shipping_address,
@@ -104,33 +129,57 @@ export const actions = {
       }
     ];
     axios
-      .post(`setConsignmentToCheckout?checkoutId=${checkoutId}`, { data })
+      .post(`setConsignmentToCheckout?checkoutId=${cartId}`, { data })
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
           if (shippingOptionId) {
-            const consignmentId = data.body?.data?.consignments[0].id;
             dispatch('updateShippingOption', {
               shippingOptionId,
-              consignmentId
+              consignmentId: data.body.data.consignments[0].id
             });
-          } else {
-            dispatch('getCheckout');
-          }
+          } else dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
         commit('SET_LOADING', false);
       });
   },
+
+  updateConsignmentToCheckout(
+    { commit, getters, dispatch },
+    { shipping_address, consignmentId, shippingOptionId }
+  ) {
+    const data = {
+      shipping_address,
+      line_items: getters.line_items
+    };
+    axios
+      .put(
+        `updateConsignmentToCheckout?checkoutId=${cartId}&consignmentId=${consignmentId}`,
+        { data }
+      )
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
+          dispatch('updateShippingOption', {
+            shippingOptionId,
+            consignmentId
+          });
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
+  },
+
   updateShippingOption(
     { commit, dispatch },
     { shippingOptionId, consignmentId }
   ) {
-    const checkoutId = window.localStorage.getItem('cartId');
     axios
       .put(
-        `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
+        `updateShippingOption?checkoutId=${cartId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
       )
       .then(({ data }) => {
         if (data.status) {
@@ -142,27 +191,27 @@ export const actions = {
         commit('SET_LOADING', false);
       });
   },
+
   setBillingAddress({ commit, dispatch }, billing_address) {
-    const checkoutId = window.localStorage.getItem('cartId');
     axios
-      .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
+      .post(`setBillingAddressToCheckout?checkoutId=${cartId}`, {
         data: billing_address
       })
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
-          dispatch('getCheckout');
+          dispatch('createOrder');
         } else {
           this.$toast.error(data.message);
         }
         commit('SET_LOADING', false);
       });
   },
-  createOrder({ commit }) {
-    const checkoutId = window.localStorage.getItem('cartId');
 
-    axios.post(`createOrder?checkoutId=${checkoutId}`).then(({ data }) => {
+  createOrder({ commit, dispatch }) {
+    axios.post(`createOrder?checkoutId=${cartId}`).then(({ data }) => {
       if (data.status) {
+        dispatch('getCheckout');
         this.$toast.success(data.message);
       } else {
         this.$toast.error(data.message);

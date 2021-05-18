@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   getCheckout,
   setConsignmentToCheckout,
+  updateConsignmentToCheckout,
   updateShippingOption,
   setBillingAddressToCheckout,
   createOrder
@@ -15,6 +16,11 @@ router.post(
   '/setConsignmentToCheckout',
   permissionMiddleware,
   setConsignmentToCheckout
+);
+router.put(
+  '/updateConsignmentToCheckout',
+  permissionMiddleware,
+  updateConsignmentToCheckout
 );
 router.put('/updateShippingOption', permissionMiddleware, updateShippingOption);
 router.post(

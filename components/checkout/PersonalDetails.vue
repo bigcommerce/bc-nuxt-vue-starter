@@ -119,6 +119,12 @@ export default {
   },
   methods: {
     runAction() {
+      if (this.loggedIn) {
+        this.$store.dispatch(
+          'carts/updateCartWithCustomerId',
+          this.customer.secureData
+        );
+      }
       return !this.$v.$invalid;
     }
   }

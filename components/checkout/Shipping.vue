@@ -188,7 +188,9 @@ export default {
         phone: '2356346674'
       },
       shippingOptionId: null,
-      shippingOptions: []
+      shippingOptions: [],
+      consignmentId: null,
+      consignment: null
     };
   },
   validations: {
@@ -232,18 +234,23 @@ export default {
     ...mapGetters('checkout', [
       'old_consignments',
       'line_items',
-      'shippingAddress'
+      'shippingAddress',
+      'shippingMethod'
     ])
   },
   mounted() {
     if (this.shippingAddress) {
       this.shippingInfo = { ...this.shippingAddress };
     }
+    if (this.shippingMethod) {
+      this.shippingOptionId = this.shippingMethod.id;
+    }
     if (this.old_consignments.length) {
       const consignment = this.old_consignments[0];
+      this.consignment = consignment;
       this.shippingOptions = consignment.available_shipping_options;
-      if (consignment.selected_shipping_option)
-        this.shippingOptionId = consignment.selected_shipping_option.id;
+      this.shippingInfo = { ...consignment.shipping_address };
+      this.consignmentId = consignment.id;
     }
   },
   destroyed() {
@@ -255,18 +262,27 @@ export default {
         Object.keys(this.shippingInfo).map(
           (key) => (this.shippingInfo[key] = action?.shipping_address[key])
         );
+        this.consignmentId = this.consignment?.id;
+        this.shippingOptionId = this.shippingMethod?.id;
       } else {
-        Object.keys(this.shippingInfo).map(
-          (key) => (this.shippingInfo[key] = '')
-        );
+        Object.keys(this.shippingInfo).map((key) => (this.test[key] = ''));
+        this.consignmentId = null;
+        this.shippingOptionId = null;
       }
     },
     runAction() {
       if (!this.$v.$invalid) {
-        this.$store.dispatch('checkout/setShippingAddress', {
-          shipping_address: this.shippingInfo,
-          shippingOptionId: this.shippingOptionId
-        });
+        if (!this.consignmentId)
+          this.$store.dispatch('checkout/setConsignmentToCheckout', {
+            shipping_address: this.shippingInfo,
+            shippingOptionId: this.shippingOptionId
+          });
+        else
+          this.$store.dispatch('checkout/updateConsignmentToCheckout', {
+            shipping_address: this.shippingInfo,
+            consignmentId: this.consignmentId,
+            shippingOptionId: this.shippingOptionId
+          });
       }
       return !this.$v.$invalid;
     }

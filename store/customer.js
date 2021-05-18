@@ -64,7 +64,7 @@ export const actions = {
       })
       .then(({ data }) => {
         if (data.status) {
-          this.$toast.info(data.message);
+          this.$toast.success(data.message);
           this.$router.push('/login');
         } else {
           this.$toast.error(data.message);

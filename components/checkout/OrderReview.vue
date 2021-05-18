@@ -14,8 +14,8 @@
     <p class="content">
       {{ personalDetails.firstName }} {{ personalDetails.lastName }}<br />
     </p>
-    <br />
     <p class="content">{{ personalDetails.email }}</p>
+    <br />
     <div class="review__header">
       <p class="review__title">Shipping details</p>
       <SfButton class="sf-button--text" @click="$emit('click:edit', 1)"
@@ -23,14 +23,15 @@
       </SfButton>
     </div>
     <p class="content">
-      <span class="content__label content__shipping">{{
-        shippingMethod.label
+      <span class="content__label">{{
+        shippingMethod ? shippingMethod.description : 'No selected'
       }}</span
       ><br />
       {{ shippingAddress.address1 }} {{ shippingAddress.address2 }},
       {{ shippingAddress.postal_code }}<br />
       {{ shippingAddress.city }}, {{ shippingAddress.country }}
     </p>
+    <br />
     <div class="review__header">
       <p class="review__title">Billing address</p>
       <SfButton class="sf-button--text" @click="$emit('click:edit', 2)"
@@ -38,19 +39,21 @@
       </SfButton>
     </div>
     <p class="content">
-      <span class="content__label">payment shippingMethod</span><br />
       {{ billingAddress.address1 }} {{ billingAddress.address2 }},
       {{ billingAddress.postal_code }}<br />
       {{ billingAddress.city }}, {{ billingAddress.country }}
     </p>
     <p class="content">{{ billingAddress.phone }}</p>
+    <br />
     <div class="review__header">
       <p class="review__title">Payment method</p>
       <SfButton class="sf-button--text" @click="$emit('click:edit', 2)"
         >Edit
       </SfButton>
     </div>
-    <p class="content">{{ paymentMethod.label }}</p>
+    <p class="content">
+      {{ paymentMethod ? paymentMethod.label : 'No selected' }}
+    </p>
     <div class="promo-code">
       <SfInput
         v-model="promoCode"
@@ -106,14 +109,10 @@ export default {
     ...mapGetters('checkout', [
       'personalDetails',
       'shippingAddress',
-      'billingAddress'
-    ]),
-    shippingMethod() {
-      return { price: 0 };
-    },
-    paymentMethod() {
-      return { label: '' };
-    }
+      'billingAddress',
+      'shippingMethod',
+      'paymentMethod'
+    ])
   }
 };
 </script>
