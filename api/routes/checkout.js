@@ -5,7 +5,8 @@ import {
   updateConsignmentToCheckout,
   updateShippingOption,
   setBillingAddressToCheckout,
-  createOrder
+  createOrder,
+  getPaymentMethodByOrder
 } from '../controller/checkout';
 import { permissionMiddleware } from '../middleware';
 
@@ -29,5 +30,10 @@ router.post(
   setBillingAddressToCheckout
 );
 router.post('/createOrder', permissionMiddleware, createOrder);
+router.get(
+  '/getPaymentMethodByOrder',
+  permissionMiddleware,
+  getPaymentMethodByOrder
+);
 
 export default router;

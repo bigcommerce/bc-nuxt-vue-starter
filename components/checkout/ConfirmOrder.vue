@@ -84,6 +84,114 @@
         class="sf-property--full-width sf-property--large property__total"
       >
       </SfProperty>
+      <div class="form">
+        <SfHeading
+          title="Payment methods"
+          :level="3"
+          class="sf-heading--left sf-heading--no-underline title"
+        />
+        <div class="payment-methods">
+          <SfRadio
+            v-for="item in paymentMethods"
+            :key="item.value"
+            v-model="paymentMethod"
+            :label="item.label"
+            :value="item.value"
+            name="paymentMethod"
+            :description="item.description"
+            class="form__radio payment-method"
+          >
+            <template #label>
+              <div class="sf-radio__label">
+                <template
+                  v-if="
+                    item.value !== 'debit' &&
+                    item.value !== 'mastercard' &&
+                    item.value !== 'electron'
+                  "
+                >
+                  {{ item.label }}
+                </template>
+                <template v-else>
+                  <SfImage
+                    :src="`/assets/storybook/checkout/${item.value}.png`"
+                    :alt="item.value"
+                    class="payment-image"
+                    :lazy="false"
+                  />
+                </template>
+              </div>
+            </template>
+          </SfRadio>
+        </div>
+        <transition name="sf-fade">
+          <div v-if="isCreditCard" class="credit-card-form">
+            <SfInput
+              v-model="cardNumber"
+              :value="cardNumber"
+              name="cardNumber"
+              label="Card number"
+              class="credit-card-form__input"
+            />
+            <SfInput
+              v-model="cardHolder"
+              :value="cardHolder"
+              label="Card holder"
+              name="cardHolder"
+              class="credit-card-form__input"
+            />
+            <div class="credit-card-form__group">
+              <span
+                class="credit-card-form__label credit-card-form__label--small credit-card-form__label--required"
+                >Expiry date:</span
+              >
+              <div class="credit-card-form__element">
+                <SfSelect
+                  v-model="cardMonth"
+                  :value="cardMonth"
+                  label="Month"
+                  class="credit-card-form__input credit-card-form__input--with-spacer form__select sf-select--underlined"
+                >
+                  <SfSelectOption
+                    v-for="monthOption in months"
+                    :key="monthOption"
+                    :value="monthOption"
+                  >
+                    {{ monthOption }}
+                  </SfSelectOption>
+                </SfSelect>
+                <SfSelect
+                  v-model="cardYear"
+                  :value="cardYear"
+                  label="Year"
+                  class="credit-card-form__input form__select sf-select--underlined"
+                >
+                  <SfSelectOption
+                    v-for="yearOption in years"
+                    :key="yearOption"
+                    :value="yearOption"
+                  >
+                    {{ yearOption }}
+                  </SfSelectOption>
+                </SfSelect>
+              </div>
+            </div>
+            <div class="credit-card-form__group">
+              <SfInput
+                v-model="cardCVC"
+                :value="cardCVC"
+                type="number"
+                label="Code CVC"
+                name="cardCVC"
+                class="credit-card-form__input credit-card-form__input--small credit-card-form__input--with-spacer"
+              />
+              <SfButton class="sf-button--text credit-card-form__button"
+                >Where can I find CVC code</SfButton
+              >
+            </div>
+          </div>
+        </transition>
+      </div>
       <SfCheckbox v-model="terms" name="terms" class="totals__terms">
         <template #label>
           <div class="sf-checkbox__label">
@@ -103,7 +211,11 @@ import {
   SfImage,
   SfPrice,
   SfProperty,
-  SfLink
+  SfLink,
+  SfButton,
+  SfSelect,
+  SfRadio,
+  SfInput
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 export default {
@@ -116,7 +228,11 @@ export default {
     SfImage,
     SfPrice,
     SfProperty,
-    SfLink
+    SfLink,
+    SfButton,
+    SfSelect,
+    SfRadio,
+    SfInput
   },
   props: {
     characteristics: {
@@ -128,14 +244,57 @@ export default {
     return {
       terms: false,
       promoCode: '',
-      tableHeaders: ['Description', 'Quantity', 'Amount']
+      tableHeaders: ['Description', 'Quantity', 'Amount'],
+      paymentMethods: [
+        {
+          label: 'Visa Debit',
+          value: 'debit'
+        },
+        {
+          label: 'MasterCard',
+          value: 'mastercard'
+        },
+        {
+          label: 'Visa Electron',
+          value: 'electron'
+        },
+        {
+          label: 'Cash on delivery',
+          value: 'cash'
+        },
+        {
+          label: 'Check',
+          value: 'check'
+        }
+      ],
+      paymentMethod: '',
+      cardNumber: '',
+      cardHolder: '',
+      cardMonth: '',
+      cardYear: '',
+      cardCVC: '',
+      months: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ],
+      years: ['2020', '2021', '2022', '2025']
     };
   },
   computed: {
     ...mapGetters('carts', ['products']),
     ...mapGetters('checkout', ['shippingMethod']),
-    paymentMethod() {
-      return { label: '' };
+    isCreditCard() {
+      return ['debit', 'mastercard', 'electron'].includes(this.paymentMethod);
     },
     subtotal() {
       const subtotal = this.products.reduce((previous, current) => {

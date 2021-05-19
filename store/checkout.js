@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { cartId } from '~/utils/storage';
+import { cartId, orderId, setOrderId } from '~/utils/storage';
 
 const getLineItems = (item) => {
   if (item) {
@@ -193,6 +193,7 @@ export const actions = {
   },
 
   setBillingAddress({ commit, dispatch }, billing_address) {
+    debugger;
     axios
       .post(`setBillingAddressToCheckout?checkoutId=${cartId}`, {
         data: billing_address
@@ -200,7 +201,8 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
-          dispatch('createOrder');
+          if (orderId) dispatch('getPaymentMethodByOrder', orderId);
+          else dispatch('createOrder');
         } else {
           this.$toast.error(data.message);
         }
@@ -211,8 +213,22 @@ export const actions = {
   createOrder({ commit, dispatch }) {
     axios.post(`createOrder?checkoutId=${cartId}`).then(({ data }) => {
       if (data.status) {
-        dispatch('getCheckout');
         this.$toast.success(data.message);
+        const orderId = data.body.data.id;
+        setOrderId(orderId);
+        dispatch('getPaymentMethodByOrder', orderId);
+      } else {
+        this.$toast.error(data.message);
+      }
+      commit('SET_LOADING', false);
+    });
+  },
+
+  getPaymentMethodByOrder({ commit, dispatch }, orderId) {
+    axios.get(`getPaymentMethodByOrder?orderId=${orderId}`).then(({ data }) => {
+      console.log(data);
+      if (data.status) {
+        dispatch('getCheckout');
       } else {
         this.$toast.error(data.message);
       }

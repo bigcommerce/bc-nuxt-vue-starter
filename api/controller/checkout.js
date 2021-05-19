@@ -131,3 +131,23 @@ export const createOrder = async (req, res) => {
     });
   }
 };
+
+export const getPaymentMethodByOrder = async (req, res) => {
+  try {
+    const orderId = req.query.orderId;
+    const result = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/payments/methods?order_id=${orderId}`
+    );
+    res.json({
+      message: 'Successfully got payment methods',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Getting payment methods failed',
+      body: error,
+      status: false
+    });
+  }
+};

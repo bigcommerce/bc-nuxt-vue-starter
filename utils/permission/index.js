@@ -21,7 +21,8 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'PUT_updateConsignmentToCheckout',
   'PUT_updateShippingOption',
   'POST_setBillingAddressToCheckout',
-  'POST_createOrder'
+  'POST_createOrder',
+  'GET_getPaymentMethodByOrder'
 ];
 
 export const checkApiAccessPermission = (permission) => {

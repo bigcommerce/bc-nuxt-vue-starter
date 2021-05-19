@@ -33,15 +33,6 @@
         :error-message="'Last name is required'"
       />
       <SfInput
-        v-model="billingInfo.email"
-        :value="billingInfo.email"
-        label="Email Address"
-        name="email"
-        class="form__element form__element--half"
-        :valid="$v.billingInfo.email.required"
-        :error-message="'Email is invalid'"
-      />
-      <SfInput
         v-model="billingInfo.address1"
         :value="billingInfo.address1"
         label="Address 1"
@@ -121,126 +112,10 @@
         :error-message="'Phone is required'"
       />
     </div>
-    <SfHeading
-      title="Payment methods"
-      :level="3"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
-    <div class="form">
-      <div class="payment-methods">
-        <SfRadio
-          v-for="item in paymentMethods"
-          :key="item.value"
-          v-model="paymentMethod"
-          :label="item.label"
-          :value="item.value"
-          name="paymentMethod"
-          :description="item.description"
-          class="form__radio payment-method"
-        >
-          <template #label>
-            <div class="sf-radio__label">
-              <template
-                v-if="
-                  item.value !== 'debit' &&
-                  item.value !== 'mastercard' &&
-                  item.value !== 'electron'
-                "
-              >
-                {{ item.label }}
-              </template>
-              <template v-else>
-                <SfImage
-                  :src="`/assets/storybook/checkout/${item.value}.png`"
-                  :alt="item.value"
-                  class="payment-image"
-                  :lazy="false"
-                />
-              </template>
-            </div>
-          </template>
-        </SfRadio>
-      </div>
-      <transition name="sf-fade">
-        <div v-if="isCreditCard" class="credit-card-form">
-          <SfInput
-            v-model="cardNumber"
-            :value="cardNumber"
-            name="cardNumber"
-            label="Card number"
-            class="credit-card-form__input"
-          />
-          <SfInput
-            v-model="cardHolder"
-            :value="cardHolder"
-            label="Card holder"
-            name="cardHolder"
-            class="credit-card-form__input"
-          />
-          <div class="credit-card-form__group">
-            <span
-              class="credit-card-form__label credit-card-form__label--small credit-card-form__label--required"
-              >Expiry date:</span
-            >
-            <div class="credit-card-form__element">
-              <SfSelect
-                v-model="cardMonth"
-                :value="cardMonth"
-                label="Month"
-                class="credit-card-form__input credit-card-form__input--with-spacer form__select sf-select--underlined"
-              >
-                <SfSelectOption
-                  v-for="monthOption in months"
-                  :key="monthOption"
-                  :value="monthOption"
-                >
-                  {{ monthOption }}
-                </SfSelectOption>
-              </SfSelect>
-              <SfSelect
-                v-model="cardYear"
-                :value="cardYear"
-                label="Year"
-                class="credit-card-form__input form__select sf-select--underlined"
-              >
-                <SfSelectOption
-                  v-for="yearOption in years"
-                  :key="yearOption"
-                  :value="yearOption"
-                >
-                  {{ yearOption }}
-                </SfSelectOption>
-              </SfSelect>
-            </div>
-          </div>
-          <div class="credit-card-form__group">
-            <SfInput
-              v-model="cardCVC"
-              :value="cardCVC"
-              type="number"
-              label="Code CVC"
-              name="cardCVC"
-              class="credit-card-form__input credit-card-form__input--small credit-card-form__input--with-spacer"
-            />
-            <SfButton class="sf-button--text credit-card-form__button"
-              >Where can I find CVC code</SfButton
-            >
-          </div>
-        </div>
-      </transition>
-    </div>
   </div>
 </template>
 <script>
-import {
-  SfHeading,
-  SfInput,
-  SfButton,
-  SfSelect,
-  SfRadio,
-  SfImage,
-  SfCheckbox
-} from '@storefront-ui/vue';
+import { SfHeading, SfInput, SfCheckbox } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 export default {
@@ -248,10 +123,6 @@ export default {
   components: {
     SfHeading,
     SfInput,
-    SfButton,
-    SfSelect,
-    SfRadio,
-    SfImage,
     SfCheckbox
   },
   props: {
@@ -266,7 +137,6 @@ export default {
       billingInfo: {
         first_name: '',
         last_name: '',
-        email: '',
         address1: '',
         address2: '',
         city: '',
@@ -275,50 +145,7 @@ export default {
         country_code: '',
         postal_code: '',
         phone: ''
-      },
-      paymentMethod: '',
-      cardNumber: '',
-      cardHolder: '',
-      cardMonth: '',
-      cardYear: '',
-      cardCVC: '',
-      months: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ],
-      years: ['2020', '2021', '2022', '2025'],
-      paymentMethods: [
-        {
-          label: 'Visa Debit',
-          value: 'debit'
-        },
-        {
-          label: 'MasterCard',
-          value: 'mastercard'
-        },
-        {
-          label: 'Visa Electron',
-          value: 'electron'
-        },
-        {
-          label: 'Cash on delivery',
-          value: 'cash'
-        },
-        {
-          label: 'Check',
-          value: 'check'
-        }
-      ]
+      }
     };
   },
   validations: {
@@ -327,9 +154,6 @@ export default {
         required
       },
       last_name: {
-        required
-      },
-      email: {
         required
       },
       address1: {
