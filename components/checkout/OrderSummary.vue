@@ -35,7 +35,7 @@
         label="Enter promo code"
         class="sf-input--filled promo-code__input"
       />
-      <SfButton class="promo-code__button" @click="$emit('click:apply')"
+      <SfButton class="promo-code__button" @click="addCouponCode"
         >Apply</SfButton
       >
     </div>
@@ -121,6 +121,11 @@ export default {
   },
   mounted() {
     this.$store.dispatch('carts/getCart');
+  },
+  methods: {
+    addCouponCode() {
+      this.$store.dispatch('checkout/addCoupons', this.promoCode);
+    }
   }
 };
 </script>

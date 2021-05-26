@@ -46,7 +46,8 @@
       "source": "/getPaymentMethodByOrder",
       "destination": "/api/routes/checkout"
     },
-    { "source": "/processPayment", "destination": "/api/routes/checkout" }
+    { "source": "/processPayment", "destination": "/api/routes/checkout" },
+    { "source": "/addCoupons", "destination": "/api/routes/checkout" }
   ],
   "env": {
     "APP_NAME": "BigCommerce Nuxt Vue Starter",

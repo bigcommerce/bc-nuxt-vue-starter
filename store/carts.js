@@ -6,7 +6,7 @@ import {
   getSecuredData,
   getUser
 } from '~/utils/auth';
-import { cartId } from '~/utils/storage';
+import { getCartId } from '~/utils/storage';
 const productFilter = (cart) => {
   return cart && cart !== ''
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -53,6 +53,7 @@ export const mutations = {
 
 export const actions = {
   addToCart({ dispatch }, data) {
+    const cartId = getCartId();
     if (cartId) dispatch('addCartItem', data);
     else dispatch('createCart', data);
   },
@@ -81,6 +82,7 @@ export const actions = {
   addCartItem({ commit }, addData) {
     const cartData = { line_items: [{ ...addData }] };
     commit('SET_LOADING', true);
+    const cartId = getCartId();
     axios
       .post(`/addCartItem?cartId=${cartId}`, { cartData })
       .then(({ data }) => {
@@ -99,6 +101,7 @@ export const actions = {
   updateCartItem({ commit }, { updateData, item_id }) {
     const cartData = { line_item: { ...updateData } };
     commit('SET_LOADING', true);
+    const cartId = getCartId();
     axios
       .put(`/updateCartItem?cartId=${cartId}&itemId=${item_id}`, { cartData })
       .then(({ data }) => {
@@ -116,6 +119,7 @@ export const actions = {
 
   deleteCartItem({ commit }, itemId) {
     commit('SET_LOADING', true);
+    const cartId = getCartId();
     axios
       .delete(`/deleteCartItem?cartId=${cartId}&itemId=${itemId}`)
       .then(({ data }) => {
@@ -134,6 +138,7 @@ export const actions = {
   },
 
   getCart({ commit }) {
+    const cartId = getCartId();
     if (cartId) {
       commit('SET_LOADING', true);
       axios.get(`/getCart?cartId=${cartId}`).then(({ data }) => {
@@ -152,6 +157,7 @@ export const actions = {
 
   updateCartWithCustomerId({ commit }, securedData) {
     const { id } = getSecuredData(securedData);
+    const cartId = getCartId();
     if (cartId) {
       commit('SET_LOADING', true);
       axios

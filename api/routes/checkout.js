@@ -7,7 +7,8 @@ import {
   setBillingAddressToCheckout,
   createOrder,
   getPaymentMethodByOrder,
-  processPayment
+  processPayment,
+  addCoupons
 } from '../controller/checkout';
 import { permissionMiddleware } from '../middleware';
 
@@ -37,5 +38,6 @@ router.get(
   getPaymentMethodByOrder
 );
 router.post('/processPayment', permissionMiddleware, processPayment);
+router.post('/addCoupons', permissionMiddleware, addCoupons);
 
 export default router;

@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
-import { cartId, orderId, setOrderId } from '~/utils/storage';
+import { getCartId, getOrderId, setOrderId } from '~/utils/storage';
 
 const getLineItems = (item) => {
   if (item) {
@@ -99,9 +99,10 @@ export const mutations = {
 
 export const actions = {
   getCheckout({ commit }) {
-    if (cartId) {
+    const checkoutId = getCartId();
+    if (checkoutId) {
       commit('SET_LOADING', true);
-      axios.get(`/getCheckout?checkoutId=${cartId}`).then(({ data }) => {
+      axios.get(`/getCheckout?checkoutId=${checkoutId}`).then(({ data }) => {
         if (data.status) {
           const body = data.body;
           commit('SET_LINE_ITEMS', getLineItems(body?.data?.cart?.line_items));
@@ -129,8 +130,9 @@ export const actions = {
         line_items: getters.line_items
       }
     ];
+    const checkoutId = getCartId();
     axios
-      .post(`setConsignmentToCheckout?checkoutId=${cartId}`, { data })
+      .post(`setConsignmentToCheckout?checkoutId=${checkoutId}`, { data })
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
@@ -155,9 +157,10 @@ export const actions = {
       shipping_address,
       line_items: getters.line_items
     };
+    const checkoutId = getCartId();
     axios
       .put(
-        `updateConsignmentToCheckout?checkoutId=${cartId}&consignmentId=${consignmentId}`,
+        `updateConsignmentToCheckout?checkoutId=${checkoutId}&consignmentId=${consignmentId}`,
         { data }
       )
       .then(({ data }) => {
@@ -178,9 +181,10 @@ export const actions = {
     { commit, dispatch },
     { shippingOptionId, consignmentId }
   ) {
+    const checkoutId = getCartId();
     axios
       .put(
-        `updateShippingOption?checkoutId=${cartId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
+        `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
       )
       .then(({ data }) => {
         if (data.status) {
@@ -194,8 +198,10 @@ export const actions = {
   },
 
   setBillingAddress({ commit, dispatch }, billing_address) {
+    const checkoutId = getCartId();
+    const orderId = getOrderId();
     axios
-      .post(`setBillingAddressToCheckout?checkoutId=${cartId}`, {
+      .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
         data: billing_address
       })
       .then(({ data }) => {
@@ -211,7 +217,8 @@ export const actions = {
   },
 
   createOrder({ commit, dispatch }) {
-    axios.post(`createOrder?checkoutId=${cartId}`).then(({ data }) => {
+    const checkoutId = getCartId();
+    axios.post(`createOrder?checkoutId=${checkoutId}`).then(({ data }) => {
       if (data.status) {
         this.$toast.success(data.message);
         const orderId = data.body.data.id;
@@ -236,6 +243,7 @@ export const actions = {
     });
   },
   processPayment({ commit }, data) {
+    const orderId = getOrderId();
     axios
       .post(`processPayment?orderId=${orderId}`, { data })
       .then(({ data }) => {
@@ -246,5 +254,20 @@ export const actions = {
         }
         commit('SET_LOADING', false);
       });
+  },
+  addCoupons({ commit }, couponCode) {
+    const checkoutId = getCartId();
+    if (!couponCode)
+      this.$toast.error('At least, you should input your coupon code');
+    else {
+      axios.post(`addCoupons`, { checkoutId, couponCode }).then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
+    }
   }
 };

@@ -192,3 +192,27 @@ export const processPayment = async (req, res) => {
     });
   }
 };
+
+export const addCoupons = async (req, res) => {
+  try {
+    const { checkoutId, couponCode } = req.body;
+
+    const result = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/coupons`,
+      {
+        coupon_code: couponCode
+      }
+    );
+    res.json({
+      message: 'Successfully added coupon to checkout',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Adding coupon failed',
+      body: error,
+      status: false
+    });
+  }
+};
