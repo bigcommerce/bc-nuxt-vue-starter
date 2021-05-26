@@ -353,7 +353,6 @@ export default {
   },
   methods: {
     runAction() {
-      debugger;
       if (!this.terms || !this.paymentMethodId || this.$v.$invalid)
         return false;
       const data = {
