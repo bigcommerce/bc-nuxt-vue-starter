@@ -91,6 +91,26 @@
           class="sf-heading--left sf-heading--no-underline title"
         />
         <div class="payment-methods">
+          <SfSelect
+            v-model="paymentMethodId"
+            label="Available Payment methods"
+            :required="true"
+            :valid="true"
+            error-message="This option should be selected"
+            placeholder="Please select payment method"
+            style="max-width: 30rem; margin: 10px"
+          >
+            <SfSelectOption
+              v-for="option in paymentOptions"
+              :key="option.id"
+              :value="option.id"
+              :label="option.name"
+            >
+              <SfProductOption :label="option.name"></SfProductOption>
+            </SfSelectOption>
+          </SfSelect>
+        </div>
+        <div v-if="paymentMethodId" class="payment-methods">
           <SfRadio
             v-for="item in paymentMethods"
             :key="item.value"
@@ -127,15 +147,15 @@
         <transition name="sf-fade">
           <div v-if="isCreditCard" class="credit-card-form">
             <SfInput
-              v-model="cardNumber"
-              :value="cardNumber"
+              v-model="cardInfo.cardNumber"
+              :value="cardInfo.cardNumber"
               name="cardNumber"
               label="Card number"
               class="credit-card-form__input"
             />
             <SfInput
-              v-model="cardHolder"
-              :value="cardHolder"
+              v-model="cardInfo.cardHolder"
+              :value="cardInfo.cardHolder"
               label="Card holder"
               name="cardHolder"
               class="credit-card-form__input"
@@ -147,22 +167,22 @@
               >
               <div class="credit-card-form__element">
                 <SfSelect
-                  v-model="cardMonth"
-                  :value="cardMonth"
+                  v-model="cardInfo.cardMonth"
+                  :value="cardInfo.cardMonth"
                   label="Month"
                   class="credit-card-form__input credit-card-form__input--with-spacer form__select sf-select--underlined"
                 >
                   <SfSelectOption
-                    v-for="monthOption in months"
+                    v-for="(monthOption, key) in months"
                     :key="monthOption"
-                    :value="monthOption"
+                    :value="key + 1"
                   >
                     {{ monthOption }}
                   </SfSelectOption>
                 </SfSelect>
                 <SfSelect
-                  v-model="cardYear"
-                  :value="cardYear"
+                  v-model="cardInfo.cardYear"
+                  :value="cardInfo.cardYear"
                   label="Year"
                   class="credit-card-form__input form__select sf-select--underlined"
                 >
@@ -178,8 +198,8 @@
             </div>
             <div class="credit-card-form__group">
               <SfInput
-                v-model="cardCVC"
-                :value="cardCVC"
+                v-model="cardInfo.cardCVC"
+                :value="cardInfo.cardCVC"
                 type="number"
                 label="Code CVC"
                 name="cardCVC"
@@ -215,9 +235,11 @@ import {
   SfButton,
   SfSelect,
   SfRadio,
-  SfInput
+  SfInput,
+  SfProductOption
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
+import { required } from 'vuelidate/lib/validators';
 export default {
   name: 'ReviewOrder',
   components: {
@@ -232,7 +254,8 @@ export default {
     SfButton,
     SfSelect,
     SfRadio,
-    SfInput
+    SfInput,
+    SfProductOption
   },
   props: {
     characteristics: {
@@ -257,22 +280,16 @@ export default {
         {
           label: 'Visa Electron',
           value: 'electron'
-        },
-        {
-          label: 'Cash on delivery',
-          value: 'cash'
-        },
-        {
-          label: 'Check',
-          value: 'check'
         }
       ],
       paymentMethod: '',
-      cardNumber: '',
-      cardHolder: '',
-      cardMonth: '',
-      cardYear: '',
-      cardCVC: '',
+      cardInfo: {
+        cardNumber: '',
+        cardHolder: '',
+        cardMonth: 0,
+        cardYear: 2021,
+        cardCVC: ''
+      },
       months: [
         'January',
         'February',
@@ -287,12 +304,32 @@ export default {
         'November',
         'December'
       ],
-      years: ['2020', '2021', '2022', '2025']
+      years: [2021, 2022, 2023, 2024, 2025],
+      paymentMethodId: null
     };
+  },
+  validations: {
+    cardInfo: {
+      cardNumber: {
+        required
+      },
+      cardHolder: {
+        required
+      },
+      cardMonth: {
+        required
+      },
+      cardYear: {
+        required
+      },
+      cardCVC: {
+        required
+      }
+    }
   },
   computed: {
     ...mapGetters('carts', ['products']),
-    ...mapGetters('checkout', ['shippingMethod']),
+    ...mapGetters('checkout', ['shippingMethod', 'paymentOptions']),
     isCreditCard() {
       return ['debit', 'mastercard', 'electron'].includes(this.paymentMethod);
     },
@@ -316,7 +353,23 @@ export default {
   },
   methods: {
     runAction() {
-      this.$store.dispatch('checkout/createOrder');
+      debugger;
+      if (!this.terms || !this.paymentMethodId || this.$v.$invalid)
+        return false;
+      const data = {
+        payment: {
+          instrument: {
+            type: 'card',
+            number: this.cardInfo.cardNumber,
+            cardholder_name: this.cardInfo.cardHolder,
+            expiry_month: this.cardInfo.cardMonth,
+            expiry_year: this.cardInfo.cardYear,
+            verification_value: this.cardInfo.cardCVC
+          },
+          payment_method_id: this.paymentMethodId
+        }
+      };
+      this.$store.dispatch('checkout/processPayment', data);
       return true;
     }
   }

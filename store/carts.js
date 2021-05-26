@@ -179,7 +179,7 @@ export const actions = {
     } else if (checkoutType === CHECKOUT_TYPE.EMBEDED) {
       this.$router.push('/');
     } else if (checkoutType === CHECKOUT_TYPE.CUSTOM) {
-      this.$router.push('/checkout');
+      window.location = '/checkout';
     }
   }
 };

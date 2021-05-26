@@ -37,7 +37,7 @@
         :value="billingInfo.address1"
         label="Address 1"
         name="address1"
-        class="form__element form__element--half form__element--half-even"
+        class="form__element form__element--half"
         :valid="$v.billingInfo.address1.required"
         :error-message="'Address 1 is required'"
       />
@@ -46,7 +46,7 @@
         :value="billingInfo.address2"
         label="Address 2"
         name="address2"
-        class="form__element form__element--half"
+        class="form__element form__element--half form__element--half-even"
         :valid="$v.billingInfo.address2.required"
         :error-message="'Address 2 is required'"
       />
@@ -55,7 +55,7 @@
         :value="billingInfo.city"
         label="City"
         name="city"
-        class="form__element form__element--half form__element--half-even"
+        class="form__element form__element--half"
         :valid="$v.billingInfo.city.required"
         :error-message="'City is required'"
       />
@@ -64,7 +64,7 @@
         :value="billingInfo.postal_code"
         label="Postal-code"
         name="postal_code"
-        class="form__element form__element--half"
+        class="form__element form__element--half form__element--half-even"
         :valid="$v.billingInfo.postal_code.required"
         :error-message="'Postal code is required'"
       />

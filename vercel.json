@@ -17,10 +17,36 @@
     { "source": "/addCartItem", "destination": "/api/routes/cart" },
     { "source": "/updateCartItem", "destination": "/api/routes/cart" },
     { "source": "/deleteCartItem", "destination": "/api/routes/cart" },
+    {
+      "source": "/updateCartWithCustomerId",
+      "destination": "/api/routes/cart"
+    },
     { "source": "/customerLogin", "destination": "/api/routes/customer" },
     { "source": "/customerRegister", "destination": "/api/routes/customer" },
     { "source": "/customerLogOut", "destination": "/api/routes/customer" },
-    { "source": "/getCheckout", "destination": "/api/routes/checkout" }
+    { "source": "/getCheckout", "destination": "/api/routes/checkout" },
+    {
+      "source": "/setConsignmentToCheckout",
+      "destination": "/api/routes/checkout"
+    },
+    {
+      "source": "/updateConsignmentToCheckout",
+      "destination": "/api/routes/checkout"
+    },
+    {
+      "source": "/updateShippingOption",
+      "destination": "/api/routes/checkout"
+    },
+    {
+      "source": "/setBillingAddressToCheckout",
+      "destination": "/api/routes/checkout"
+    },
+    { "source": "/createOrder", "destination": "/api/routes/checkout" },
+    {
+      "source": "/getPaymentMethodByOrder",
+      "destination": "/api/routes/checkout"
+    },
+    { "source": "/processPayment", "destination": "/api/routes/checkout" }
   ],
   "env": {
     "APP_NAME": "BigCommerce Nuxt Vue Starter",

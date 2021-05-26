@@ -265,7 +265,9 @@ export default {
         this.consignmentId = this.consignment?.id;
         this.shippingOptionId = this.shippingMethod?.id;
       } else {
-        Object.keys(this.shippingInfo).map((key) => (this.test[key] = ''));
+        Object.keys(this.shippingInfo).map(
+          (key) => (this.shippingInfo[key] = '')
+        );
         this.consignmentId = null;
         this.shippingOptionId = null;
       }

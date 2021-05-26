@@ -151,3 +151,44 @@ export const getPaymentMethodByOrder = async (req, res) => {
     });
   }
 };
+
+export const processPayment = async (req, res) => {
+  try {
+    const orderId = req.query.orderId;
+    const paymentData = req.body.data;
+
+    paymentData.payment.instrument.expiry_month = parseInt(
+      paymentData.payment.instrument.expiry_month
+    );
+    paymentData.payment.instrument.expiry_year = parseInt(
+      paymentData.payment.instrument.expiry_year
+    );
+
+    const tokenResult = await customAxios('api').post(
+      `/stores/${process.env.STORE_HASH}/v3/payments/access_tokens`,
+      {
+        order: {
+          id: parseInt(orderId)
+        }
+      }
+    );
+
+    const result = await customAxios(
+      'payment',
+      null,
+      tokenResult.data?.data?.id
+    ).post(`/stores/${process.env.STORE_HASH}/payments`, paymentData);
+
+    res.json({
+      message: 'Successfully processed payment',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Processing payment failed',
+      body: error,
+      status: false
+    });
+  }
+};

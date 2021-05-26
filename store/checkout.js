@@ -26,6 +26,7 @@ export const state = () => ({
   shippingAddress: null,
   shippingMethod: null,
   billingAddress: null,
+  paymentOptions: [],
   // old
   line_items: [],
   old_consignments: [],
@@ -49,8 +50,8 @@ export const getters = {
   billingAddress(state) {
     return state.billingAddress;
   },
-  paymentMethod(state) {
-    return state.paymentMethod;
+  paymentOptions(state) {
+    return state.paymentOptions;
   },
   // For getting old data from checkout
   line_items(state) {
@@ -81,8 +82,8 @@ export const mutations = {
   SET_BILLING_ADDRESS(state, billingAddress) {
     state.billingAddress = billingAddress;
   },
-  SET_PAYMENT_METHOD(state, paymentMethod) {
-    state.paymentMethod = paymentMethod;
+  SET_PAYMENT_OPTIONS(state, paymentOptions) {
+    state.paymentOptions = paymentOptions;
   },
   // old
   SET_LINE_ITEMS(state, line_items) {
@@ -193,7 +194,6 @@ export const actions = {
   },
 
   setBillingAddress({ commit, dispatch }, billing_address) {
-    debugger;
     axios
       .post(`setBillingAddressToCheckout?checkoutId=${cartId}`, {
         data: billing_address
@@ -226,13 +226,25 @@ export const actions = {
 
   getPaymentMethodByOrder({ commit, dispatch }, orderId) {
     axios.get(`getPaymentMethodByOrder?orderId=${orderId}`).then(({ data }) => {
-      console.log(data);
       if (data.status) {
+        commit('SET_PAYMENT_OPTIONS', data.body?.data);
         dispatch('getCheckout');
       } else {
         this.$toast.error(data.message);
       }
       commit('SET_LOADING', false);
     });
+  },
+  processPayment({ commit }, data) {
+    axios
+      .post(`processPayment?orderId=${orderId}`, { data })
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
+        } else {
+          this.$toast.error(data.message);
+        }
+        commit('SET_LOADING', false);
+      });
   }
 };

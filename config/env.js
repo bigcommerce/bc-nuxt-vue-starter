@@ -9,5 +9,6 @@ export default {
   storeHash: process.env.STORE_HASH || '',
   jwtSecret: process.env.JWT_SECRET || '',
   channelId: process.env.CHANNEL_ID || '',
-  checkoutType: process.env.CHECKOUT_TYPE || 'redirected'
+  checkoutType: process.env.CHECKOUT_TYPE || 'redirected',
+  paymentUrl: process.env.PAYMENT_URL || 'http://localhost'
 };

@@ -44,16 +44,6 @@
       {{ billingAddress.city }}, {{ billingAddress.country }}
     </p>
     <p class="content">{{ billingAddress.phone }}</p>
-    <br />
-    <div class="review__header">
-      <p class="review__title">Payment method</p>
-      <SfButton class="sf-button--text" @click="$emit('click:edit', 2)"
-        >Edit
-      </SfButton>
-    </div>
-    <p class="content">
-      {{ paymentMethod ? paymentMethod.label : 'No selected' }}
-    </p>
     <div class="promo-code">
       <SfInput
         v-model="promoCode"
