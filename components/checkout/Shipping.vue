@@ -175,17 +175,17 @@ export default {
   data() {
     return {
       shippingInfo: {
-        first_name: 'leo',
-        last_name: 'pard',
-        email: 'leopard@gmail.com',
-        address1: 'street 1',
-        address2: 'street 2',
-        city: 'Burnaby',
-        state_or_province: 'Ontario',
-        country: 'Canada',
-        country_code: 'CA',
-        postal_code: '235654',
-        phone: '2356346674'
+        first_name: '',
+        last_name: '',
+        email: '',
+        address1: '',
+        address2: '',
+        city: '',
+        state_or_province: '',
+        country: '',
+        country_code: '',
+        postal_code: '',
+        phone: ''
       },
       shippingOptionId: null,
       shippingOptions: [],

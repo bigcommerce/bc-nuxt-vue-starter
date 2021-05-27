@@ -185,7 +185,7 @@ export const actions = {
     } else if (checkoutType === CHECKOUT_TYPE.EMBEDED) {
       this.$router.push('/');
     } else if (checkoutType === CHECKOUT_TYPE.CUSTOM) {
-      window.location = '/checkout';
+      this.$router.push('/checkout');
     }
   }
 };
