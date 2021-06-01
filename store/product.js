@@ -1,6 +1,22 @@
 import axios from 'axios';
 import { color } from '~/constants';
 
+const checkCartOnPage = (edges) => {
+  let flag = false;
+  // eslint-disable-next-line no-unreachable-loop
+  for (let index = 0; index < edges.length; index++) {
+    const { node } = edges[index];
+    if (node.options.edges.length > 0) {
+      flag = true;
+      break;
+    } else {
+      flag = false;
+      break;
+    }
+  }
+  return flag;
+};
+
 export const state = () => ({
   products: [],
   product: null,
@@ -117,21 +133,6 @@ export const actions = {
       .get(`/getProductsByCategory?path=${path}&pageParam=${pageParam}`)
       .then(({ data }) => {
         if (data.status) {
-          const checkCartOnPage = (edges) => {
-            let flag = false;
-            // eslint-disable-next-line no-unreachable-loop
-            for (let index = 0; index < edges.length; index++) {
-              const { node } = edges[index];
-              if (node.options.edges.length > 0) {
-                flag = true;
-                break;
-              } else {
-                flag = false;
-                break;
-              }
-            }
-            return flag;
-          };
           const products = data.body?.data?.site?.route?.node?.products?.edges.map(
             ({ node }) => ({
               path: node.path,

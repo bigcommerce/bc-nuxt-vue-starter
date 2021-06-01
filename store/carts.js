@@ -16,7 +16,8 @@ const productFilter = (cart) => {
         title: item.name,
         image: item.image_url,
         price: { regular: item.sale_price },
-        qty: item.quantity
+        qty: item.quantity,
+        configuration: []
       }))
     : [];
 };
