@@ -39,7 +39,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   }
 };

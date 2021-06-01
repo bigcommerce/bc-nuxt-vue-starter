@@ -107,7 +107,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
     }
   },
@@ -137,7 +136,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -165,7 +163,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -185,7 +182,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -204,7 +200,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -219,7 +214,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   },
 
@@ -231,7 +225,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   },
   processPayment({ commit }, data) {
@@ -244,7 +237,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
   addCoupons({ commit }, couponCode) {
@@ -258,7 +250,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
     }
   }

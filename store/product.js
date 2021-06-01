@@ -104,7 +104,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   },
   getProductsByCategory({ commit, getters }, data) {
@@ -155,7 +154,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
   getProductBySlug({ commit }, slug) {
@@ -198,7 +196,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   },
   setColor({ commit, getters }, colorIndex) {
@@ -228,7 +225,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   }
 };

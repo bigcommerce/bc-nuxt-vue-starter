@@ -45,7 +45,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
   createCustomer({ commit }, variables) {
@@ -60,7 +59,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
   async logOut({ commit }) {
@@ -76,7 +74,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
   async isLoggedIn({ commit }) {

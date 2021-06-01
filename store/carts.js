@@ -68,7 +68,6 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   },
 
@@ -86,7 +85,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -104,7 +102,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -123,7 +120,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
 
@@ -139,7 +135,6 @@ export const actions = {
           window.localStorage.removeItem('cartId');
           commit('SET_CART', productFilter(null));
         }
-        commit('SET_LOADING', false);
       });
     }
   },
@@ -156,7 +151,6 @@ export const actions = {
           } else {
             this.$toast.error(data.message);
           }
-          commit('SET_LOADING', false);
         });
     }
   },
