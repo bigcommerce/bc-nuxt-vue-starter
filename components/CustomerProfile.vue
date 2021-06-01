@@ -54,8 +54,8 @@ export default {
   },
   computed: {
     ...mapGetters('customer', ['customer']),
-    ...mapGetters('order', ['orders', 'isLoading']),
-    ...mapGetters('address', ['addresses', 'isLoading'])
+    ...mapGetters('order', ['orders']),
+    ...mapGetters('address', ['addresses'])
   },
   mounted() {
     this.getAllOrders();

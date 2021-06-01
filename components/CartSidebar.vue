@@ -131,7 +131,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters('carts', ['products', 'isLoading']),
+    ...mapGetters('carts', ['products']),
     totalItems() {
       return this.products.reduce(
         (totalItems, product) => totalItems + parseInt(product.qty, 10),

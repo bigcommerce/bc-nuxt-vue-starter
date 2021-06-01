@@ -83,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('customer', ['loggedIn', 'isLoading']),
+    ...mapGetters('customer', ['loggedIn']),
     btnDisabled() {
       return this.$v.$invalid;
     }

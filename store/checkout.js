@@ -20,7 +20,6 @@ const getShippingMethod = (consignments) => {
 };
 
 export const state = () => ({
-  isLoading: false,
   // new
   personalDetails: null,
   shippingAddress: null,
@@ -34,9 +33,6 @@ export const state = () => ({
 });
 
 export const getters = {
-  isLoading(state) {
-    return state.isLoading;
-  },
   // set new checkout data
   personalDetails(state) {
     return state.personalDetails;
@@ -66,9 +62,6 @@ export const getters = {
 };
 
 export const mutations = {
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
-  },
   // new
   SET_PERSONAL_DETAILS(state, personalDetails) {
     state.personalDetails = personalDetails;
@@ -101,7 +94,6 @@ export const actions = {
   getCheckout({ commit }) {
     const checkoutId = getCartId();
     if (checkoutId) {
-      commit('SET_LOADING', true);
       axios.get(`/getCheckout?checkoutId=${checkoutId}`).then(({ data }) => {
         if (data.status) {
           const body = data.body;

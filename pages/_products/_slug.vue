@@ -232,12 +232,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('product', [
-      'product',
-      'isLoading',
-      'colors',
-      'selectedColor'
-    ])
+    ...mapGetters('product', ['product', 'colors', 'selectedColor'])
   },
   mounted() {
     this.getProductBySlug(this.$route.params.slug);

@@ -9,8 +9,7 @@ import {
 
 export const state = () => ({
   customer: null,
-  loggedIn: false,
-  isLoading: false
+  loggedIn: false
 });
 
 export const getters = {
@@ -19,9 +18,6 @@ export const getters = {
   },
   loggedIn(state) {
     return state.loggedIn;
-  },
-  isLoading(state) {
-    return state.isLoading;
   }
 };
 
@@ -31,15 +27,11 @@ export const mutations = {
   },
   SET_LOGGEDIN(state, loggedIn) {
     state.loggedIn = loggedIn;
-  },
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
   }
 };
 
 export const actions = {
   login({ dispatch, commit }, variables) {
-    commit('SET_LOADING', true);
     axios
       .post(`/customerLogin`, {
         variables
@@ -57,7 +49,6 @@ export const actions = {
       });
   },
   createCustomer({ commit }, variables) {
-    commit('SET_LOADING', true);
     axios
       .post(`/customerRegister`, {
         variables
@@ -73,7 +64,6 @@ export const actions = {
       });
   },
   async logOut({ commit }) {
-    commit('SET_LOADING', true);
     const cookie = getCookie();
     axios
       .post('/customerLogOut', {

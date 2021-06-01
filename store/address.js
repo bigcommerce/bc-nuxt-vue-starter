@@ -2,31 +2,23 @@ import axios from 'axios';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
-  isLoading: false,
   addresses: []
 });
 
 export const getters = {
-  isLoading(state) {
-    return state.isLoading;
-  },
   addresses(state) {
     return state.addresses;
   }
 };
 
 export const mutations = {
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
-  },
   SET_ADDRESSES(state, addresses) {
     state.addresses = addresses;
   }
 };
 
 export const actions = {
-  getAllAddresses({ commit, state }) {
-    commit('SET_LOADING', true);
+  getAllAddresses({ commit }) {
     const user = getUser();
     const customer = getSecuredData(user.secureData);
     axios.get(`/getAllAddresses?customerId=${customer.id}`).then(({ data }) => {
@@ -53,11 +45,9 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
     });
   },
-  updateAddress({ commit, dispatch }, address) {
-    commit('SET_LOADING', true);
+  updateAddress({ dispatch }, address) {
     const customerId = address.customer_id;
     const id = address.id;
     delete address.id;
@@ -72,13 +62,11 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
-  addAddress({ commit, dispatch }, address) {
+  addAddress({ dispatch }, address) {
     const user = getUser();
     const customer = getSecuredData(user.secureData);
-    commit('SET_LOADING', true);
     delete address.id;
     delete address.customer_id;
     axios
@@ -90,11 +78,9 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   },
-  deleteAddress({ commit, dispatch }, { customerId, addressId }) {
-    commit('SET_LOADING', true);
+  deleteAddress({ dispatch }, { customerId, addressId }) {
     axios
       .delete(`/deleteAddress?customerId=${customerId}&addressId=${addressId}`)
       .then(({ data }) => {
@@ -104,7 +90,6 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-        commit('SET_LOADING', false);
       });
   }
 };

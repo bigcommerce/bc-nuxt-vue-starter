@@ -21,7 +21,6 @@ export const state = () => ({
   products: [],
   product: null,
   colors: [],
-  isLoading: false,
   selectedColor: null,
   categories: [],
   category: '/shop-all/',
@@ -43,9 +42,6 @@ export const getters = {
   },
   selectedColor(state) {
     return state.selectedColor;
-  },
-  isLoading(state) {
-    return state.isLoading;
   },
   categories(state) {
     return state.categories;
@@ -80,9 +76,6 @@ export const mutations = {
   SET_SELECTED_COLOR(state, selectedColor) {
     state.selectedColor = selectedColor;
   },
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
-  },
   SET_CATEGORIES(state, categories) {
     state.categories = categories;
   },
@@ -105,7 +98,6 @@ export const mutations = {
 
 export const actions = {
   getCategories({ commit }) {
-    commit('SET_LOADING', true);
     axios.get(`/getCategories`).then(({ data }) => {
       if (data.status) {
         commit('SET_CATEGORIES', data.body?.data?.site?.categoryTree);
@@ -128,7 +120,7 @@ export const actions = {
     }
     if (typeof path !== 'undefined') commit('SET_CATEGORY', path);
     else path = getters.category;
-    commit('SET_LOADING', true);
+
     axios
       .get(`/getProductsByCategory?path=${path}&pageParam=${pageParam}`)
       .then(({ data }) => {
@@ -167,7 +159,6 @@ export const actions = {
       });
   },
   getProductBySlug({ commit }, slug) {
-    commit('SET_LOADING', true);
     axios.get(`/getProductBySlug?slug=${slug}`).then(({ data }) => {
       if (data.status) {
         const product = data.body.data?.site?.route?.node;
@@ -224,7 +215,6 @@ export const actions = {
     commit('SET_COLORS', colors);
   },
   searchProductByKey({ commit, state }, key) {
-    commit('SET_LOADING', true);
     axios.get(`/searchProductByKey?key=${key}`).then(({ data }) => {
       if (data.status) {
         const products = data.body.data.map((item) => ({

@@ -24,8 +24,7 @@ const productFilter = (cart) => {
 
 export const state = () => ({
   products: [],
-  redirectUrls: {},
-  isLoading: false
+  redirectUrls: {}
 });
 
 export const getters = {
@@ -34,18 +33,12 @@ export const getters = {
   },
   redirectUrls(state) {
     return state.redirectUrls;
-  },
-  isLoading(state) {
-    return state.isLoading;
   }
 };
 
 export const mutations = {
   SET_CART(state, products) {
     state.products = products;
-  },
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
   },
   SET_REDIRECTURLS(state, redirectUrls) {
     state.redirectUrls = redirectUrls;
@@ -60,7 +53,6 @@ export const actions = {
   },
 
   createCart({ commit }, createData) {
-    commit('SET_LOADING', true);
     const cartData = {
       line_items: [{ ...createData }],
       channel_id: `${process.env.CHANNEL_ID}`
@@ -82,7 +74,6 @@ export const actions = {
 
   addCartItem({ commit }, addData) {
     const cartData = { line_items: [{ ...addData }] };
-    commit('SET_LOADING', true);
     const cartId = getCartId();
     axios
       .post(`/addCartItem?cartId=${cartId}`, { cartData })
@@ -101,7 +92,6 @@ export const actions = {
 
   updateCartItem({ commit }, { updateData, item_id }) {
     const cartData = { line_item: { ...updateData } };
-    commit('SET_LOADING', true);
     const cartId = getCartId();
     axios
       .put(`/updateCartItem?cartId=${cartId}&itemId=${item_id}`, { cartData })
@@ -119,7 +109,6 @@ export const actions = {
   },
 
   deleteCartItem({ commit }, itemId) {
-    commit('SET_LOADING', true);
     const cartId = getCartId();
     axios
       .delete(`/deleteCartItem?cartId=${cartId}&itemId=${itemId}`)
@@ -141,7 +130,6 @@ export const actions = {
   getCart({ commit }) {
     const cartId = getCartId();
     if (cartId) {
-      commit('SET_LOADING', true);
       axios.get(`/getCart?cartId=${cartId}`).then(({ data }) => {
         if (data.status) {
           const body = data.body;
@@ -160,7 +148,6 @@ export const actions = {
     const { id } = getSecuredData(securedData);
     const cartId = getCartId();
     if (cartId) {
-      commit('SET_LOADING', true);
       axios
         .put(`/updateCartWithCustomerId?cartId=${cartId}&customerId=${id}`)
         .then(({ data }) => {
