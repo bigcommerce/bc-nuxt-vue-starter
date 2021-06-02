@@ -4,7 +4,7 @@ export const getCart = async (req, res) => {
   try {
     const cartId = req.query.cartId;
     const result = await customAxios('api').get(
-      `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}?include=redirect_urls`
+      `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}?include=redirect_urls,line_items.physical_items.options`
     );
     res.json({
       message: 'Successfully got carts',
