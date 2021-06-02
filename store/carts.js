@@ -52,7 +52,7 @@ export const actions = {
     else dispatch('createCart', data);
   },
 
-  createCart({ commit }, createData) {
+  createCart({ dispatch }, createData) {
     const cartData = {
       line_items: [{ ...createData }],
       channel_id: `${process.env.CHANNEL_ID}`
@@ -62,8 +62,7 @@ export const actions = {
         const body = data.body;
         const cartId = body.data.id;
         window.localStorage.setItem('cartId', cartId);
-        commit('SET_CART', productFilter(body));
-        commit('SET_REDIRECTURLS', body.data.redirect_urls);
+        dispatch('getCart');
         this.$toast.success(data.message);
       } else {
         this.$toast.error(data.message);
@@ -71,16 +70,14 @@ export const actions = {
     });
   },
 
-  addCartItem({ commit }, addData) {
+  addCartItem({ dispatch }, addData) {
     const cartData = { line_items: [{ ...addData }] };
     const cartId = getCartId();
     axios
       .post(`/addCartItem?cartId=${cartId}`, { cartData })
       .then(({ data }) => {
         if (data.status) {
-          const body = data.body;
-          commit('SET_CART', productFilter(body));
-          commit('SET_REDIRECTURLS', body.data.redirect_urls);
+          dispatch('getCart');
           this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
@@ -88,16 +85,14 @@ export const actions = {
       });
   },
 
-  updateCartItem({ commit }, { updateData, item_id }) {
+  updateCartItem({ dispatch }, { updateData, item_id }) {
     const cartData = { line_item: { ...updateData } };
     const cartId = getCartId();
     axios
       .put(`/updateCartItem?cartId=${cartId}&itemId=${item_id}`, { cartData })
       .then(({ data }) => {
         if (data.status) {
-          const body = data.body;
-          commit('SET_CART', productFilter(body));
-          commit('SET_REDIRECTURLS', body.data.redirect_urls);
+          dispatch('getCart');
           this.$toast.success(data.message);
         } else {
           this.$toast.error(data.message);
@@ -105,7 +100,7 @@ export const actions = {
       });
   },
 
-  deleteCartItem({ commit }, itemId) {
+  deleteCartItem({ dispatch }, itemId) {
     const cartId = getCartId();
     axios
       .delete(`/deleteCartItem?cartId=${cartId}&itemId=${itemId}`)
@@ -113,8 +108,7 @@ export const actions = {
         if (data.status) {
           const body = data.body;
           const cart = productFilter(body);
-          commit('SET_CART', cart);
-          commit('SET_REDIRECTURLS', body ? body.data.redirect_urls : null);
+          dispatch('getCart');
           if (cart.length === 0) window.localStorage.removeItem('cartId');
           this.$toast.success(data.message);
         } else {
