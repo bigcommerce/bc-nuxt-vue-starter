@@ -152,6 +152,8 @@
               name="cardNumber"
               label="Card number"
               class="credit-card-form__input"
+              :valid="$v.cardInfo.cardNumber.required"
+              :error-message="'Card number is required'"
             />
             <SfInput
               v-model="cardInfo.cardHolder"
@@ -159,6 +161,8 @@
               label="Card holder"
               name="cardHolder"
               class="credit-card-form__input"
+              :valid="$v.cardInfo.cardHolder.required"
+              :error-message="'Card holder name is required'"
             />
             <div class="credit-card-form__group">
               <span
@@ -166,34 +170,48 @@
                 >Expiry date:</span
               >
               <div class="credit-card-form__element">
-                <SfSelect
-                  v-model="cardInfo.cardMonth"
-                  :value="cardInfo.cardMonth"
-                  label="Month"
-                  class="credit-card-form__input credit-card-form__input--with-spacer form__select sf-select--underlined"
-                >
-                  <SfSelectOption
-                    v-for="(monthOption, key) in months"
-                    :key="monthOption"
-                    :value="key + 1"
+                <div class="credit-card-form__item">
+                  <SfSelect
+                    v-model="cardInfo.cardMonth"
+                    :value="cardInfo.cardMonth"
+                    label="Month"
+                    class="credit-card-form__input credit-card-form__input--with-spacer form__select sf-select--underlined"
                   >
-                    {{ monthOption }}
-                  </SfSelectOption>
-                </SfSelect>
-                <SfSelect
-                  v-model="cardInfo.cardYear"
-                  :value="cardInfo.cardYear"
-                  label="Year"
-                  class="credit-card-form__input form__select sf-select--underlined"
-                >
-                  <SfSelectOption
-                    v-for="yearOption in years"
-                    :key="yearOption"
-                    :value="yearOption"
+                    <SfSelectOption
+                      v-for="(monthOption, key) in months"
+                      :key="monthOption"
+                      :value="key + 1"
+                    >
+                      {{ monthOption }}
+                    </SfSelectOption>
+                  </SfSelect>
+                  <span
+                    v-if="!$v.cardInfo.cardMonth.required"
+                    style="margin-top: 50px; color: red; font-size: 14px"
+                    >Card month is required</span
                   >
-                    {{ yearOption }}
-                  </SfSelectOption>
-                </SfSelect>
+                </div>
+                <div class="credit-card-form__item">
+                  <SfSelect
+                    v-model="cardInfo.cardYear"
+                    :value="cardInfo.cardYear"
+                    label="Year"
+                    class="credit-card-form__input form__select sf-select--underlined"
+                  >
+                    <SfSelectOption
+                      v-for="yearOption in years"
+                      :key="yearOption"
+                      :value="yearOption"
+                    >
+                      {{ yearOption }}
+                    </SfSelectOption>
+                  </SfSelect>
+                  <span
+                    v-if="!$v.cardInfo.cardYear.required"
+                    style="margin-top: 50px; color: red; font-size: 14px"
+                    >Card year is required</span
+                  >
+                </div>
               </div>
             </div>
             <div class="credit-card-form__group">
@@ -204,6 +222,8 @@
                 label="Code CVC"
                 name="cardCVC"
                 class="credit-card-form__input credit-card-form__input--small credit-card-form__input--with-spacer"
+                :valid="$v.cardInfo.cardCVC.required"
+                :error-message="'Card CVC is required'"
               />
               <SfButton class="sf-button--text credit-card-form__button"
                 >Where can I find CVC code</SfButton
@@ -286,8 +306,8 @@ export default {
       cardInfo: {
         cardNumber: '',
         cardHolder: '',
-        cardMonth: '0',
-        cardYear: '2021',
+        cardMonth: '',
+        cardYear: '',
         cardCVC: ''
       },
       months: [

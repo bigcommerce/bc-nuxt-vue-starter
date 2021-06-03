@@ -229,6 +229,10 @@
   &__element {
     flex: 1;
   }
+  &__item {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
   &__label {
     font-size: var(--font-size--base);
     font-family: var(--font-family--secondary);
