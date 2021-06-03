@@ -29,6 +29,14 @@
         </SfTableData>
         <SfTableData class="table__data">{{ product.qty }}</SfTableData>
         <SfTableData class="table__data">
+          <SfProperty
+            v-for="(property, key) in product.configuration"
+            :key="'property' + key"
+            :name="property.name"
+            :value="property.value"
+          />
+        </SfTableData>
+        <SfTableData class="table__data">
           <SfPrice
             :regular="product.price.regular"
             :special="product.price.special"
@@ -287,7 +295,7 @@ export default {
     return {
       terms: false,
       promoCode: '',
-      tableHeaders: ['Description', 'Quantity', 'Amount'],
+      tableHeaders: ['Description', 'Quantity', 'Configuration', 'Amount'],
       paymentMethods: [
         {
           label: 'Visa Debit',
