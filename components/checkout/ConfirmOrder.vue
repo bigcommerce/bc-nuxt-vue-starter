@@ -286,8 +286,8 @@ export default {
       cardInfo: {
         cardNumber: '',
         cardHolder: '',
-        cardMonth: 0,
-        cardYear: 2021,
+        cardMonth: '0',
+        cardYear: '2021',
         cardCVC: ''
       },
       months: [

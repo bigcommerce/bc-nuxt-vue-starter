@@ -73,7 +73,7 @@
         :value="billingInfo.country_code"
         label="Country code"
         name="country_code"
-        class="form__element form__element--half form__element--half-even"
+        class="form__element"
         :valid="$v.billingInfo.country_code.required"
         :error-message="'Country code is required'"
       />
