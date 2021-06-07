@@ -374,7 +374,9 @@ export default {
     },
     total() {
       const subtotal = parseFloat(this.subtotal.replace('$', ''));
-      const shipping = parseFloat(this.shippingMethod.cost);
+      const shipping = parseFloat(
+        this.shippingMethod ? this.shippingMethod.cost : 0
+      );
       const total = subtotal + shipping;
       return '$' + total.toFixed(2);
     }

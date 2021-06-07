@@ -24,6 +24,7 @@ export const state = () => ({
   personalDetails: null,
   shippingAddress: null,
   shippingMethod: null,
+  consignmentId: null,
   billingAddress: null,
   paymentOptions: [],
   // old
@@ -42,6 +43,9 @@ export const getters = {
   },
   shippingMethod(state) {
     return state.shippingMethod;
+  },
+  consignmentId(state) {
+    return state.consignmentId;
   },
   billingAddress(state) {
     return state.billingAddress;
@@ -71,6 +75,9 @@ export const mutations = {
   },
   SET_SHIPPING_METHOD(state, shippingMethod) {
     state.shippingMethod = shippingMethod;
+  },
+  SET_CONSIGNMENTID(state, consignmentId) {
+    state.consignmentId = consignmentId;
   },
   SET_BILLING_ADDRESS(state, billingAddress) {
     state.billingAddress = billingAddress;
@@ -113,7 +120,7 @@ export const actions = {
 
   setConsignmentToCheckout(
     { commit, getters, dispatch },
-    { shipping_address, shippingOptionId }
+    { shipping_address }
   ) {
     const data = [
       {
@@ -127,12 +134,10 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
-          if (shippingOptionId) {
-            dispatch('updateShippingOption', {
-              shippingOptionId,
-              consignmentId: data.body.data.consignments[0].id
-            });
-          } else dispatch('getCheckout');
+          const body = data.body;
+          const consignment = body?.data?.consignments[0];
+          commit('SET_CONSIGNMENTID', consignment.id);
+          dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
@@ -140,8 +145,8 @@ export const actions = {
   },
 
   updateConsignmentToCheckout(
-    { commit, getters, dispatch },
-    { shipping_address, consignmentId, shippingOptionId }
+    { commit, getters },
+    { shipping_address, consignmentId }
   ) {
     const data = {
       shipping_address,
@@ -156,20 +161,39 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
-          dispatch('updateShippingOption', {
-            shippingOptionId,
-            consignmentId
-          });
+          commit('SET_CONSIGNMENTID', consignmentId);
         } else {
           this.$toast.error(data.message);
         }
       });
   },
 
-  updateShippingOption(
-    { commit, dispatch },
-    { shippingOptionId, consignmentId }
+  setBillingAddress(
+    { dispatch, getters },
+    { billingAddress, shippingOptionId }
   ) {
+    const checkoutId = getCartId();
+    const orderId = getOrderId();
+    const consignmentId = getters.consignmentId;
+    console.log(consignmentId);
+
+    axios
+      .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
+        data: billingAddress
+      })
+      .then(({ data }) => {
+        if (data.status) {
+          this.$toast.success(data.message);
+          dispatch('updateShippingOption', { shippingOptionId, consignmentId });
+          if (orderId) dispatch('getPaymentMethodByOrder', orderId);
+          else dispatch('createOrder');
+        } else {
+          this.$toast.error(data.message);
+        }
+      });
+  },
+
+  updateShippingOption({ dispatch }, { shippingOptionId, consignmentId }) {
     const checkoutId = getCartId();
     axios
       .put(
@@ -179,24 +203,6 @@ export const actions = {
         if (data.status) {
           this.$toast.success(data.message);
           dispatch('getCheckout');
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
-  },
-
-  setBillingAddress({ commit, dispatch }, billing_address) {
-    const checkoutId = getCartId();
-    const orderId = getOrderId();
-    axios
-      .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
-        data: billing_address
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          this.$toast.success(data.message);
-          if (orderId) dispatch('getPaymentMethodByOrder', orderId);
-          else dispatch('createOrder');
         } else {
           this.$toast.error(data.message);
         }

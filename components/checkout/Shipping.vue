@@ -117,50 +117,10 @@
         :error-message="'Phone is required'"
       />
     </div>
-    <SfHeading
-      title="Shipping method"
-      :level="3"
-      class="sf-heading--left sf-heading--no-underline title"
-    />
-    <div class="form">
-      <div class="form__radio-group">
-        <SfRadio
-          v-for="item in shippingOptions"
-          :key="item.id"
-          v-model="shippingOptionId"
-          :label="item.type"
-          :value="item.id"
-          name="shippingMethods"
-          :description="item.description"
-          class="form__radio shipping"
-        >
-          <template #label="{ label }">
-            <div class="sf-radio__label shipping__label">
-              <div>
-                {{ label }}
-              </div>
-              <div class="shipping__label-price">{{ item.price }}</div>
-            </div>
-          </template>
-          <template #description="{ description }">
-            <div class="sf-radio__description shipping__description">
-              <div class="shipping__delivery">
-                <span>{{ item.delivery }}</span>
-              </div>
-              <transition name="sf-fade">
-                <div class="shipping__info">
-                  {{ description }}
-                </div>
-              </transition>
-            </div>
-          </template>
-        </SfRadio>
-      </div>
-    </div>
   </div>
 </template>
 <script>
-import { SfHeading, SfInput, SfRadio } from '@storefront-ui/vue';
+import { SfHeading, SfInput } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
 import { required } from 'vuelidate/lib/validators';
@@ -169,7 +129,6 @@ export default {
   components: {
     SfHeading,
     SfInput,
-    SfRadio,
     SpDropdown
   },
   data() {
@@ -187,8 +146,19 @@ export default {
         postal_code: '',
         phone: ''
       },
-      shippingOptionId: null,
-      shippingOptions: [],
+      test: {
+        first_name: 'Ameed',
+        last_name: 'Khalid',
+        email: 'abc@gmail.com',
+        address1: 'test',
+        address2: 'test',
+        city: 'test',
+        state_or_province: '',
+        country: '',
+        country_code: 'CA',
+        postal_code: '123123',
+        phone: '123123123123'
+      },
       consignmentId: null,
       consignment: null
     };
@@ -234,21 +204,16 @@ export default {
     ...mapGetters('checkout', [
       'old_consignments',
       'line_items',
-      'shippingAddress',
-      'shippingMethod'
+      'shippingAddress'
     ])
   },
   mounted() {
     if (this.shippingAddress) {
       this.shippingInfo = { ...this.shippingAddress };
     }
-    if (this.shippingMethod) {
-      this.shippingOptionId = this.shippingMethod.id;
-    }
     if (this.old_consignments.length) {
       const consignment = this.old_consignments[0];
       this.consignment = consignment;
-      this.shippingOptions = consignment.available_shipping_options;
       this.shippingInfo = { ...consignment.shipping_address };
       this.consignmentId = consignment.id;
     }
@@ -263,27 +228,23 @@ export default {
           (key) => (this.shippingInfo[key] = action?.shipping_address[key])
         );
         this.consignmentId = this.consignment?.id;
-        this.shippingOptionId = this.shippingMethod?.id;
       } else {
         Object.keys(this.shippingInfo).map(
-          (key) => (this.shippingInfo[key] = '')
+          (key) => (this.shippingInfo[key] = this.test[key])
         );
         this.consignmentId = null;
-        this.shippingOptionId = null;
       }
     },
     runAction() {
       if (!this.$v.$invalid) {
         if (!this.consignmentId)
           this.$store.dispatch('checkout/setConsignmentToCheckout', {
-            shipping_address: this.shippingInfo,
-            shippingOptionId: this.shippingOptionId
+            shipping_address: this.shippingInfo
           });
         else
           this.$store.dispatch('checkout/updateConsignmentToCheckout', {
             shipping_address: this.shippingInfo,
-            consignmentId: this.consignmentId,
-            shippingOptionId: this.shippingOptionId
+            consignmentId: this.consignmentId
           });
       }
       return !this.$v.$invalid;

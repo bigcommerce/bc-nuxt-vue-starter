@@ -112,10 +112,50 @@
         :error-message="'Phone is required'"
       />
     </div>
+    <SfHeading
+      title="Shipping method"
+      :level="3"
+      class="sf-heading--left sf-heading--no-underline title"
+    />
+    <div class="form">
+      <div class="form__radio-group">
+        <SfRadio
+          v-for="item in shippingOptions"
+          :key="item.id"
+          v-model="shippingOptionId"
+          :label="item.type"
+          :value="item.id"
+          name="shippingMethods"
+          :description="item.description"
+          class="form__radio shipping"
+        >
+          <template #label="{ label }">
+            <div class="sf-radio__label shipping__label">
+              <div>
+                {{ label }}
+              </div>
+              <div class="shipping__label-price">{{ item.price }}</div>
+            </div>
+          </template>
+          <template #description="{ description }">
+            <div class="sf-radio__description shipping__description">
+              <div class="shipping__delivery">
+                <span>{{ item.delivery }}</span>
+              </div>
+              <transition name="sf-fade">
+                <div class="shipping__info">
+                  {{ description }}
+                </div>
+              </transition>
+            </div>
+          </template>
+        </SfRadio>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { SfHeading, SfInput, SfCheckbox } from '@storefront-ui/vue';
+import { SfHeading, SfInput, SfCheckbox, SfRadio } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 export default {
@@ -123,7 +163,8 @@ export default {
   components: {
     SfHeading,
     SfInput,
-    SfCheckbox
+    SfCheckbox,
+    SfRadio
   },
   props: {
     value: {
@@ -145,7 +186,9 @@ export default {
         country_code: '',
         postal_code: '',
         phone: ''
-      }
+      },
+      shippingOptionId: null,
+      shippingOptions: []
     };
   },
   validations: {
@@ -186,7 +229,10 @@ export default {
     ...mapGetters('checkout', [
       'shippingAddress',
       'billingAddress',
-      'old_billing_address'
+      'old_billing_address',
+      'old_consignments',
+      'line_items',
+      'shippingMethod'
     ]),
     isCreditCard() {
       return ['debit', 'mastercard', 'electron'].includes(this.paymentMethod);
@@ -197,6 +243,13 @@ export default {
       this.billingInfo = { ...this.billingAddress };
     } else if (this.old_billing_address !== {}) {
       this.billingInfo = { ...this.old_billing_address };
+    }
+    if (this.shippingMethod) {
+      this.shippingOptionId = this.shippingMethod.id;
+    }
+    if (this.old_consignments.length) {
+      const consignment = this.old_consignments[0];
+      this.shippingOptions = consignment.available_shipping_options;
     }
   },
   destroyed() {
@@ -213,7 +266,10 @@ export default {
     },
     runAction() {
       if (!this.$v.$invalid) {
-        this.$store.dispatch('checkout/setBillingAddress', this.billingInfo);
+        this.$store.dispatch('checkout/setBillingAddress', {
+          billingAddress: this.billingInfo,
+          shippingOptionId: this.shippingOptionId
+        });
       }
       return !this.$v.$invalid;
     }
