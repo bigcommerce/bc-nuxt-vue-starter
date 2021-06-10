@@ -285,8 +285,8 @@ export default {
         this.modifiers = _.cloneDeep(val.modifiers);
         this.optionFields = this.options.map(({ field }) => field);
         this.modifierFields = this.modifiers.map((item) => item.display_name);
-        [...this.optionFields, ...this.modifierFields].map(
-          (item) => (this.selectedField[item] = null)
+        [...this.optionFields, ...this.modifierFields].map((item) =>
+          this.$set(this.selectedField, item, null)
         );
       }
     }
@@ -369,7 +369,7 @@ export default {
           option.values.map((item) => {
             if (item.id === colorIndex) {
               item.selected = true;
-              this.selectedField[option.field] = item.id;
+              this.$set(this.selectedField, option.field, item.id);
             }
             return item;
           });
