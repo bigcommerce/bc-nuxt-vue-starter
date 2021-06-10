@@ -295,7 +295,6 @@ export default {
     this.getProductBySlug(this.$route.params.slug);
   },
   methods: {
-    /* eslint-disable array-callback-return */
     ...mapActions({
       getProductBySlug: 'product/getProductBySlug'
     }),
