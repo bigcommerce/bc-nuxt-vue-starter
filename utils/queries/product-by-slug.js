@@ -7,6 +7,15 @@ export const productBySlug = (params) => {
           ... on Product {
             id
             entityId
+            productOptions {
+              edges {
+                node {
+                  entityId
+                  displayName
+                  isRequired
+                }
+              }
+            }
             variants {
               edges {
                 node {
@@ -15,6 +24,7 @@ export const productBySlug = (params) => {
                   options {
                     edges {
                       node {
+                        displayName
                         values {
                           edges {
                             node {
@@ -47,7 +57,11 @@ export const productBySlug = (params) => {
             }
             brand {
               name
-              metaDesc
+              seo {
+                pageTitle
+                metaDescription
+                metaKeywords
+              }
             }
             path
             prices {

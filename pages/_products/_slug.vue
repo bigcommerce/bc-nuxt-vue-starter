@@ -77,35 +77,70 @@
               <SfButton class="sf-button--text desktop-only product__guide">
                 Size guide
               </SfButton>
-              <SfSelect
-                v-if="product.sizes.length > 0"
-                v-model="selectedSize"
-                label="Size"
-                class="sf-select--underlined product__select-size"
-                :reqired="true"
-              >
-                <SfSelectOption
-                  v-for="size in product.sizes"
-                  :key="size.id"
-                  :value="size.id"
+              <div v-if="options.length">Variants</div>
+              <template v-for="(option, key) in options">
+                <div
+                  v-if="option.field === 'Color' && option.values.length > 0"
+                  :key="key + `${option.field}`"
+                  class="product__colors desktop-only"
                 >
-                  <SfProductOption :label="size.value"></SfProductOption>
-                </SfSelectOption>
-              </SfSelect>
-              <div
-                v-if="colors.length > 0"
-                class="product__colors desktop-only"
-              >
-                <p class="product__color-label">Color:</p>
-                <SfColor
-                  v-for="color in colors"
-                  :key="color.id"
-                  :color="color.value"
-                  :selected="color.selected"
-                  class="product__color"
-                  @click="selectColor(color.id)"
+                  <p class="product__color-label">Color:</p>
+                  <SfColor
+                    v-for="color in option.values"
+                    :key="color.id"
+                    :color="color.color"
+                    :selected="color.selected"
+                    class="product__color"
+                    @click="selectColor(color.id)"
+                  />
+                </div>
+                <SfSelect
+                  v-else
+                  :key="key + `${option.field}`"
+                  v-model="selectedField[option.field]"
+                  :value="selectedField[option.field]"
+                  :label="option.field"
+                  class="sf-select--underlined product__select-size"
+                  :reqired="true"
+                >
+                  <SfSelectOption
+                    v-for="field in option.values"
+                    :key="field.id"
+                    :value="field.id"
+                  >
+                    <SfProductOption :label="field.label"></SfProductOption>
+                  </SfSelectOption>
+                </SfSelect>
+              </template>
+              <div v-if="modifiers.length">Modifiers</div>
+              <template v-for="(modifier, key) in modifiers">
+                <SfInput
+                  v-if="!modifier.values.length"
+                  :key="key + `${modifier.display_name}`"
+                  v-model="selectedField[modifier.display_name]"
+                  :value="selectedField[modifier.display_name]"
+                  :name="modifier.display_name"
+                  :label="modifier.display_name"
+                  class="form__element form__element--half"
                 />
-              </div>
+                <SfSelect
+                  v-else
+                  :key="key + `${modifier.display_name}`"
+                  v-model="selectedField[modifier.display_name]"
+                  :value="selectedField[modifier.display_name]"
+                  :label="modifier.display_name"
+                  class="sf-select--underlined product__select-size"
+                  :reqired="true"
+                >
+                  <SfSelectOption
+                    v-for="field in modifier.values"
+                    :key="field.id"
+                    :value="field.id"
+                  >
+                    <SfProductOption :label="field.label"></SfProductOption>
+                  </SfSelectOption>
+                </SfSelect>
+              </template>
               <SfAddToCart
                 v-model="qty"
                 class="product__add-to-cart"
@@ -142,7 +177,7 @@
                       :level="3"
                       class="sf-heading--no-underline sf-heading--left"
                     />
-                    <p v-text="product.brand.metaDesc" />
+                    <p v-text="product.brand.seo.metaDescription" />
                   </template>
                 </div>
               </SfTab>
@@ -199,9 +234,11 @@ import {
   SfProductOption,
   SfBreadcrumbs,
   SfImage,
-  SfBanner
+  SfBanner,
+  SfInput
 } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
+import _ from 'lodash';
 import { productBreadcrumbs } from '~/constants';
 export default {
   name: 'Product',
@@ -220,19 +257,39 @@ export default {
     SfSelect,
     SfProductOption,
     SfBreadcrumbs,
-    SfBanner
+    SfBanner,
+    SfInput
   },
   data() {
     return {
       current: 1,
-      selectedSize: null,
+      selectedField: {},
       qty: 1,
       tabs: ['Description', 'Additional Information'],
-      breadcrumbs: productBreadcrumbs
+      breadcrumbs: productBreadcrumbs,
+      options: [],
+      modifiers: [],
+      variants: [],
+      optionFields: [],
+      modifierFields: []
     };
   },
   computed: {
-    ...mapGetters('product', ['product', 'colors', 'selectedColor'])
+    ...mapGetters('product', ['product'])
+  },
+  watch: {
+    product(val) {
+      if (val) {
+        this.options = _.cloneDeep(val.options);
+        this.variants = _.cloneDeep(val.variants);
+        this.modifiers = _.cloneDeep(val.modifiers);
+        this.optionFields = this.options.map(({ field }) => field);
+        this.modifierFields = this.modifiers.map((item) => item.display_name);
+        [...this.optionFields, ...this.modifierFields].map(
+          (item) => (this.selectedField[item] = null)
+        );
+      }
+    }
   },
   mounted() {
     this.getProductBySlug(this.$route.params.slug);
@@ -243,53 +300,83 @@ export default {
       getProductBySlug: 'product/getProductBySlug'
     }),
     addToCart() {
-      const variants = this.product.variants.edges;
+      let isCartable = true;
       const addData = {
         quantity: this.qty,
         product_id: this.product.entityId
       };
-      if (this.colors.length && this.product.sizes.length) {
-        if (!this.selectedSize) {
-          this.$toast.error('Please select size');
-          return;
-        }
-        if (!this.selectedColor) {
-          this.$toast.error('Please select color');
-          return;
-        }
-        if (this.selectedColor && this.selectedSize) {
-          const pairOptions = variants.map(({ node }) => ({
-            id: node?.entityId,
-            options: node?.options?.edges?.map(
-              ({ node }) => node?.values?.edges
-            )
-          }));
-          const selectedVariant = pairOptions.find(
-            ({ options }) =>
-              options.find((option) =>
-                option.find(({ node }) => node?.entityId === this.selectedColor)
-              ) &&
-              options.find((option) =>
-                option.find(
-                  ({ node }) => node?.entityId === parseInt(this.selectedSize)
-                )
-              )
-          );
-          if (selectedVariant) {
-            addData.variant_id = selectedVariant.id;
-            this.$store.dispatch('carts/addToCart', addData);
-          } else {
-            this.$toast.error(
-              'We do not have the product which matches to the options'
-            );
+      if (this.options.length) {
+        const missedFields = [];
+        this.optionFields.forEach((field) => {
+          if (!this.selectedField[field]) {
+            missedFields.push(field);
           }
+        });
+        if (missedFields.length) {
+          this.$toast.error(`Please select ${missedFields.toString()}`);
+          isCartable = false;
+          return;
         }
-      } else {
-        this.$store.dispatch('carts/addToCart', addData);
+        const selectedVariant = this.variants.find((variant) => {
+          let matched = true;
+          variant.values.forEach((item) => {
+            if (
+              parseInt(this.selectedField[item.option_display_name]) !== item.id
+            )
+              matched = false;
+          });
+          if (matched) return true;
+          return false;
+        });
+        if (selectedVariant) addData.variant_id = selectedVariant.id;
       }
+
+      if (this.modifiers.length) {
+        addData.option_selections = [];
+        const missedFields = [];
+        this.modifierFields.forEach((field) => {
+          if (!this.selectedField[field]) {
+            missedFields.push(field);
+          }
+        });
+        if (missedFields.length) {
+          this.$toast.error(`Please select ${missedFields.toString()}`);
+          isCartable = false;
+          return;
+        }
+        this.modifiers.forEach((item) => {
+          if (this.selectedField[item.display_name]) {
+            addData.option_selections.push({
+              option_id: item.id,
+              option_value: this.selectedField[item.display_name]
+            });
+          }
+        });
+      }
+      if (isCartable) this.$store.dispatch('carts/addToCart', addData);
     },
     selectColor(colorIndex) {
-      this.$store.dispatch('product/setColor', colorIndex);
+      this.options.map((option) => {
+        if (option.field.toLowerCase() === 'color') {
+          option.values.map((item) => {
+            item.selected = false;
+            return item;
+          });
+        }
+        return option;
+      });
+      this.options.map((option) => {
+        if (option.field.toLowerCase() === 'color') {
+          option.values.map((item) => {
+            if (item.id === colorIndex) {
+              item.selected = true;
+              this.selectedField[option.field] = item.id;
+            }
+            return item;
+          });
+        }
+        return option;
+      });
     }
   }
 };

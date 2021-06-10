@@ -3,7 +3,8 @@ import {
   getProductsByCategory,
   getProductBySlug,
   getCategories,
-  searchProductByKey
+  searchProductByKey,
+  getProductOption
 } from '../controller/product';
 import { permissionMiddleware } from '../middleware';
 
@@ -17,5 +18,6 @@ router.get(
 router.get('/getProductBySlug', permissionMiddleware, getProductBySlug);
 router.get('/getCategories', permissionMiddleware, getCategories);
 router.get('/searchProductByKey', permissionMiddleware, searchProductByKey);
+router.get('/getProductOption', permissionMiddleware, getProductOption);
 
 export default router;
