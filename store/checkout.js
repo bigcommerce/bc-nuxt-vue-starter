@@ -145,7 +145,7 @@ export const actions = {
   },
 
   updateConsignmentToCheckout(
-    { commit, getters },
+    { commit, dispatch, getters },
     { shipping_address, consignmentId }
   ) {
     const data = {
@@ -162,6 +162,7 @@ export const actions = {
         if (data.status) {
           this.$toast.success(data.message);
           commit('SET_CONSIGNMENTID', consignmentId);
+          dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
@@ -187,6 +188,7 @@ export const actions = {
           dispatch('updateShippingOption', { shippingOptionId, consignmentId });
           if (orderId) dispatch('getPaymentMethodByOrder', orderId);
           else dispatch('createOrder');
+          dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
@@ -209,7 +211,7 @@ export const actions = {
       });
   },
 
-  createOrder({ commit, dispatch }) {
+  createOrder({ dispatch }) {
     const checkoutId = getCartId();
     axios.post(`createOrder?checkoutId=${checkoutId}`).then(({ data }) => {
       if (data.status) {
@@ -233,19 +235,20 @@ export const actions = {
       }
     });
   },
-  processPayment({ commit }, data) {
+  processPayment({ dispatch }, data) {
     const orderId = getOrderId();
     axios
       .post(`processPayment?orderId=${orderId}`, { data })
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
+          dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
       });
   },
-  addCoupons({ commit }, couponCode) {
+  addCoupons({ dispatch }, couponCode) {
     const checkoutId = getCartId();
     if (!couponCode)
       this.$toast.error('At least, you should input your coupon code');
@@ -253,6 +256,7 @@ export const actions = {
       axios.post(`addCoupons`, { checkoutId, couponCode }).then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
+          dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
