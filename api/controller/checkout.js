@@ -35,7 +35,7 @@ export const setConsignmentToCheckout = async (req, res) => {
     });
   } catch (error) {
     res.json({
-      message: 'Adding consigmnent to checkout failed',
+      message: 'Adding consignment to checkout failed',
       body: error,
       status: false
     });

@@ -187,8 +187,7 @@ export default {
         postal_code: '',
         phone: ''
       },
-      shippingOptionId: null,
-      shippingOptions: []
+      shippingOptionId: null
     };
   },
   validations: {
@@ -234,8 +233,20 @@ export default {
       'line_items',
       'shippingMethod'
     ]),
+    shippingOptions() {
+      if (this.old_consignments.length) {
+        const consignment = this.old_consignments[0];
+        return consignment.available_shipping_options;
+      }
+      return [];
+    },
     isCreditCard() {
       return ['debit', 'mastercard', 'electron'].includes(this.paymentMethod);
+    }
+  },
+  watch: {
+    shippingMethod() {
+      this.shippingOptionId = this.shippingMethod.id;
     }
   },
   mounted() {
@@ -243,13 +254,6 @@ export default {
       this.billingInfo = { ...this.billingAddress };
     } else if (this.old_billing_address !== {}) {
       this.billingInfo = { ...this.old_billing_address };
-    }
-    if (this.shippingMethod) {
-      this.shippingOptionId = this.shippingMethod.id;
-    }
-    if (this.old_consignments.length) {
-      const consignment = this.old_consignments[0];
-      this.shippingOptions = consignment.available_shipping_options;
     }
   },
   destroyed() {
