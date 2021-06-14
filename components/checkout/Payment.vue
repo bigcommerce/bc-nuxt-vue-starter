@@ -245,8 +245,8 @@ export default {
     }
   },
   watch: {
-    shippingMethod() {
-      this.shippingOptionId = this.shippingMethod.id;
+    shippingMethod(val) {
+      this.shippingOptionId = val?.id;
     }
   },
   mounted() {

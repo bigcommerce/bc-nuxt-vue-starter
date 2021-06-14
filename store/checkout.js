@@ -161,8 +161,13 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
+          if (getters.shippingMethod?.id) {
+            dispatch('updateShippingOption', {
+              shippingOptionId: getters.shippingMethod.id,
+              consignmentId
+            });
+          }
           commit('SET_CONSIGNMENTID', consignmentId);
-          dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
@@ -176,7 +181,6 @@ export const actions = {
     const checkoutId = getCartId();
     const orderId = getOrderId();
     const consignmentId = getters.consignmentId;
-    console.log(consignmentId);
 
     axios
       .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
@@ -185,10 +189,9 @@ export const actions = {
       .then(({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
-          dispatch('updateShippingOption', { shippingOptionId, consignmentId });
           if (orderId) dispatch('getPaymentMethodByOrder', orderId);
           else dispatch('createOrder');
-          dispatch('getCheckout');
+          dispatch('updateShippingOption', { shippingOptionId, consignmentId });
         } else {
           this.$toast.error(data.message);
         }
@@ -229,7 +232,6 @@ export const actions = {
     axios.get(`getPaymentMethodByOrder?orderId=${orderId}`).then(({ data }) => {
       if (data.status) {
         commit('SET_PAYMENT_OPTIONS', data.body?.data);
-        dispatch('getCheckout');
       } else {
         this.$toast.error(data.message);
       }
