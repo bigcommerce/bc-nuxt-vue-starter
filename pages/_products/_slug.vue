@@ -77,6 +77,12 @@
               <SfButton class="sf-button--text desktop-only product__guide">
                 Size guide
               </SfButton>
+              <SfInput
+                v-model="cartName"
+                label="Cart Name"
+                name="cart_name"
+                placeholder="Input Cart Name (optional)"
+              />
               <div v-if="options.length">Variants</div>
               <template v-for="(option, key) in options">
                 <div
@@ -271,7 +277,8 @@ export default {
       modifiers: [],
       variants: [],
       optionFields: [],
-      modifierFields: []
+      modifierFields: [],
+      cartName: ''
     };
   },
   computed: {
@@ -304,6 +311,8 @@ export default {
         quantity: this.qty,
         product_id: this.product.entityId
       };
+      if (this.cartName) addData.name = this.cartName;
+
       if (this.options.length) {
         const missedFields = [];
         this.optionFields.forEach((field) => {
