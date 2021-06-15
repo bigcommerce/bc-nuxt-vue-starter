@@ -206,7 +206,6 @@ export const actions = {
       )
       .then(({ data }) => {
         if (data.status) {
-          this.$toast.success(data.message);
           dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);

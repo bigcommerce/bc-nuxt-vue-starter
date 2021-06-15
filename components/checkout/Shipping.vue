@@ -147,14 +147,14 @@ export default {
         phone: ''
       },
       test: {
-        first_name: 'Ameed',
-        last_name: 'Khalid',
-        email: 'abc@gmail.com',
-        address1: 'test',
-        address2: 'test',
-        city: 'test',
-        state_or_province: '',
-        country: '',
+        first_name: 'First',
+        last_name: 'Last',
+        email: 'test@test.com',
+        address1: 'Test Address 1',
+        address2: 'Test Address 2',
+        city: 'Burnaby',
+        state_or_province: 'Ontario',
+        country: 'Canada',
         country_code: 'CA',
         postal_code: '123123',
         phone: '123123123123'

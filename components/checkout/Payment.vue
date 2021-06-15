@@ -255,6 +255,7 @@ export default {
     } else if (this.old_billing_address !== {}) {
       this.billingInfo = { ...this.old_billing_address };
     }
+    if (this.shippingMethod) this.shippingOptionId = this.shippingMethod.id;
   },
   destroyed() {
     this.$store.commit('checkout/SET_BILLING_ADDRESS', this.billingInfo);
