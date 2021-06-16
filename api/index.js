@@ -1,21 +1,11 @@
 import express from 'express';
-import product from './routes/product';
-import address from './routes/address';
-import order from './routes/order';
-import cart from './routes/cart';
-import customer from './routes/customer';
-import checkout from './routes/checkout';
+import routes from './routes';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(product);
-app.use(address);
-app.use(order);
-app.use(cart);
-app.use(customer);
-app.use(checkout);
+app.use(routes);
 
 if (require.main === module) {
   const port = 3001;

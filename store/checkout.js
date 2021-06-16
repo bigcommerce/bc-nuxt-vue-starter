@@ -158,11 +158,11 @@ export const actions = {
         `updateConsignmentToCheckout?checkoutId=${checkoutId}&consignmentId=${consignmentId}`,
         { data }
       )
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
           if (getters.shippingMethod?.id) {
-            dispatch('updateShippingOption', {
+            await dispatch('updateShippingOption', {
               shippingOptionId: getters.shippingMethod.id,
               consignmentId
             });
@@ -186,31 +186,34 @@ export const actions = {
       .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
         data: billingAddress
       })
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (data.status) {
           this.$toast.success(data.message);
+          await dispatch('updateShippingOption', {
+            shippingOptionId,
+            consignmentId
+          });
           if (orderId) dispatch('getPaymentMethodByOrder', orderId);
           else dispatch('createOrder');
-          dispatch('updateShippingOption', { shippingOptionId, consignmentId });
         } else {
           this.$toast.error(data.message);
         }
       });
   },
 
-  updateShippingOption({ dispatch }, { shippingOptionId, consignmentId }) {
+  async updateShippingOption(
+    { dispatch },
+    { shippingOptionId, consignmentId }
+  ) {
     const checkoutId = getCartId();
-    axios
-      .put(
-        `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
-      )
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getCheckout');
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
+    const { data } = await axios.put(
+      `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
+    );
+    if (data.status) {
+      dispatch('getCheckout');
+    } else {
+      this.$toast.error(data.message);
+    }
   },
 
   createOrder({ dispatch }) {

@@ -2,53 +2,53 @@
   "rewrites": [
     {
       "source": "/getProductsByCategory",
-      "destination": "/api/routes/product"
+      "destination": "/api/routes"
     },
-    { "source": "/getProductBySlug", "destination": "/api/routes/product" },
-    { "source": "/getCategories", "destination": "/api/routes/product" },
-    { "source": "/searchProductByKey", "destination": "/api/routes/product" },
-    { "source": "/getProductOption", "destination": "/api/routes/product" },
-    { "source": "/getAllAddresses", "destination": "/api/routes/address" },
-    { "source": "/updateAddress", "destination": "/api/routes/address" },
-    { "source": "/addAddress", "destination": "/api/routes/address" },
-    { "source": "/deleteAddress", "destination": "/api/routes/address" },
-    { "source": "/getAllOrders", "destination": "/api/routes/order" },
-    { "source": "/getCart", "destination": "/api/routes/cart" },
-    { "source": "/createCart", "destination": "/api/routes/cart" },
-    { "source": "/addCartItem", "destination": "/api/routes/cart" },
-    { "source": "/updateCartItem", "destination": "/api/routes/cart" },
-    { "source": "/deleteCartItem", "destination": "/api/routes/cart" },
+    { "source": "/getProductBySlug", "destination": "/api/routes" },
+    { "source": "/getCategories", "destination": "/api/routes" },
+    { "source": "/searchProductByKey", "destination": "/api/routes" },
+    { "source": "/getProductOption", "destination": "/api/routes" },
+    { "source": "/getAllAddresses", "destination": "/api/routes" },
+    { "source": "/updateAddress", "destination": "/api/routes" },
+    { "source": "/addAddress", "destination": "/api/routes" },
+    { "source": "/deleteAddress", "destination": "/api/routes" },
+    { "source": "/getAllOrders", "destination": "/api/routes" },
+    { "source": "/createOrder", "destination": "/api/routes" },
+    { "source": "/getCart", "destination": "/api/routes" },
+    { "source": "/createCart", "destination": "/api/routes" },
+    { "source": "/addCartItem", "destination": "/api/routes" },
+    { "source": "/updateCartItem", "destination": "/api/routes" },
+    { "source": "/deleteCartItem", "destination": "/api/routes" },
     {
       "source": "/updateCartWithCustomerId",
-      "destination": "/api/routes/cart"
+      "destination": "/api/routes"
     },
-    { "source": "/customerLogin", "destination": "/api/routes/customer" },
-    { "source": "/customerRegister", "destination": "/api/routes/customer" },
-    { "source": "/customerLogOut", "destination": "/api/routes/customer" },
-    { "source": "/getCheckout", "destination": "/api/routes/checkout" },
+    { "source": "/customerLogin", "destination": "/api/routes" },
+    { "source": "/customerRegister", "destination": "/api/routes" },
+    { "source": "/customerLogOut", "destination": "/api/routes" },
+    { "source": "/getCheckout", "destination": "/api/routes" },
     {
       "source": "/setConsignmentToCheckout",
-      "destination": "/api/routes/checkout"
+      "destination": "/api/routes"
     },
     {
       "source": "/updateConsignmentToCheckout",
-      "destination": "/api/routes/checkout"
+      "destination": "/api/routes"
     },
     {
       "source": "/updateShippingOption",
-      "destination": "/api/routes/checkout"
+      "destination": "/api/routes"
     },
     {
       "source": "/setBillingAddressToCheckout",
-      "destination": "/api/routes/checkout"
+      "destination": "/api/routes"
     },
-    { "source": "/createOrder", "destination": "/api/routes/checkout" },
     {
       "source": "/getPaymentMethodByOrder",
-      "destination": "/api/routes/checkout"
+      "destination": "/api/routes"
     },
-    { "source": "/processPayment", "destination": "/api/routes/checkout" },
-    { "source": "/addCoupons", "destination": "/api/routes/checkout" }
+    { "source": "/processPayment", "destination": "/api/routes" },
+    { "source": "/addCoupons", "destination": "/api/routes" }
   ],
   "env": {
     "APP_NAME": "BigCommerce Nuxt Vue Starter",

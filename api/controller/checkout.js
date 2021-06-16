@@ -112,26 +112,6 @@ export const setBillingAddressToCheckout = async (req, res) => {
   }
 };
 
-export const createOrder = async (req, res) => {
-  try {
-    const checkoutId = req.query.checkoutId;
-    const result = await customAxios('api').post(
-      `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/orders`
-    );
-    res.json({
-      message: 'Successfully created an order with checkout',
-      body: result.data,
-      status: true
-    });
-  } catch (error) {
-    res.json({
-      message: 'Creating order failed',
-      body: error,
-      status: false
-    });
-  }
-};
-
 export const getPaymentMethodByOrder = async (req, res) => {
   try {
     const orderId = req.query.orderId;
