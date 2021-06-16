@@ -2,6 +2,7 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_getCategories',
   'GET_getProductsByCategory',
   'GET_getProductBySlug',
+  'GET_getProductOption',
   'GET_getCart',
   'POST_createCart',
   'POST_addCartItem',

@@ -2,7 +2,7 @@
   <client-only>
     <div>
       <LayoutDefaultHeader :menu="menu" />
-      <nuxt />
+      <nuxt keep-alive :keep-alive-props="{ max: 10 }" />
     </div>
   </client-only>
 </template>

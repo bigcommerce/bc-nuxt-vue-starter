@@ -7,6 +7,7 @@
     { "source": "/getProductBySlug", "destination": "/api/routes/product" },
     { "source": "/getCategories", "destination": "/api/routes/product" },
     { "source": "/searchProductByKey", "destination": "/api/routes/product" },
+    { "source": "/getProductOption", "destination": "/api/routes/product" },
     { "source": "/getAllAddresses", "destination": "/api/routes/address" },
     { "source": "/updateAddress", "destination": "/api/routes/address" },
     { "source": "/addAddress", "destination": "/api/routes/address" },
