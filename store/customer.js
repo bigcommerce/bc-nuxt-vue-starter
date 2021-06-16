@@ -31,52 +31,61 @@ export const mutations = {
 };
 
 export const actions = {
-  login({ dispatch, commit }, variables) {
-    axios
-      .post(`/customerLogin`, {
+  async login({ dispatch, commit }, variables) {
+    try {
+      const { data } = await axios.post(`/customerLogin`, {
         variables
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          const user = setUser(data.body.data.customer);
-          setCookie(data.body.cookie);
-          commit('SET_CUSTOMER', user);
-          dispatch('isLoggedIn');
-        } else {
-          this.$toast.error(data.message);
-        }
       });
+
+      if (data.status) {
+        const user = setUser(data.body.data.customer);
+        setCookie(data.body.cookie);
+        commit('SET_CUSTOMER', user);
+        dispatch('isLoggedIn');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  createCustomer({ commit }, variables) {
-    axios
-      .post(`/customerRegister`, {
+  async createCustomer({ commit }, variables) {
+    try {
+      const { data } = await axios.post(`/customerRegister`, {
         variables
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          this.$toast.success(data.message);
-          this.$router.push('/login');
-        } else {
-          this.$toast.error(data.message);
-        }
       });
+
+      if (data.status) {
+        this.$toast.success(data.message);
+        this.$router.push('/login');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
   async logOut({ commit }) {
-    const cookie = getCookie();
-    axios
-      .post('/customerLogOut', {
+    try {
+      const cookie = getCookie();
+      const { data } = await axios.post('/customerLogOut', {
         cookie
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          commit('SET_LOGGEDIN', false);
-          removeUserAndCookie();
-        } else {
-          this.$toast.error(data.message);
-        }
       });
+
+      if (data.status) {
+        commit('SET_LOGGEDIN', false);
+        removeUserAndCookie();
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  async isLoggedIn({ commit }) {
+  isLoggedIn({ commit }) {
     const user = getUser();
     commit('SET_LOGGEDIN', !!user);
     commit('SET_CUSTOMER', user);

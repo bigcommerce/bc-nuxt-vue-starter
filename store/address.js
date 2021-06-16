@@ -18,10 +18,13 @@ export const mutations = {
 };
 
 export const actions = {
-  getAllAddresses({ commit }) {
-    const user = getUser();
-    const customer = getSecuredData(user.secureData);
-    axios.get(`/getAllAddresses?customerId=${customer.id}`).then(({ data }) => {
+  async getAllAddresses({ commit }) {
+    try {
+      const user = getUser();
+      const customer = getSecuredData(user.secureData);
+      const { data } = await axios.get(
+        `/getAllAddresses?customerId=${customer.id}`
+      );
       if (data.status) {
         let addresses = [];
         if (data.body) {
@@ -45,51 +48,68 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  updateAddress({ dispatch }, address) {
-    const customerId = address.customer_id;
-    const id = address.id;
-    delete address.id;
-    axios
-      .put(`/updateAddress?customerId=${customerId}&addressId=${id}`, {
-        address
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getAllAddresses');
-          this.$toast.success(data.message);
-        } else {
-          this.$toast.error(data.message);
+  async updateAddress({ dispatch }, address) {
+    try {
+      const customerId = address.customer_id;
+      const id = address.id;
+      delete address.id;
+      const { data } = await axios.put(
+        `/updateAddress?customerId=${customerId}&addressId=${id}`,
+        {
+          address
         }
-      });
+      );
+      if (data.status) {
+        dispatch('getAllAddresses');
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  addAddress({ dispatch }, address) {
-    const user = getUser();
-    const customer = getSecuredData(user.secureData);
-    delete address.id;
-    delete address.customer_id;
-    axios
-      .post(`/addAddress?customerId=${customer.id}`, { address })
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getAllAddresses');
-          this.$toast.success(data.message);
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
+  async addAddress({ dispatch }, address) {
+    try {
+      const user = getUser();
+      const customer = getSecuredData(user.secureData);
+      delete address.id;
+      delete address.customer_id;
+      const { data } = await axios.post(
+        `/addAddress?customerId=${customer.id}`,
+        { address }
+      );
+      if (data.status) {
+        dispatch('getAllAddresses');
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  deleteAddress({ dispatch }, { customerId, addressId }) {
-    axios
-      .delete(`/deleteAddress?customerId=${customerId}&addressId=${addressId}`)
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getAllAddresses');
-          this.$toast.success(data.message);
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
+  async deleteAddress({ dispatch }, { customerId, addressId }) {
+    try {
+      const { data } = await axios.delete(
+        `/deleteAddress?customerId=${customerId}&addressId=${addressId}`
+      );
+      if (data.status) {
+        dispatch('getAllAddresses');
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   }
 };

@@ -98,10 +98,14 @@ export const mutations = {
 };
 
 export const actions = {
-  getCheckout({ commit }) {
-    const checkoutId = getCartId();
-    if (checkoutId) {
-      axios.get(`/getCheckout?checkoutId=${checkoutId}`).then(({ data }) => {
+  async getCheckout({ commit }) {
+    try {
+      const checkoutId = getCartId();
+      if (checkoutId) {
+        const { data } = await axios.get(
+          `/getCheckout?checkoutId=${checkoutId}`
+        );
+
         if (data.status) {
           const body = data.body;
           commit('SET_LINE_ITEMS', getLineItems(body?.data?.cart?.line_items));
@@ -114,111 +118,142 @@ export const actions = {
         } else {
           this.$toast.error(data.message);
         }
-      });
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
     }
   },
 
-  setConsignmentToCheckout(
+  async setConsignmentToCheckout(
     { commit, getters, dispatch },
     { shipping_address }
   ) {
-    const data = [
-      {
-        shipping_address,
-        line_items: getters.line_items
-      }
-    ];
-    const checkoutId = getCartId();
-    axios
-      .post(`setConsignmentToCheckout?checkoutId=${checkoutId}`, { data })
-      .then(({ data }) => {
-        if (data.status) {
-          this.$toast.success(data.message);
-          const body = data.body;
-          const consignment = body?.data?.consignments[0];
-          commit('SET_CONSIGNMENTID', consignment.id);
-          dispatch('getCheckout');
-        } else {
-          this.$toast.error(data.message);
+    try {
+      const consignment = [
+        {
+          shipping_address,
+          line_items: getters.line_items
         }
-      });
+      ];
+      const checkoutId = getCartId();
+
+      const { data } = await axios.post(
+        `setConsignmentToCheckout?checkoutId=${checkoutId}`,
+        {
+          consignment
+        }
+      );
+      if (data.status) {
+        this.$toast.success(data.message);
+        const body = data.body;
+        const consignment = body?.data?.consignments[0];
+        commit('SET_CONSIGNMENTID', consignment.id);
+        dispatch('getCheckout');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
 
-  updateConsignmentToCheckout(
+  async updateConsignmentToCheckout(
     { commit, dispatch, getters },
     { shipping_address, consignmentId }
   ) {
-    const data = {
-      shipping_address,
-      line_items: getters.line_items
-    };
-    const checkoutId = getCartId();
-    axios
-      .put(
+    try {
+      const consignment = {
+        shipping_address,
+        line_items: getters.line_items
+      };
+      const checkoutId = getCartId();
+
+      const {
+        data
+      } = await axios.put(
         `updateConsignmentToCheckout?checkoutId=${checkoutId}&consignmentId=${consignmentId}`,
-        { data }
-      )
-      .then(async ({ data }) => {
-        if (data.status) {
-          this.$toast.success(data.message);
-          if (getters.shippingMethod?.id) {
-            await dispatch('updateShippingOption', {
-              shippingOptionId: getters.shippingMethod.id,
-              consignmentId
-            });
-          }
-          commit('SET_CONSIGNMENTID', consignmentId);
-        } else {
-          this.$toast.error(data.message);
+        { consignment }
+      );
+
+      if (data.status) {
+        this.$toast.success(data.message);
+        if (getters.shippingMethod?.id) {
+          await dispatch('updateShippingOption', {
+            shippingOptionId: getters.shippingMethod.id,
+            consignmentId
+          });
         }
-      });
+        commit('SET_CONSIGNMENTID', consignmentId);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
 
-  setBillingAddress(
+  async setBillingAddress(
     { dispatch, getters },
     { billingAddress, shippingOptionId }
   ) {
-    const checkoutId = getCartId();
-    const orderId = getOrderId();
-    const consignmentId = getters.consignmentId;
+    try {
+      const checkoutId = getCartId();
+      const orderId = getOrderId();
+      const consignmentId = getters.consignmentId;
 
-    axios
-      .post(`setBillingAddressToCheckout?checkoutId=${checkoutId}`, {
-        data: billingAddress
-      })
-      .then(async ({ data }) => {
-        if (data.status) {
-          this.$toast.success(data.message);
-          await dispatch('updateShippingOption', {
-            shippingOptionId,
-            consignmentId
-          });
-          if (orderId) dispatch('getPaymentMethodByOrder', orderId);
-          else dispatch('createOrder');
-        } else {
-          this.$toast.error(data.message);
+      const { data } = await axios.post(
+        `setBillingAddressToCheckout?checkoutId=${checkoutId}`,
+        {
+          data: billingAddress
         }
-      });
+      );
+
+      if (data.status) {
+        this.$toast.success(data.message);
+        await dispatch('updateShippingOption', {
+          shippingOptionId,
+          consignmentId
+        });
+        if (orderId) dispatch('getPaymentMethodByOrder', orderId);
+        else dispatch('createOrder');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
 
   async updateShippingOption(
     { dispatch },
     { shippingOptionId, consignmentId }
   ) {
-    const checkoutId = getCartId();
-    const { data } = await axios.put(
-      `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
-    );
-    if (data.status) {
-      dispatch('getCheckout');
-    } else {
-      this.$toast.error(data.message);
+    try {
+      const checkoutId = getCartId();
+      const { data } = await axios.put(
+        `updateShippingOption?checkoutId=${checkoutId}&consignmentId=${consignmentId}&shippingOptionId=${shippingOptionId}`
+      );
+      if (data.status) {
+        dispatch('getCheckout');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
     }
   },
 
-  createOrder({ dispatch }) {
-    const checkoutId = getCartId();
-    axios.post(`createOrder?checkoutId=${checkoutId}`).then(({ data }) => {
+  async createOrder({ dispatch }) {
+    try {
+      const checkoutId = getCartId();
+
+      const { data } = await axios.post(`createOrder?checkoutId=${checkoutId}`);
+
       if (data.status) {
         this.$toast.success(data.message);
         const orderId = data.body.data.id;
@@ -227,44 +262,68 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
 
-  getPaymentMethodByOrder({ commit, dispatch }, orderId) {
-    axios.get(`getPaymentMethodByOrder?orderId=${orderId}`).then(({ data }) => {
+  async getPaymentMethodByOrder({ commit }, orderId) {
+    try {
+      const { data } = await axios.get(
+        `getPaymentMethodByOrder?orderId=${orderId}`
+      );
+
       if (data.status) {
         commit('SET_PAYMENT_OPTIONS', data.body?.data);
       } else {
         this.$toast.error(data.message);
       }
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  processPayment({ dispatch }, data) {
-    const orderId = getOrderId();
-    axios
-      .post(`processPayment?orderId=${orderId}`, { data })
-      .then(({ data }) => {
+  async processPayment({ dispatch }, payment) {
+    try {
+      const orderId = getOrderId();
+
+      const { data } = await axios.post(`processPayment?orderId=${orderId}`, {
+        payment
+      });
+
+      if (data.status) {
+        this.$toast.success(data.message);
+        dispatch('getCheckout');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
+  },
+  async addCoupons({ dispatch }, couponCode) {
+    try {
+      const checkoutId = getCartId();
+      if (!couponCode)
+        this.$toast.error('At least, you should input your coupon code');
+      else {
+        const { data } = await axios.post(`addCoupons`, {
+          checkoutId,
+          couponCode
+        });
+
         if (data.status) {
           this.$toast.success(data.message);
           dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
         }
-      });
-  },
-  addCoupons({ dispatch }, couponCode) {
-    const checkoutId = getCartId();
-    if (!couponCode)
-      this.$toast.error('At least, you should input your coupon code');
-    else {
-      axios.post(`addCoupons`, { checkoutId, couponCode }).then(({ data }) => {
-        if (data.status) {
-          this.$toast.success(data.message);
-          dispatch('getCheckout');
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
     }
   }
 };

@@ -117,67 +117,78 @@ export const mutations = {
 };
 
 export const actions = {
-  getCategories({ commit }) {
-    axios.get(`/getCategories`).then(({ data }) => {
+  async getCategories({ commit }) {
+    try {
+      const { data } = await axios.get(`/getCategories`);
       if (data.status) {
         commit('SET_CATEGORIES', data.body?.data?.site?.categoryTree);
       } else {
         this.$toast.error(data.message);
       }
-    });
-  },
-  getProductsByCategory({ commit, getters }, data) {
-    let path = data?.path;
-    const page = data?.page;
-    let pageParam = null;
-    if (!page) {
-      pageParam = `after: "", first: ${getters.showOnPage}`;
-    } else if (page === 'next') {
-      pageParam = `after: "${getters.endCursor}", first: ${getters.showOnPage}`;
-    } else if (page === 'prev') {
-      pageParam = `before: "${getters.startCursor}", last: ${getters.showOnPage}`;
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
     }
-    if (typeof path !== 'undefined') commit('SET_CATEGORY', path);
-    else path = getters.category;
-
-    axios
-      .get(`/getProductsByCategory?path=${path}&pageParam=${pageParam}`)
-      .then(({ data }) => {
-        if (data.status) {
-          const products = data.body?.data?.site?.route?.node?.products?.edges.map(
-            ({ node }) => ({
-              path: node.path,
-              title: node.name,
-              id: node.entityId,
-              description: node.description,
-              image:
-                node.defaultImage?.url ??
-                '/assets/storybook/SfProductCard/no-product.jpg',
-              price: {
-                regular: `${node.prices?.price?.currencyCode} ${node.prices?.price?.value}`
-              },
-              rating: {
-                max: 5,
-                score:
-                  node.reviewSummary?.summationOfRatings /
-                  node.reviewSummary?.numberOfReviews
-              },
-              reviewsCount: node.reviewSummary?.numberOfReviews,
-              isCartableOnCategoryPage: checkCartOnPage(node?.variants?.edges)
-            })
-          );
-          const pageInfo =
-            data.body?.data?.site?.route?.node?.products?.pageInfo;
-          commit('SET_START_CURSOR', pageInfo.startCursor);
-          commit('SET_END_CURSOR', pageInfo.endCursor);
-          commit('SET_PRODUCTS', products);
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
   },
-  getProductBySlug({ dispatch }, slug) {
-    axios.get(`/getProductBySlug?slug=${slug}`).then(({ data }) => {
+  async getProductsByCategory({ commit, getters }, pageInfo) {
+    try {
+      let path = pageInfo?.path;
+      const page = pageInfo?.page;
+      let pageParam = null;
+
+      if (!page) {
+        pageParam = `after: "", first: ${getters.showOnPage}`;
+      } else if (page === 'next') {
+        pageParam = `after: "${getters.endCursor}", first: ${getters.showOnPage}`;
+      } else if (page === 'prev') {
+        pageParam = `before: "${getters.startCursor}", last: ${getters.showOnPage}`;
+      }
+      if (typeof path !== 'undefined') commit('SET_CATEGORY', path);
+      else path = getters.category;
+
+      const { data } = await axios.get(
+        `/getProductsByCategory?path=${path}&pageParam=${pageParam}`
+      );
+
+      if (data.status) {
+        const products = data.body?.data?.site?.route?.node?.products?.edges.map(
+          ({ node }) => ({
+            path: node.path,
+            title: node.name,
+            id: node.entityId,
+            description: node.description,
+            image:
+              node.defaultImage?.url ??
+              '/assets/storybook/SfProductCard/no-product.jpg',
+            price: {
+              regular: `${node.prices?.price?.currencyCode} ${node.prices?.price?.value}`
+            },
+            rating: {
+              max: 5,
+              score:
+                node.reviewSummary?.summationOfRatings /
+                node.reviewSummary?.numberOfReviews
+            },
+            reviewsCount: node.reviewSummary?.numberOfReviews,
+            isCartableOnCategoryPage: checkCartOnPage(node?.variants?.edges)
+          })
+        );
+        const pageInfo = data.body?.data?.site?.route?.node?.products?.pageInfo;
+        commit('SET_START_CURSOR', pageInfo.startCursor);
+        commit('SET_END_CURSOR', pageInfo.endCursor);
+        commit('SET_PRODUCTS', products);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
+  },
+  async getProductBySlug({ dispatch }, slug) {
+    try {
+      const { data } = await axios.get(`/getProductBySlug?slug=${slug}`);
+
       if (data.status) {
         const product = data.body.data?.site?.route?.node;
         if (product != null) {
@@ -203,25 +214,35 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  getProductOption({ commit }, product) {
-    axios
-      .get(`/getProductOption?productId=${product.entityId}`)
-      .then(({ data }) => {
-        if (data.status) {
-          const result = data.body.data;
-          product.options = getProductOptions(result.options);
-          product.variants = getProductVariants(result.variants);
-          product.modifiers = getProductModifiers(result.modifiers);
-          commit('SET_PRODUCT', product);
-        } else {
-          this.$toast.error(data.message);
-        }
-      });
+  async getProductOption({ commit }, product) {
+    try {
+      const { data } = await axios.get(
+        `/getProductOption?productId=${product.entityId}`
+      );
+
+      if (data.status) {
+        const result = data.body.data;
+        product.options = getProductOptions(result.options);
+        product.variants = getProductVariants(result.variants);
+        product.modifiers = getProductModifiers(result.modifiers);
+        commit('SET_PRODUCT', product);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  searchProductByKey({ commit, state }, key) {
-    axios.get(`/searchProductByKey?key=${key}`).then(({ data }) => {
+  async searchProductByKey({ commit }, key) {
+    try {
+      const { data } = await axios.get(`/searchProductByKey?key=${key}`);
+
       if (data.status) {
         const products = data.body.data.map((item) => ({
           path: item.custom_url?.url,
@@ -234,6 +255,9 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   }
 };

@@ -23,7 +23,7 @@ export const getCheckout = async (req, res) => {
 export const setConsignmentToCheckout = async (req, res) => {
   try {
     const checkoutId = req.query.checkoutId;
-    const data = req.body.data;
+    const data = req.body.consignment;
     const result = await customAxios('api').post(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments`,
       data
@@ -46,10 +46,10 @@ export const updateConsignmentToCheckout = async (req, res) => {
   try {
     const checkoutId = req.query.checkoutId;
     const consignmentId = req.query.consignmentId;
-    const data = req.body.data;
+    const consignment = req.body.consignment;
     const result = await customAxios('api').put(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
-      data
+      consignment
     );
     res.json({
       message: 'Successfully updated consignment on checkout',
@@ -135,7 +135,7 @@ export const getPaymentMethodByOrder = async (req, res) => {
 export const processPayment = async (req, res) => {
   try {
     const orderId = req.query.orderId;
-    const paymentData = req.body.data;
+    const paymentData = req.body.payment;
 
     paymentData.payment.instrument.expiry_month = parseInt(
       paymentData.payment.instrument.expiry_month
