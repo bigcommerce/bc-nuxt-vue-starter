@@ -26,7 +26,8 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_getPaymentMethodByOrder',
   'POST_processPayment',
   'POST_addCoupons',
-  'GET_getProductOption'
+  'GET_getProductOption',
+  'GET_getStorefrontSeo'
 ];
 
 export const checkApiAccessPermission = (permission) => {

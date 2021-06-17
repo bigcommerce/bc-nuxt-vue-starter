@@ -17,7 +17,28 @@ export default {
   middleware: 'authenticated',
   data() {
     return {
-      menu
+      menu,
+      seo: {}
+    };
+  },
+  async fetch() {
+    this.seo = await this.$store.dispatch('storefront/getStorefrontSeo');
+  },
+  head() {
+    return {
+      title: this.seo.page_title || process.env.npm_package_name || '',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.seo.meta_description || ''
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: this.seo.meta_keywords || ''
+        }
+      ]
     };
   }
 };
