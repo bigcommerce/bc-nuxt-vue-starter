@@ -10,6 +10,7 @@
 <script>
 import { menu } from '@/constants';
 import LayoutDefaultHeader from '@/components/LayoutDefaultHeader';
+import { getSeo, setSeo } from '~/utils/storage';
 export default {
   components: {
     LayoutDefaultHeader
@@ -22,7 +23,13 @@ export default {
     };
   },
   async fetch() {
-    this.seo = await this.$store.dispatch('storefront/getStorefrontSeo');
+    const seo = getSeo();
+    if (seo) this.seo = seo;
+    else {
+      const newSeo = await this.$store.dispatch('storefront/getStorefrontSeo');
+      setSeo(newSeo);
+      this.seo = newSeo;
+    }
   },
   head() {
     return {

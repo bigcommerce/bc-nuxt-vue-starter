@@ -18,3 +18,22 @@ export const getStorefrontSeo = async (req, res) => {
     });
   }
 };
+
+export const getStorefrontStatus = async (req, res) => {
+  try {
+    const result = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/settings/storefront/status?channel_id=${process.env.CHANNEL_ID}`
+    );
+    res.json({
+      message: 'Successfully got storefront status',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Getting storefront status failed',
+      body: error,
+      status: false
+    });
+  }
+};

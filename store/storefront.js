@@ -20,5 +20,18 @@ export const actions = {
       console.log(error);
       return {};
     }
+  },
+  async getStorefrontStatus() {
+    try {
+      const { data } = await axios.get(`/getStorefrontStatus`);
+      if (data.status) {
+        return data.body?.data;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
   }
 };

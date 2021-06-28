@@ -178,7 +178,6 @@ export const actions = {
       );
 
       if (data.status) {
-        this.$toast.success(data.message);
         if (getters.shippingMethod?.id) {
           await dispatch('updateShippingOption', {
             shippingOptionId: getters.shippingMethod.id,
@@ -212,7 +211,6 @@ export const actions = {
       );
 
       if (data.status) {
-        this.$toast.success(data.message);
         await dispatch('updateShippingOption', {
           shippingOptionId,
           consignmentId
@@ -255,7 +253,6 @@ export const actions = {
       const { data } = await axios.post(`createOrder?checkoutId=${checkoutId}`);
 
       if (data.status) {
-        this.$toast.success(data.message);
         const orderId = data.body.data.id;
         setOrderId(orderId);
         dispatch('getPaymentMethodByOrder', orderId);
@@ -293,7 +290,6 @@ export const actions = {
       });
 
       if (data.status) {
-        this.$toast.success(data.message);
         dispatch('getCheckout');
       } else {
         this.$toast.error(data.message);
@@ -315,7 +311,6 @@ export const actions = {
         });
 
         if (data.status) {
-          this.$toast.success(data.message);
           dispatch('getCheckout');
         } else {
           this.$toast.error(data.message);
