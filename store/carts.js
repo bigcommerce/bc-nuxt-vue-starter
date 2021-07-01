@@ -6,7 +6,9 @@ import {
   getSecuredData,
   getUser
 } from '~/utils/auth';
+import sampleLanguageData, { getBrowserLocales } from '~/utils/language';
 import { getCartId } from '~/utils/storage';
+
 const productFilter = (cart) => {
   return cart && cart !== ''
     ? cart.data.line_items.physical_items.map((item) => ({
@@ -20,6 +22,32 @@ const productFilter = (cart) => {
         configuration: item.options
       }))
     : [];
+};
+
+const setCartLocale = (carts) => {
+  const browserLocales = getBrowserLocales();
+  const locales = Object.keys(sampleLanguageData).filter((locale) =>
+    browserLocales.includes(locale)
+  );
+  if (locales.length) {
+    const selectedLocale = locales[0];
+    const selectedLocaleData = sampleLanguageData[selectedLocale];
+    carts.map((cart) => {
+      const data = selectedLocaleData.find((item) =>
+        Object.keys(item).includes(cart.title)
+      );
+      if (data) {
+        cart.title = data[cart.title];
+        cart.configuration.map((config) => {
+          config.name = data[config.name];
+          config.value = data[config.value];
+          return config;
+        });
+      }
+      return cart;
+    });
+  }
+  return carts;
 };
 
 export const state = () => ({
@@ -152,7 +180,9 @@ export const actions = {
 
         if (data.status) {
           const body = data.body;
-          commit('SET_CART', productFilter(body));
+          const carts = productFilter(body);
+
+          commit('SET_CART', setCartLocale(carts));
           commit('SET_REDIRECTURLS', body.data.redirect_urls);
         } else {
           window.localStorage.removeItem('cartId');
