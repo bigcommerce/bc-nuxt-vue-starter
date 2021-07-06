@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import { embedCheckout } from '@bigcommerce/checkout-sdk';
 import axios from 'axios';
 import { CHECKOUT_TYPE } from '~/constants/checkouttype';
 import {
@@ -218,16 +219,25 @@ export const actions = {
 
   async cartCheckout({ state }) {
     try {
+      const user = getUser();
       const checkoutType = process.env.CHECKOUT_TYPE;
       if (checkoutType === CHECKOUT_TYPE.REDIRECTED) {
-        const user = getUser();
         if (user) {
           window.location = getCartCheckoutRedirectUrl(
             state.redirectUrls.checkout_url
           );
         } else window.location = state.redirectUrls.checkout_url;
       } else if (checkoutType === CHECKOUT_TYPE.EMBEDED) {
-        this.$router.push('/');
+        let url = '';
+        if (user) {
+          url = getCartCheckoutRedirectUrl(
+            state.redirectUrls.embedded_checkout_url
+          );
+        } else url = state.redirectUrls.embedded_checkout_url;
+        embedCheckout({
+          containerId: 'embedded-checkout',
+          url
+        });
       } else if (checkoutType === CHECKOUT_TYPE.CUSTOM) {
         this.$router.push('/checkout');
       }
