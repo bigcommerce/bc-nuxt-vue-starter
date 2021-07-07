@@ -141,6 +141,50 @@ If you don't input these params, default routes will be added.
 ]
 ```
 
+## How to use sample translation JSON file
+
+```
+{
+  "es": [
+    {
+      "[Sample] 1 L Le Parfait Jar": "[Muestra] Tarro Le Parfait de 1 litro",
+      "Color": "Color",
+      "Orange": "Naranja",
+      "Size": "Tamaño",
+      "Medium": "Medio",
+      "Weight": "Peso",
+      "5Kg": "5Kg",
+      "Modifier": "Modificador",
+      "test2": "test2"
+    }
+  ],
+  "en": [
+    {
+      "[Sample] 1 L Le Parfait Jar": "[Sample] 1 L Le Parfait Jar",
+      "Color": "Color",
+      "Orange": "Orange",
+      "Size": "Size",
+      "Medium": "Medium",
+      "Weight": "Weight",
+      "5Kg": "5Kg",
+      "Modifier": "Modifier",
+      "test2": "test2"
+    }
+  ]
+}
+If you want to write sample translation for cart name and cart configuration, you should add translations of carts as arrays.
+```
+
+## How to set up checkout type
+
+```
+There are 3 types of checkout type - `redirected`, `custom`, `embedded`.
+If you set CHECKOUT_TYPE in env with these variables, it will be worked.
+"redirected" - redirect to default checkout page provided in cart reidrect_urls.
+"custom" - go to customized checkout page.
+"embedded" - load default checkout page into our storefront checkout page as iframe. This wouldn't work on HTTP localhost. Firstly, you should use SSL for this using ngrok or any other thing. And you should input the https URL into channel site URL.
+```
+
 If you're new to BigCommerce, that's ok! You can create a free developer sandbox store here: https://developer.bigcommerce.com/sandbox/vue
 
 ## Props
