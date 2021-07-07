@@ -227,7 +227,7 @@ export const actions = {
             state.redirectUrls.checkout_url
           );
         } else window.location = state.redirectUrls.checkout_url;
-      } else if (checkoutType === CHECKOUT_TYPE.EMBEDED) {
+      } else if (checkoutType === CHECKOUT_TYPE.EMBEDDED) {
         let url = '';
         if (user) {
           url = getCartCheckoutRedirectUrl(

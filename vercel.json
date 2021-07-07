@@ -63,6 +63,8 @@
     "API_SECRET": "***",
     "CHANNEL_ID": "***",
     "BASE_URL": "https://store-storehash-channelid.mybigcommerce.com",
-    "STOREFRONT_API_TOKEN": "***"
+    "STOREFRONT_API_TOKEN": "***",
+    "CHECKOUT_TYPE": "embedded",
+    "PAYMENT_URL": "https://payments.bigcommerce.com"
   }
 }
