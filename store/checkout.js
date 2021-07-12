@@ -290,6 +290,7 @@ export const actions = {
       });
 
       if (data.status) {
+        this.$toast.success('Successfully done.');
         dispatch('getCheckout');
       } else {
         this.$toast.error(data.message);
