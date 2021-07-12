@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const customAxios = (action, cookie = null) => {
+export const customAxios = (action, cookie = null, auth = null) => {
   let baseURL = '';
   const headers = {
     'Content-Type': 'application/json',
@@ -11,7 +11,11 @@ export const customAxios = (action, cookie = null) => {
     headers['X-Auth-Token'] = `${process.env.API_TOKEN}`;
   } else if (action === 'graphql') {
     baseURL = process.env.BASE_URL;
-    headers.authorization = `Bearer ${process.env.STOREFRONT_API_TOKEN}`;
+    headers.Authorization = `Bearer ${process.env.STOREFRONT_API_TOKEN}`;
+  } else if (action === 'payment') {
+    baseURL = process.env.PAYMENT_URL;
+    headers.Accept = 'application/vnd.bc.v1+json';
+    headers.Authorization = `PAT ${auth}`;
   }
   if (cookie) {
     headers.Cookie = cookie;

@@ -9,8 +9,7 @@ import {
 
 export const state = () => ({
   customer: null,
-  loggedIn: false,
-  isLoading: false
+  loggedIn: false
 });
 
 export const getters = {
@@ -19,9 +18,6 @@ export const getters = {
   },
   loggedIn(state) {
     return state.loggedIn;
-  },
-  isLoading(state) {
-    return state.isLoading;
   }
 };
 
@@ -31,66 +27,65 @@ export const mutations = {
   },
   SET_LOGGEDIN(state, loggedIn) {
     state.loggedIn = loggedIn;
-  },
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
   }
 };
 
 export const actions = {
-  login({ dispatch, commit }, variables) {
-    commit('SET_LOADING', true);
-    axios
-      .post(`/customerLogin`, {
+  async login({ dispatch, commit }, variables) {
+    try {
+      const { data } = await axios.post(`/customerLogin`, {
         variables
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          const user = setUser(data.body.data.customer);
-          setCookie(data.body.cookie);
-          commit('SET_CUSTOMER', user);
-          dispatch('isLoggedIn');
-        } else {
-          this.$toast.error(data.message);
-        }
-        commit('SET_LOADING', false);
       });
+
+      if (data.status) {
+        const user = setUser(data.body.data.customer);
+        setCookie(data.body.cookie);
+        commit('SET_CUSTOMER', user);
+        dispatch('isLoggedIn');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  createCustomer({ commit }, data) {
-    commit('SET_LOADING', true);
-    this.$axios
-      .$post(`/api/stores/${process.env.storeHash}/v2/customers`, {
-        ...data
-      })
-      .then(() => {
-        commit('SET_LOADING', false);
-        this.$toast.info('Successfully registered.');
-        this.$router.push('/login');
-      })
-      .catch(() => {
-        this.$toast.error('Customer create error.');
-        commit('SET_LOADING', false);
+  async createCustomer({ commit }, variables) {
+    try {
+      const { data } = await axios.post(`/customerRegister`, {
+        variables
       });
+
+      if (data.status) {
+        this.$toast.success(data.message);
+        this.$router.push('/login');
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
   async logOut({ commit }) {
-    commit('SET_LOADING', true);
-    const cookie = getCookie();
-    console.log(cookie);
-    axios
-      .post('/customerLogOut', {
+    try {
+      const cookie = getCookie();
+      const { data } = await axios.post('/customerLogOut', {
         cookie
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          commit('SET_LOGGEDIN', false);
-          removeUserAndCookie();
-        } else {
-          this.$toast.error(data.message);
-        }
-        commit('SET_LOADING', false);
       });
+
+      if (data.status) {
+        commit('SET_LOGGEDIN', false);
+        removeUserAndCookie();
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  async isLoggedIn({ commit }) {
+  isLoggedIn({ commit }) {
     const user = getUser();
     commit('SET_LOGGEDIN', !!user);
     commit('SET_CUSTOMER', user);

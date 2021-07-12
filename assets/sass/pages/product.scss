@@ -87,6 +87,7 @@
     }
   }
   &__colors {
+    margin-bottom: 1rem;
     @include font(
       --product-color-font,
       var(--font-weight--normal),

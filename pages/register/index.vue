@@ -77,7 +77,7 @@
 <script>
 import { SfInput, SfButton } from '@storefront-ui/vue';
 import { required, email, sameAs, minLength } from 'vuelidate/lib/validators';
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import { passwordRegexValidate } from '~/utils/validation';
 
 export default {
@@ -122,7 +122,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('customer', ['isLoading']),
     btnDisabled() {
       return !this.$v.$invalid;
     }

@@ -2,34 +2,29 @@ import axios from 'axios';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
-  isLoading: false,
   addresses: []
 });
 
 export const getters = {
-  isLoading(state) {
-    return state.isLoading;
-  },
   addresses(state) {
     return state.addresses;
   }
 };
 
 export const mutations = {
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
-  },
   SET_ADDRESSES(state, addresses) {
     state.addresses = addresses;
   }
 };
 
 export const actions = {
-  getAllAddresses({ commit, state }) {
-    commit('SET_LOADING', true);
-    const user = getUser();
-    const customer = getSecuredData(user.secureData);
-    axios.get(`/getAllAddresses?customerId=${customer.id}`).then(({ data }) => {
+  async getAllAddresses({ commit }) {
+    try {
+      const user = getUser();
+      const customer = getSecuredData(user.secureData);
+      const { data } = await axios.get(
+        `/getAllAddresses?customerId=${customer.id}`
+      );
       if (data.status) {
         let addresses = [];
         if (data.body) {
@@ -53,58 +48,68 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  updateAddress({ commit, dispatch }, address) {
-    commit('SET_LOADING', true);
-    const customerId = address.customer_id;
-    const id = address.id;
-    delete address.id;
-    axios
-      .put(`/updateAddress?customerId=${customerId}&addressId=${id}`, {
-        address
-      })
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getAllAddresses');
-          this.$toast.info(data.message);
-        } else {
-          this.$toast.error(data.message);
+  async updateAddress({ dispatch }, address) {
+    try {
+      const customerId = address.customer_id;
+      const id = address.id;
+      delete address.id;
+      const { data } = await axios.put(
+        `/updateAddress?customerId=${customerId}&addressId=${id}`,
+        {
+          address
         }
-        commit('SET_LOADING', false);
-      });
+      );
+      if (data.status) {
+        dispatch('getAllAddresses');
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  addAddress({ commit, dispatch }, address) {
-    const user = getUser();
-    const customer = getSecuredData(user.secureData);
-    commit('SET_LOADING', true);
-    delete address.id;
-    delete address.customer_id;
-    axios
-      .post(`/addAddress?customerId=${customer.id}`, { address })
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getAllAddresses');
-          this.$toast.info(data.message);
-        } else {
-          this.$toast.error(data.message);
-        }
-        commit('SET_LOADING', false);
-      });
+  async addAddress({ dispatch }, address) {
+    try {
+      const user = getUser();
+      const customer = getSecuredData(user.secureData);
+      delete address.id;
+      delete address.customer_id;
+      const { data } = await axios.post(
+        `/addAddress?customerId=${customer.id}`,
+        { address }
+      );
+      if (data.status) {
+        dispatch('getAllAddresses');
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   },
-  deleteAddress({ commit, dispatch }, { customerId, addressId }) {
-    commit('SET_LOADING', true);
-    axios
-      .delete(`/deleteAddress?customerId=${customerId}&addressId=${addressId}`)
-      .then(({ data }) => {
-        if (data.status) {
-          dispatch('getAllAddresses');
-          this.$toast.info(data.message);
-        } else {
-          this.$toast.error(data.message);
-        }
-        commit('SET_LOADING', false);
-      });
+  async deleteAddress({ dispatch }, { customerId, addressId }) {
+    try {
+      const { data } = await axios.delete(
+        `/deleteAddress?customerId=${customerId}&addressId=${addressId}`
+      );
+      if (data.status) {
+        dispatch('getAllAddresses');
+        this.$toast.success(data.message);
+      } else {
+        this.$toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   }
 };

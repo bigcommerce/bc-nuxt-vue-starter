@@ -79,3 +79,23 @@ export const getProductBySlug = async (req, res) => {
     });
   }
 };
+
+export const getProductOption = async (req, res) => {
+  try {
+    const productId = req.query.productId;
+    const result = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/catalog/products/${productId}?include=options,variants,modifiers&include_fields=id`
+    );
+    res.json({
+      message: 'Successfully got product options',
+      body: result.data,
+      status: true
+    });
+  } catch (error) {
+    res.json({
+      message: 'Getting product optioons failed',
+      body: error,
+      status: false
+    });
+  }
+};
