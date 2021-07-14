@@ -2,34 +2,31 @@ import axios from 'axios';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
-  isLoading: false,
   orders: []
 });
 
 export const getters = {
-  isLoading(state) {
-    return state.isLoading;
-  },
   orders(state) {
     return state.orders;
   }
 };
 
 export const mutations = {
-  SET_LOADING(state, isLoading) {
-    state.isLoading = isLoading;
-  },
   SET_ORDERS(state, orders) {
     state.orders = orders;
   }
 };
 
 export const actions = {
-  getAllOrders({ commit }) {
-    commit('SET_LOADING', true);
-    const user = getUser();
-    const customer = getSecuredData(user.secureData);
-    axios.get(`/getAllOrders?customerId=${customer.id}`).then(({ data }) => {
+  async getAllOrders({ commit }) {
+    try {
+      const user = getUser();
+      const customer = getSecuredData(user.secureData);
+
+      const { data } = await axios.get(
+        `/getAllOrders?customerId=${customer.id}`
+      );
+
       if (data.status) {
         let orders = [];
         if (data.body) {
@@ -47,7 +44,9 @@ export const actions = {
       } else {
         this.$toast.error(data.message);
       }
-      commit('SET_LOADING', false);
-    });
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
   }
 };

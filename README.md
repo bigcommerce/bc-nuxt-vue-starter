@@ -4,7 +4,7 @@
 
 ## Build Setup
 
-````bash
+```bash
 # install dependencies
 $ npm install
 
@@ -25,7 +25,7 @@ $ npm run generate
 #deploy static project
 Before running bellow script, you should put the vercel ENV from the local env.
 $ npm run deploy
-````
+```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
@@ -33,7 +33,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 You will need a channel.
 
-````json
+```json
 POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/channels
 {
   "is_listable_from_ui": false,
@@ -41,17 +41,24 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/channels
   "name": {channel_name},
   "status": "active",
   "type": "storefront",
-  "platform": "custom"
+  "platform": "custom",
+  "config_meta": {
+    "app": {
+      "id": {app id},
+      "sections": [{ "title": {title}, "query_path": {query path} }]
+    }
+  }
 }
 
 Or you can just run a CLI.
-$ npm run create-storefront-channel {channel_name}
-i.e -> npm run create-storefront-channel "mychannel"
-````
+$ npm run create-storefront-channel --name {channel name} --appId {app id} --sections {sections}
+i.e -> npm run create-storefront-channel --name "channel name" --appId 4949 --sections '[{"title":"Overview", "query_path":"overview"}]'
+Data type should be matched like above
+```
 
 You'll need a BigCommerce store and a token for our GraphQL Storefront API, which you can create in the API Account section of the control panel. Once you have your BC API credentials, here's a sample request to create a token:
 
-````json
+```json
 POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/storefront/api-token
 {
   "channel_id": 1,
@@ -60,16 +67,16 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/storefront/api-token
 }
 
 Or you can just run a CLI.
-$ npm run create-storefront-token {channel_id} {host_url}
+$ npm run create-storefront-token --channelId {channel id} --hostUrl {host url}
 channel_id - you will get this id from above command.
-i.e -> npm run create-storefront-token 123455 http://localhost:3000
+i.e -> npm run create-storefront-token --channelId 123455 --hostUrl http://localhost:3000
 
 (*) If you need to deploy on vercel, you should set the origin as the initially deployed URL and create this token.
-````
+```
 
 You will need a site.
 
-````json
+```json
 POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/channels/{{channelId}}/site
 {
   "channel_id": 123456,
@@ -77,13 +84,13 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/channels/{{channelId}}
 }
 
 Or you can just run a CLI.
-$ npm run create-storefront-site {channel_id} {site_url}
-i.e -> npm run create-storefront-site 123456 "http://store.example.com"
-````
+$ npm run create-storefront-site --channelId {channel id} --siteUrl {site url}
+i.e -> npm run create-storefront-site --channelId 123456 --siteUrl "http://store.example.com"
+```
 
 You will need a route.
 
-````json
+```json
 POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/sites/{{siteId}}/routes
 {
   "type": "product",
@@ -92,8 +99,8 @@ POST https://api.bigcommerce.com/stores/{{store_hash}}/v3/sites/{{siteId}}/route
 }
 
 Or you can just run a CLI.
-$ npm run create-storefront-route {site_id} {type} {route}
-i.e -> npm run create-storefront-route 123456 "product" "/product/book"
+$ npm run create-storefront-route --siteId {site id} --type {type} --route {route}
+i.e -> npm run create-storefront-route --siteId 1001 --type "product" --route "/product/book"
 If you don't input these params, default routes will be added.
 [
   {
@@ -132,7 +139,51 @@ If you don't input these params, default routes will be added.
     "route": "/login"
   }
 ]
-````
+```
+
+## How to use sample translation JSON file
+
+```
+{
+  "es": [
+    {
+      "[Sample] 1 L Le Parfait Jar": "[Muestra] Tarro Le Parfait de 1 litro",
+      "Color": "Color",
+      "Orange": "Naranja",
+      "Size": "Tamaño",
+      "Medium": "Medio",
+      "Weight": "Peso",
+      "5Kg": "5Kg",
+      "Modifier": "Modificador",
+      "test2": "test2"
+    }
+  ],
+  "en": [
+    {
+      "[Sample] 1 L Le Parfait Jar": "[Sample] 1 L Le Parfait Jar",
+      "Color": "Color",
+      "Orange": "Orange",
+      "Size": "Size",
+      "Medium": "Medium",
+      "Weight": "Weight",
+      "5Kg": "5Kg",
+      "Modifier": "Modifier",
+      "test2": "test2"
+    }
+  ]
+}
+If you want to write sample translation for cart name and cart configuration, you should add translations of carts as arrays.
+```
+
+## How to set up checkout type
+
+```
+There are 3 types of checkout type - `redirected`, `custom`, `embedded`.
+If you set CHECKOUT_TYPE in env with these variables, it will be worked.
+"redirected" - redirect to default checkout page provided in cart reidrect_urls.
+"custom" - go to customized checkout page.
+"embedded" - load default checkout page into our storefront checkout page as iframe. This wouldn't work on HTTP localhost. Firstly, you should use SSL for this using ngrok or any other thing. And you should input the https URL into channel site URL.
+```
 
 If you're new to BigCommerce, that's ok! You can create a free developer sandbox store here: https://developer.bigcommerce.com/sandbox/vue
 

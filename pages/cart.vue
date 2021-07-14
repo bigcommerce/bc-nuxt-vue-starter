@@ -1,5 +1,6 @@
 <template>
   <div id="cart">
+    <div id="embedded-checkout"></div>
     <transition name="fade" mode="out-in">
       <div v-if="totalItems" key="my-cart" class="my-cart">
         <h3 class="my-cart__total-items">items: {{ totalItems }}</h3>
@@ -106,7 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('carts', ['products', 'isLoading']),
+    ...mapGetters('carts', ['products']),
     totalItems() {
       return this.products.reduce(
         (totalItems, product) => totalItems + parseInt(product.qty, 10),

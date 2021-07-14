@@ -1,0 +1,28 @@
+{
+  "es": [
+    {
+      "[Sample] 1 L Le Parfait Jar": "[Muestra] Tarro Le Parfait de 1 litro",
+      "Color": "Color",
+      "Orange": "Naranja",
+      "Size": "Tamaño",
+      "Medium": "Medio",
+      "Weight": "Peso",
+      "5Kg": "5Kg",
+      "Modifier": "Modificador",
+      "test2": "test2"
+    }
+  ],
+  "en": [
+    {
+      "[Sample] 1 L Le Parfait Jar": "[Sample] 1 L Le Parfait Jar",
+      "Color": "Color",
+      "Orange": "Orange",
+      "Size": "Size",
+      "Medium": "Medium",
+      "Weight": "Weight",
+      "5Kg": "5Kg",
+      "Modifier": "Modifier",
+      "test2": "test2"
+    }
+  ]
+}

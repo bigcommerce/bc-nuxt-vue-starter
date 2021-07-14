@@ -224,7 +224,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('product', ['categories', 'products', 'isLoading'])
+    ...mapGetters('product', ['categories', 'products'])
   },
   watch: {
     categories(val) {

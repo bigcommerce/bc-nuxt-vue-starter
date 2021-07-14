@@ -83,19 +83,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('customer', ['loggedIn', 'isLoading']),
+    ...mapGetters('customer', ['loggedIn']),
     btnDisabled() {
       return this.$v.$invalid;
     }
   },
   watch: {},
-  mounted() {
-    this.checkLogin();
-  },
   methods: {
     ...mapActions({
-      login: 'customer/login',
-      checkLogin: 'customer/isLoggedIn'
+      login: 'customer/login'
     }),
     async handleLogin() {
       await this.login({ email: this.email, password: this.password });

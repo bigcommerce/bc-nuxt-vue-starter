@@ -2,10 +2,12 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_getCategories',
   'GET_getProductsByCategory',
   'GET_getProductBySlug',
+  'GET_getProductOption',
   'GET_getCart',
   'POST_createCart',
   'POST_addCartItem',
   'PUT_updateCartItem',
+  'PUT_updateCartWithCustomerId',
   'DELETE_deleteCartItem',
   'GET_getAllOrders',
   'GET_getAllAddresses',
@@ -14,7 +16,19 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'DELETE_deleteAddress',
   'GET_searchProductByKey',
   'POST_customerLogin',
-  'POST_customerLogOut'
+  'POST_customerRegister',
+  'GET_getCheckout',
+  'POST_setConsignmentToCheckout',
+  'PUT_updateConsignmentToCheckout',
+  'PUT_updateShippingOption',
+  'POST_setBillingAddressToCheckout',
+  'POST_createOrder',
+  'GET_getPaymentMethodByOrder',
+  'POST_processPayment',
+  'POST_addCoupons',
+  'GET_getProductOption',
+  'GET_getStorefrontSeo',
+  'GET_getStorefrontStatus'
 ];
 
 export const checkApiAccessPermission = (permission) => {

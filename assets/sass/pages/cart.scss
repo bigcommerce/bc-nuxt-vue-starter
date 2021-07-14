@@ -33,13 +33,10 @@
     margin-top: var(--spacer-xl);
   }
   &__actions {
-    opacity: 0;
-    transition: opacity 300ms ease-in-out;
-    @at-root.collected-product:hover & {
-      @include for-desktop {
-        opacity: 1;
-      }
-    }
+    transition: opacity 150ms ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 .empty-cart {
