@@ -22,9 +22,25 @@ $ npm run start
 # generate static project
 $ npm run generate
 
-#deploy static project
+# deploy static project on vercel
 Before running bellow script, you should put the vercel ENV from the local env.
 $ npm run deploy
+
+# deploy non-static project on heroku
+Firstly, please create free heroku account.
+1. Please follow up below commands.
+    brew install heroku/brew/heroku
+    heroku login
+    heroku create {Heroku App Name} - i.e: heroku create bc-vue-nuxt-starter
+    npm run set-heroku-env
+2. Please make you are on the latest updates of your current branch codebase.
+3. After checking of these, please change something.
+  - Change "target: 'static'" to "target: 'server'" in nuxt.config.js
+  - Remove .env from .gitignore.
+4. Run commands
+    git add .
+    git commit -am "commit message"
+    git push heroku master
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
