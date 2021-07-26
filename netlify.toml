@@ -1,0 +1,12 @@
+[dev]
+   command = "npm run dev"
+[build]
+  command = "npm run generate"
+  publish = "dist"
+  functions = 'functions'  # directs netlify to where your functions directory is located
+
+[[headers]]
+  # Define which paths this specific [[headers]] block will cover.
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
