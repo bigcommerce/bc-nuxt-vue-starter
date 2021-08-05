@@ -1,132 +1,84 @@
 import { customAxios } from '../utils/axios';
 
-export const getCart = async (req, res) => {
+export const getCart = async (req, res, next) => {
   try {
     const cartId = req.query.cartId;
-    const result = await customAxios('api').get(
+    const { data } = await customAxios('api').get(
       `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}?include=redirect_urls,line_items.physical_items.options`
     );
-    res.json({
-      message: 'Successfully got carts',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Getting carts failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const createCart = async (req, res) => {
+export const createCart = async (req, res, next) => {
   try {
-    const data = req.body.cartData;
-    const result = await customAxios('api').post(
+    const cartData = req.body.cartData;
+    const { data } = await customAxios('api').post(
       `/stores/${process.env.STORE_HASH}/v3/carts?include=redirect_urls`,
-      data
+      cartData
     );
-    res.json({
-      message: 'Successfully created cart',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Creating cart failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const addCartItem = async (req, res) => {
+export const addCartItem = async (req, res, next) => {
   try {
     const cartId = req.query.cartId;
-    const data = req.body.cartData;
-    const result = await customAxios('api').post(
+    const cartData = req.body.cartData;
+    const { data } = await customAxios('api').post(
       `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}/items?include=redirect_urls`,
-      data
+      cartData
     );
-    res.json({
-      message: 'Successfully added an item to cart',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Adding an item to cart failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const updateCartItem = async (req, res) => {
+export const updateCartItem = async (req, res, next) => {
   try {
     const cartId = req.query.cartId;
     const itemId = req.query.itemId;
-    const data = req.body.cartData;
-    const result = await customAxios('api').put(
+    const cartData = req.body.cartData;
+    const { data } = await customAxios('api').put(
       `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}/items/${itemId}?include=redirect_urls`,
-      data
+      cartData
     );
-    res.json({
-      message: 'Successfully updated cart with an item',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Updating cart with an item failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const deleteCartItem = async (req, res) => {
+export const deleteCartItem = async (req, res, next) => {
   try {
     const cartId = req.query.cartId;
     const itemId = req.query.itemId;
-    const result = await customAxios('api').delete(
+    const { data } = await customAxios('api').delete(
       `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}/items/${itemId}?include=redirect_urls`
     );
-    res.json({
-      message: 'Successfully deleted item or cart',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Deleting item or cart failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const updateCartWithCustomerId = async (req, res) => {
+export const updateCartWithCustomerId = async (req, res, next) => {
   try {
     const cartId = req.query.cartId;
     const customerId = req.query.customerId;
-    const result = await customAxios('api').put(
+    const { data } = await customAxios('api').put(
       `/stores/${process.env.STORE_HASH}/v3/carts/${cartId}`,
       {
         customer_id: customerId
       }
     );
-    res.json({
-      message: 'Successfully updated cart with customer',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Updating cart with this customer failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };

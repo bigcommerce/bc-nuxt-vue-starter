@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '~/config/constants';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
@@ -24,29 +25,25 @@ export const actions = {
       const customer = getSecuredData(user.secureData);
 
       const { data } = await axios.get(
-        `/getAllOrders?customerId=${customer.id}`
+        `${API_URL}/getAllOrders?customerId=${customer.id}`
       );
 
-      if (data.status) {
-        let orders = [];
-        if (data.body) {
-          orders = data.body.map((item) => {
-            return [
-              `#${item.id}`,
-              item.date_modified,
-              item.payment_method,
-              Number.parseFloat(item.total_inc_tax).toFixed(2),
-              item.status
-            ];
-          });
-        }
-        commit('SET_ORDERS', orders);
-      } else {
-        this.$toast.error(data.message);
+      let orders = [];
+      if (data) {
+        orders = data.map((item) => {
+          return [
+            `#${item.id}`,
+            item.date_modified,
+            item.payment_method,
+            Number.parseFloat(item.total_inc_tax).toFixed(2),
+            item.status
+          ];
+        });
       }
+      commit('SET_ORDERS', orders);
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in getting orders');
     }
   }
 };

@@ -17,6 +17,7 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'GET_searchProductByKey',
   'POST_customerLogin',
   'POST_customerRegister',
+  'POST_customerLogOut',
   'GET_getCheckout',
   'POST_setConsignmentToCheckout',
   'PUT_updateConsignmentToCheckout',
@@ -27,11 +28,10 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'POST_processPayment',
   'POST_addCoupons',
   'GET_getProductOption',
-  'GET_getStorefrontSeo',
-  'GET_getStorefrontStatus'
+  'GET_storefront'
 ];
 
-export const checkApiAccessPermission = (permission) => {
+module.exports.checkApiAccessPermission = (permission) => {
   if (ACCESSIBLE_API_ENDPOINTS.includes(permission)) {
     return true;
   } else {

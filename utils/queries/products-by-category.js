@@ -1,4 +1,4 @@
-export const productsByCategory = (path, pageParam) => {
+module.exports.productsByCategory = (path, pageParam) => {
   return `
   query CategoryByUrl {
     site {

@@ -1,4 +1,4 @@
-export const productBySlug = (params) => {
+module.exports.productBySlug = (params) => {
   return `query LookUpUrl {
     site {
       route(path: "/${params.slug}/") {

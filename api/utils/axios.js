@@ -1,6 +1,6 @@
-import axios from 'axios';
+const axios = require('axios');
 
-export const customAxios = (action, cookie = null, auth = null) => {
+module.exports.customAxios = (action, cookie = null, auth = null) => {
   let baseURL = '';
   const headers = {
     'Content-Type': 'application/json',

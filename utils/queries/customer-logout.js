@@ -1,4 +1,4 @@
-export const customerLogOut = () => {
+module.exports.customerLogOut = () => {
   return `
     mutation Logout {
       logout {

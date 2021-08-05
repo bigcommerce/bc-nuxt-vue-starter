@@ -1,14 +1,15 @@
-// Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
-const handler = async (event, context) => {
-  try {
-    const subject = event.queryStringParameters.name || 'World';
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: `Hello ${subject}` })
-    };
-  } catch (error) {
-    return { statusCode: 500, body: error.toString() };
-  }
+const { customAxios } = require('../api/utils/axios');
+const permission = require('./middleware/permission');
+
+const storefront = async ({ queryStringParameters }, context) => {
+  const { field } = queryStringParameters;
+  const { data, status } = await customAxios('api').get(
+    `/stores/${process.env.STORE_HASH}/v3/settings/storefront/${field}?channel_id=${process.env.CHANNEL_ID}`
+  );
+  return {
+    body: JSON.stringify(data),
+    statusCode: status
+  };
 };
 
-module.exports = { handler };
+exports.handler = (event, context) => permission(storefront)(event, context);

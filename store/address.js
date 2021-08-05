@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '~/config/constants';
 import { getSecuredData, getUser } from '~/utils/auth';
 
 export const state = () => ({
@@ -23,34 +24,27 @@ export const actions = {
       const user = getUser();
       const customer = getSecuredData(user.secureData);
       const { data } = await axios.get(
-        `/getAllAddresses?customerId=${customer.id}`
+        `${API_URL}/getAllAddresses?customerId=${customer.id}`
       );
-      if (data.status) {
-        let addresses = [];
-        if (data.body) {
-          addresses = data.body.map((item) => ({
-            address_type: item.address_type,
-            city: item.city,
-            company: item.company,
-            country: item.country,
-            customer_id: item.customer_id,
-            first_name: item.first_name,
-            id: item.id,
-            last_name: item.last_name,
-            phone: item.phone,
-            state: item.state,
-            street_1: item.street_1,
-            street_2: item.street_2,
-            zip: item.zip
-          }));
-        }
-        commit('SET_ADDRESSES', addresses);
-      } else {
-        this.$toast.error(data.message);
-      }
+      const addresses = data.map((item) => ({
+        address_type: item.address_type,
+        city: item.city,
+        company: item.company,
+        country: item.country,
+        customer_id: item.customer_id,
+        first_name: item.first_name,
+        id: item.id,
+        last_name: item.last_name,
+        phone: item.phone,
+        state: item.state,
+        street_1: item.street_1,
+        street_2: item.street_2,
+        zip: item.zip
+      }));
+      commit('SET_ADDRESSES', addresses);
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in getting addresses');
     }
   },
   async updateAddress({ dispatch }, address) {
@@ -59,20 +53,16 @@ export const actions = {
       const id = address.id;
       delete address.id;
       const { data } = await axios.put(
-        `/updateAddress?customerId=${customerId}&addressId=${id}`,
+        `${API_URL}/updateAddress?customerId=${customerId}&addressId=${id}`,
         {
           address
         }
       );
-      if (data.status) {
-        dispatch('getAllAddresses');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      dispatch('getAllAddresses');
+      this.$toast.success(data.message);
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in updating address');
     }
   },
   async addAddress({ dispatch }, address) {
@@ -81,35 +71,24 @@ export const actions = {
       const customer = getSecuredData(user.secureData);
       delete address.id;
       delete address.customer_id;
-      const { data } = await axios.post(
-        `/addAddress?customerId=${customer.id}`,
-        { address }
-      );
-      if (data.status) {
-        dispatch('getAllAddresses');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      await axios.post(`${API_URL}/addAddress?customerId=${customer.id}`, {
+        address
+      });
+      dispatch('getAllAddresses');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in adding address');
     }
   },
   async deleteAddress({ dispatch }, { customerId, addressId }) {
     try {
-      const { data } = await axios.delete(
+      await axios.delete(
         `/deleteAddress?customerId=${customerId}&addressId=${addressId}`
       );
-      if (data.status) {
-        dispatch('getAllAddresses');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      dispatch('getAllAddresses');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in deleting address');
     }
   }
 };

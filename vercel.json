@@ -49,8 +49,7 @@
     },
     { "source": "/processPayment", "destination": "/api/routes" },
     { "source": "/addCoupons", "destination": "/api/routes" },
-    { "source": "/getStorefrontSeo", "destination": "/api/routes" },
-    { "source": "/getStorefrontStatus", "destination": "/api/routes" }
+    { "source": "/storefront", "destination": "/api/routes" }
   ],
   "env": {
     "APP_NAME": "BigCommerce Nuxt Vue Starter",

@@ -41,6 +41,13 @@ Firstly, please create free heroku account.
     git add .
     git commit -am "commit message"
     git push heroku master
+
+
+# deploy static project on netlify
+Important thing is to push .env file to git if you are going to publish from github repo. For security person, we recommend you to use your private repo.
+1. Set all environments from your local to netlify environment setting
+2. Run these commands on local. `netlify login`, `netlify dev` if you want to run this application on netlify environment, please add local netlify function url to netlify env.
+3. `git push`, then netlify server will automatically build your applicatoin.
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

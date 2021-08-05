@@ -28,6 +28,7 @@
     "@storefront-ui/vue": "^0.10.4",
     "core-js": "^3.8.1",
     "express": "^4.17.1",
+    "http-status": "^1.5.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "nuxt": "^2.14.12",

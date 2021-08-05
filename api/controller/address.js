@@ -1,87 +1,55 @@
 import { customAxios } from '../utils/axios';
 
-export const getAllAddresses = async (req, res) => {
+export const getAllAddresses = async (req, res, next) => {
   try {
     const customerId = req.query.customerId;
-    const result = await customAxios('api').get(
+    const { data } = await customAxios('api').get(
       `/stores/${process.env.STORE_HASH}/v2/customers/${customerId}/addresses`
     );
-    res.json({
-      message: 'Successfully got customer addresses',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Getting customer addresses failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const updateAddress = async (req, res) => {
+export const updateAddress = async (req, res, next) => {
   try {
     const customerId = req.query.customerId;
     const addressId = req.query.addressId;
     const address = req.body.address;
-    const result = await customAxios('api').put(
+    const { data } = await customAxios('api').put(
       `/stores/${process.env.STORE_HASH}/v2/customers/${customerId}/addresses/${addressId}`,
       address
     );
-    res.json({
-      message: 'Successfully updated customer address',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Updating customer address failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const addAddress = async (req, res) => {
+export const addAddress = async (req, res, next) => {
   try {
     const customerId = req.query.customerId;
     const address = req.body.address;
-    const result = await customAxios('api').post(
+    const { data } = await customAxios('api').post(
       `/stores/${process.env.STORE_HASH}/v2/customers/${customerId}/addresses`,
       address
     );
-    res.json({
-      message: 'Successfully added customer address',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Adding customer address failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const deleteAddress = async (req, res) => {
+export const deleteAddress = async (req, res, next) => {
   try {
     const customerId = req.query.customerId;
     const addressId = req.query.addressId;
-    const result = await customAxios('api').delete(
+    const { data } = await customAxios('api').delete(
       `/stores/${process.env.STORE_HASH}/v2/customers/${customerId}/addresses/${addressId}`
     );
-    res.json({
-      message: 'Successfully deleted customer address',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Deleting customer address failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
