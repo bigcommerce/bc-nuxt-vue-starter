@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '~/config/constants';
 import {
   setUser,
   getUser,
@@ -33,56 +34,41 @@ export const mutations = {
 export const actions = {
   async login({ dispatch, commit }, variables) {
     try {
-      const { data } = await axios.post(`/customerLogin`, {
+      const { data } = await axios.post(`${API_URL}/customerLogin`, {
         variables
       });
 
-      if (data.status) {
-        const user = setUser(data.body.data.customer);
-        setCookie(data.body.cookie);
-        commit('SET_CUSTOMER', user);
-        dispatch('isLoggedIn');
-      } else {
-        this.$toast.error(data.message);
-      }
+      const user = setUser(data.data.customer);
+      setCookie(data.cookie);
+      commit('SET_CUSTOMER', user);
+      dispatch('isLoggedIn');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in login');
     }
   },
   async createCustomer({ commit }, variables) {
     try {
-      const { data } = await axios.post(`/customerRegister`, {
+      await axios.post(`${API_URL}/customerRegister`, {
         variables
       });
-
-      if (data.status) {
-        this.$toast.success(data.message);
-        this.$router.push('/login');
-      } else {
-        this.$toast.error(data.message);
-      }
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in register');
     }
   },
   async logOut({ commit }) {
     try {
       const cookie = getCookie();
-      const { data } = await axios.post('/customerLogOut', {
+      await axios.post(`${API_URL}/customerLogOut`, {
         cookie
       });
 
-      if (data.status) {
-        commit('SET_LOGGEDIN', false);
-        removeUserAndCookie();
-      } else {
-        this.$toast.error(data.message);
-      }
+      commit('SET_LOGGEDIN', false);
+      removeUserAndCookie();
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in logout');
     }
   },
   isLoggedIn({ commit }) {

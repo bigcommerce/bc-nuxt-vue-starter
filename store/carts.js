@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { embedCheckout } from '@bigcommerce/checkout-sdk';
 import axios from 'axios';
+import { API_URL } from '~/config/constants';
 import { CHECKOUT_TYPE } from '~/constants/checkouttype';
 import {
   getCartCheckoutRedirectUrl,
@@ -88,20 +89,14 @@ export const actions = {
         channel_id: `${process.env.CHANNEL_ID}`
       };
 
-      const { data } = await axios.post(`/createCart`, { cartData });
+      const { data } = await axios.post(`${API_URL}/createCart`, { cartData });
 
-      if (data.status) {
-        const body = data.body;
-        const cartId = body.data.id;
-        window.localStorage.setItem('cartId', cartId);
-        dispatch('getCart');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      const cartId = data?.data?.id;
+      window.localStorage.setItem('cartId', cartId);
+      dispatch('getCart');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in creating cart');
     }
   },
 
@@ -110,19 +105,14 @@ export const actions = {
       const cartData = { line_items: [{ ...addData }] };
       const cartId = getCartId();
 
-      const { data } = await axios.post(`/addCartItem?cartId=${cartId}`, {
+      await axios.post(`${API_URL}/addCartItem?cartId=${cartId}`, {
         cartData
       });
 
-      if (data.status) {
-        dispatch('getCart');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      dispatch('getCart');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong adding item to cart');
     }
   },
 
@@ -131,22 +121,17 @@ export const actions = {
       const cartData = { line_item: { ...updateData } };
       const cartId = getCartId();
 
-      const {
-        data
-      } = await axios.put(
-        `/updateCartItem?cartId=${cartId}&itemId=${item_id}`,
-        { cartData }
+      await axios.put(
+        `${API_URL}/updateCartItem?cartId=${cartId}&itemId=${item_id}`,
+        {
+          cartData
+        }
       );
 
-      if (data.status) {
-        dispatch('getCart');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      dispatch('getCart');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in updating cart item');
     }
   },
 
@@ -155,21 +140,15 @@ export const actions = {
       const cartId = getCartId();
 
       const { data } = await axios.delete(
-        `/deleteCartItem?cartId=${cartId}&itemId=${itemId}`
+        `${API_URL}/deleteCartItem?cartId=${cartId}&itemId=${itemId}`
       );
 
-      if (data.status) {
-        const body = data.body;
-        const cart = productFilter(body);
-        dispatch('getCart');
-        if (cart.length === 0) window.localStorage.removeItem('cartId');
-        this.$toast.success(data.message);
-      } else {
-        this.$toast.error(data.message);
-      }
+      const cart = productFilter(data?.data);
+      dispatch('getCart');
+      if (cart.length === 0) window.localStorage.removeItem('cartId');
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in deleting cart item');
     }
   },
 
@@ -177,22 +156,17 @@ export const actions = {
     try {
       const cartId = getCartId();
       if (cartId) {
-        const { data } = await axios.get(`/getCart?cartId=${cartId}`);
+        const { data } = await axios.get(`${API_URL}/getCart?cartId=${cartId}`);
+        const carts = productFilter(data);
 
-        if (data.status) {
-          const body = data.body;
-          const carts = productFilter(body);
-
-          commit('SET_CART', setCartLocale(carts));
-          commit('SET_REDIRECTURLS', body.data.redirect_urls);
-        } else {
-          window.localStorage.removeItem('cartId');
-          commit('SET_CART', productFilter(null));
-        }
+        commit('SET_CART', setCartLocale(carts));
+        commit('SET_REDIRECTURLS', data.redirect_urls);
       }
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      window.localStorage.removeItem('cartId');
+      commit('SET_CART', productFilter(null));
+      this.$toast.error('Something went wrong in getting cart');
     }
   },
 
@@ -202,18 +176,13 @@ export const actions = {
       const cartId = getCartId();
 
       if (cartId) {
-        const { data } = await axios.put(
-          `/updateCartWithCustomerId?cartId=${cartId}&customerId=${id}`
+        await axios.put(
+          `${API_URL}/updateCartWithCustomerId?cartId=${cartId}&customerId=${id}`
         );
-        if (data.status) {
-          this.$toast.success(data.message);
-        } else {
-          this.$toast.error(data.message);
-        }
       }
     } catch (error) {
       console.log(error);
-      this.$toast.error('Something went wrong');
+      this.$toast.error('Something went wrong in updating cart with customer');
     }
   },
 

@@ -1,138 +1,90 @@
 import { customAxios } from '../utils/axios';
 
-export const getCheckout = async (req, res) => {
+export const getCheckout = async (req, res, next) => {
   try {
     const checkoutId = req.query.checkoutId;
-    const result = await customAxios('api').get(
+    const { data } = await customAxios('api').get(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}?includes=consignments.available_shipping_options`
     );
-    res.json({
-      message: 'Successfully got checkout',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Getting checkout failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const setConsignmentToCheckout = async (req, res) => {
+export const setConsignmentToCheckout = async (req, res, next) => {
   try {
     const checkoutId = req.query.checkoutId;
-    const data = req.body.consignment;
-    const result = await customAxios('api').post(
+    const consignment = req.body.consignment;
+    const { data } = await customAxios('api').post(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments`,
-      data
+      consignment
     );
-    res.json({
-      message: 'Successfully added consignment on checkout',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Adding consignment to checkout failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const updateConsignmentToCheckout = async (req, res) => {
+export const updateConsignmentToCheckout = async (req, res, next) => {
   try {
     const checkoutId = req.query.checkoutId;
     const consignmentId = req.query.consignmentId;
     const consignment = req.body.consignment;
-    const result = await customAxios('api').put(
+    const { data } = await customAxios('api').put(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
       consignment
     );
-    res.json({
-      message: 'Successfully updated consignment on checkout',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Updating consigmnent to checkout failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const updateShippingOption = async (req, res) => {
+export const updateShippingOption = async (req, res, next) => {
   try {
     const checkoutId = req.query.checkoutId;
     const consignmentId = req.query.consignmentId;
     const shippingOptionId = req.query.shippingOptionId;
-    const result = await customAxios(
+    const { data } = await customAxios(
       'api'
     ).put(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
       { shipping_option_id: shippingOptionId }
     );
-    res.json({
-      message: 'Successfully added shipping option',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Adding shipping option to checkout failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const setBillingAddressToCheckout = async (req, res) => {
+export const setBillingAddressToCheckout = async (req, res, next) => {
   try {
     const checkoutId = req.query.checkoutId;
-    const data = req.body.data;
-    const result = await customAxios('api').post(
+    const billData = req.body.data;
+    const { data } = await customAxios('api').post(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/billing-address`,
-      data
+      billData
     );
-    res.json({
-      message: 'Successfully added billing address on checkout',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Adding billing address to checkout failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const getPaymentMethodByOrder = async (req, res) => {
+export const getPaymentMethodByOrder = async (req, res, next) => {
   try {
     const orderId = req.query.orderId;
-    const result = await customAxios('api').get(
+    const { data } = await customAxios('api').get(
       `/stores/${process.env.STORE_HASH}/v3/payments/methods?order_id=${orderId}`
     );
-    res.json({
-      message: 'Successfully got payment methods',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Getting payment methods failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const processPayment = async (req, res) => {
+export const processPayment = async (req, res, next) => {
   try {
     const orderId = req.query.orderId;
     const paymentData = req.body.payment;
@@ -153,46 +105,30 @@ export const processPayment = async (req, res) => {
       }
     );
 
-    const result = await customAxios(
+    const { data } = await customAxios(
       'payment',
       null,
       tokenResult.data?.data?.id
     ).post(`/stores/${process.env.STORE_HASH}/payments`, paymentData);
 
-    res.json({
-      message: 'Successfully processed payment',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Processing payment failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };
 
-export const addCoupons = async (req, res) => {
+export const addCoupons = async (req, res, next) => {
   try {
     const { checkoutId, couponCode } = req.body;
 
-    const result = await customAxios('api').get(
+    const { data } = await customAxios('api').get(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/coupons`,
       {
         coupon_code: couponCode
       }
     );
-    res.json({
-      message: 'Successfully added coupon to checkout',
-      body: result.data,
-      status: true
-    });
+    res.json(data);
   } catch (error) {
-    res.json({
-      message: 'Adding coupon failed',
-      body: error,
-      status: false
-    });
+    next(error);
   }
 };

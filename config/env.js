@@ -10,5 +10,5 @@ export default {
   jwtSecret: process.env.JWT_SECRET || '',
   channelId: process.env.CHANNEL_ID || '',
   checkoutType: process.env.CHECKOUT_TYPE || 'redirected',
-  paymentUrl: process.env.PAYMENT_URL || 'http://localhost'
+  paymentUrl: process.env.PAYMENT_URL || 'http://localhost:3000'
 };

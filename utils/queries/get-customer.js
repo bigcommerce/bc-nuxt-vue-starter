@@ -1,4 +1,4 @@
-export const getCustomer = () => {
+module.exports.getCustomer = () => {
   return `
     query {
       customer {

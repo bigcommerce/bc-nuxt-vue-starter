@@ -9,8 +9,8 @@
 
 <script>
 import { menu } from '@/constants';
+import { mapGetters } from 'vuex';
 import LayoutDefaultHeader from '@/components/LayoutDefaultHeader';
-import { getSeo, setSeo } from '~/utils/storage';
 export default {
   components: {
     LayoutDefaultHeader
@@ -18,18 +18,8 @@ export default {
   middleware: 'authenticated',
   data() {
     return {
-      menu,
-      seo: {}
+      menu
     };
-  },
-  async fetch() {
-    const seo = getSeo();
-    if (seo) this.seo = seo;
-    else {
-      const newSeo = await this.$store.dispatch('storefront/getStorefrontSeo');
-      setSeo(newSeo);
-      this.seo = newSeo;
-    }
   },
   head() {
     return {
@@ -47,6 +37,12 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapGetters('storefront', ['seo'])
+  },
+  mounted() {
+    this.$store.dispatch('storefront/getStorefrontSeo');
   }
 };
 </script>

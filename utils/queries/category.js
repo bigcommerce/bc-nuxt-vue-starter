@@ -1,4 +1,4 @@
-export const category = () => {
+module.exports.category = () => {
   return `
     query paginateProducts{
       site {

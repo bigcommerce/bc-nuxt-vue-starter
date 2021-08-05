@@ -36,10 +36,7 @@ import {
   searchProductByKey,
   getProductOption
 } from '../controller/product';
-import {
-  getStorefrontSeo,
-  getStorefrontStatus
-} from '../controller/storefront';
+import { storefront } from '../controller/storefront';
 import { permissionMiddleware } from '../middleware';
 
 const router = Router();
@@ -102,7 +99,6 @@ router.get('/getCategories', permissionMiddleware, getCategories);
 router.get('/searchProductByKey', permissionMiddleware, searchProductByKey);
 router.get('/getProductOption', permissionMiddleware, getProductOption);
 // storefront
-router.get('/getStorefrontSeo', permissionMiddleware, getStorefrontSeo);
-router.get('/getStorefrontStatus', permissionMiddleware, getStorefrontStatus);
+router.get('/storefront', permissionMiddleware, storefront);
 
 export default router;
