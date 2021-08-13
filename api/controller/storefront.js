@@ -1,4 +1,5 @@
 import { customAxios } from '../utils/axios';
+const queries = require('../../utils/queries');
 
 export const storefront = async (req, res, next) => {
   const field = req.query.field;
@@ -8,6 +9,18 @@ export const storefront = async (req, res, next) => {
     );
     res.json(data);
   } catch (error) {
+    next(error);
+  }
+};
+
+export const getHomePageContentWidgets = async (req, res, next) => {
+  try {
+    const { data } = await customAxios('graphql').post(`/graphql`, {
+      query: queries.homePageContentWidgets()
+    });
+    res.json(data);
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };

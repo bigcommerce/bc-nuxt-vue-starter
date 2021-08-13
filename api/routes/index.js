@@ -36,7 +36,10 @@ import {
   searchProductByKey,
   getProductOption
 } from '../controller/product';
-import { storefront } from '../controller/storefront';
+import {
+  storefront,
+  getHomePageContentWidgets
+} from '../controller/storefront';
 import { permissionMiddleware } from '../middleware';
 
 const router = Router();
@@ -100,5 +103,10 @@ router.get('/searchProductByKey', permissionMiddleware, searchProductByKey);
 router.get('/getProductOption', permissionMiddleware, getProductOption);
 // storefront
 router.get('/storefront', permissionMiddleware, storefront);
+router.get(
+  '/getHomePageContentWidgets',
+  permissionMiddleware,
+  getHomePageContentWidgets
+);
 
 export default router;
