@@ -65,6 +65,8 @@
     "BASE_URL": "https://store-storehash-channelid.mybigcommerce.com",
     "STOREFRONT_API_TOKEN": "***",
     "CHECKOUT_TYPE": "embedded",
-    "PAYMENT_URL": "https://payments.bigcommerce.com"
+    "PAYMENT_URL": "https://payments.bigcommerce.com",
+    "DEPLOY_PLATFORM": "vercel",
+    "NETLIFY_API_URL": ""
   }
 }
