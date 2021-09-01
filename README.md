@@ -4,7 +4,7 @@
 
 ## Build Setup
 
-```bash
+```
 # install dependencies
 $ npm install
 
@@ -21,36 +21,49 @@ $ npm run start
 
 # generate static project
 $ npm run generate
+```
 
-# deploy static project on vercel
+## Deploy static project on vercel
+
+```
 Before running bellow script, you should put the vercel ENV from the local env.
 $ npm run deploy
+```
 
-# deploy non-static project on heroku
+## Deploy non-static project on heroku
+
+```
 Firstly, please create free heroku account.
+
 1. Please follow up below commands.
-    brew install heroku/brew/heroku
-    heroku login
-    heroku create {Heroku App Name} - i.e: heroku create bc-vue-nuxt-starter
-    npm run set-heroku-env
+   brew install heroku/brew/heroku
+   heroku login
+   heroku create {Heroku App Name} - i.e: heroku create bc-vue-nuxt-starter
+   npm run set-heroku-env
 2. Please make you are on the latest updates of your current branch codebase.
 3. After checking of these, please change something.
-  - Change "target: 'static'" to "target: 'server'" in nuxt.config.js
-  - Remove .env from .gitignore.
+
+- Change "target: 'static'" to "target: 'server'" in nuxt.config.js
+- Remove .env from .gitignore.
+
 4. Run commands
-    git add .
-    git commit -am "commit message"
-    git push heroku master
+   git add .
+   git commit -am "commit message"
+   git push heroku master
+```
 
+## Deploy static project on netlify
 
-# deploy static project on netlify
+```
 Important thing is to push .env file to git if you are going to publish from github repo. For security person, we recommend you to use your private repo.
+
 1. Set all environments from your local to netlify environment setting
 2. Run these commands on local. `netlify login`, `netlify dev` if you want to run this application on netlify environment, please add local netlify function url to netlify env.
 3. `git push`, then netlify server will automatically build your applicatoin.
+
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+### For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
 ## Requirements
 

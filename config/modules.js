@@ -3,5 +3,6 @@ export default [
   '@nuxtjs/axios',
   '@nuxtjs/pwa',
   '@nuxtjs/toast',
-  '@nuxtjs/proxy'
+  '@nuxtjs/proxy',
+  '@nuxtjs/sentry'
 ];
