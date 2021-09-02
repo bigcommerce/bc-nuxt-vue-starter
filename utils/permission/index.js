@@ -33,9 +33,7 @@ const ACCESSIBLE_API_ENDPOINTS = [
 ];
 
 module.exports.checkApiAccessPermission = (permission) => {
-  if (ACCESSIBLE_API_ENDPOINTS.includes(permission)) {
-    return true;
-  } else {
-    return false;
+  if (!ACCESSIBLE_API_ENDPOINTS.includes(permission)) {
+    throw new Error('permission error');
   }
 };
