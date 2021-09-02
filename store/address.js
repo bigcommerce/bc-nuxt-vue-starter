@@ -52,14 +52,14 @@ export const actions = {
       const customerId = address.customer_id;
       const id = address.id;
       delete address.id;
-      const { data } = await axios.put(
+      await axios.put(
         `${API_URL}/updateAddress?customerId=${customerId}&addressId=${id}`,
         {
           address
         }
       );
       dispatch('getAllAddresses');
-      this.$toast.success(data.message);
+      this.$toast.success('Successfully updated!');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in updating address');
@@ -75,6 +75,7 @@ export const actions = {
         address
       });
       dispatch('getAllAddresses');
+      this.$toast.success('Successfully created!');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in adding address');
@@ -86,6 +87,7 @@ export const actions = {
         `/deleteAddress?customerId=${customerId}&addressId=${addressId}`
       );
       dispatch('getAllAddresses');
+      this.$toast.success('Successfully deleted!');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in deleting address');

@@ -52,6 +52,7 @@ export const actions = {
       await axios.post(`${API_URL}/customerRegister`, {
         variables
       });
+      this.$toast.success('Successfully registered!');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in register');
