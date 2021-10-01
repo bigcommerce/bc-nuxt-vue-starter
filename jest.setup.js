@@ -1,5 +1,6 @@
 import { Nuxt, Builder } from 'nuxt';
 import nuxtConfig from './nuxt.config';
+import './test/utils/dotenv-test';
 
 // these boolean switches turn off the build for all but the store
 const resetConfig = {
@@ -34,7 +35,6 @@ const resetConfig = {
 // we take our nuxt config, lay the resets on top of it,
 // and lastly we apply the non-boolean overrides
 const config = Object.assign({}, nuxtConfig, resetConfig, {
-  mode: 'spa',
   srcDir: nuxtConfig.srcDir,
   ignore: ['**/components/**/*', '**/layouts/**/*', '**/pages/**/*']
 });

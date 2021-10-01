@@ -6,6 +6,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(routes);
+app.get('/ping', function (req, res) {
+  res.json('PONG');
+});
 
 if (require.main === module) {
   const port = 3001;
