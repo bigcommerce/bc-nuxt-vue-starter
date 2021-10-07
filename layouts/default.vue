@@ -3,6 +3,19 @@
     <div>
       <LayoutDefaultHeader :menu="menu" />
       <nuxt keep-alive :keep-alive-props="{ max: 10 }" />
+      <SfFooter>
+        <SfFooterColumn
+          v-for="(column, key) in footerColumns"
+          :key="key"
+          :title="column.title"
+        >
+          <SfList>
+            <SfListItem v-for="(menuItem, index) in column.items" :key="index">
+              <SfMenuItem :label="menuItem" />
+            </SfListItem>
+          </SfList>
+        </SfFooterColumn>
+      </SfFooter>
     </div>
   </client-only>
 </template>
@@ -10,15 +23,37 @@
 <script>
 import { menu } from '@/constants';
 import { mapGetters } from 'vuex';
+import { SfFooter, SfList, SfMenuItem } from '@storefront-ui/vue';
 import LayoutDefaultHeader from '@/components/LayoutDefaultHeader';
 export default {
   components: {
-    LayoutDefaultHeader
+    LayoutDefaultHeader,
+    SfFooter,
+    SfList,
+    SfMenuItem
   },
   middleware: 'authenticated',
   data() {
     return {
-      menu
+      menu,
+      footerColumns: [
+        {
+          title: 'About us',
+          items: ['Who we are']
+        },
+        {
+          title: 'Departments',
+          items: ['Home']
+        },
+        {
+          title: 'Help',
+          items: ['Contact us']
+        },
+        {
+          title: 'Payment & delivery',
+          items: ['Purchase terms']
+        }
+      ]
     };
   },
   head() {
