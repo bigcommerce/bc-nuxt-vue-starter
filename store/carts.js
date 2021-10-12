@@ -160,7 +160,7 @@ export const actions = {
         const carts = productFilter(data);
 
         commit('SET_CART', setCartLocale(carts));
-        commit('SET_REDIRECTURLS', data.redirect_urls);
+        commit('SET_REDIRECTURLS', data.data.redirect_urls);
       }
     } catch (error) {
       console.log(error);
