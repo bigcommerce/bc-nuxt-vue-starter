@@ -163,9 +163,13 @@
         </SfPagination>
         <div class="products__show-on-page desktop-only">
           <span class="products__show-on-page__label">Show on page:</span>
-          <SfSelect class="products__items-per-page" @input="handleShowPage">
+          <SfSelect
+            v-model="showOnPage"
+            class="products__items-per-page"
+            @input="handleShowPage"
+          >
             <SfSelectOption
-              v-for="option in showOnPage"
+              v-for="option in showNumbersOnPage"
               :key="option"
               :value="option"
               class="products__items-per-page__option"
@@ -217,14 +221,14 @@ export default {
       isGridView: true,
       category: 'Shop All',
       sidebarAccordion: [],
-      showOnPage: ['5', '10', '20'],
+      showNumbersOnPage: ['5', '10', '20'],
       breadcrumbs: productsBreadcrumbs,
       hoveredProduct: null,
       isCartSidebarOpen: false
     };
   },
   computed: {
-    ...mapGetters('product', ['categories', 'products'])
+    ...mapGetters('product', ['categories', 'products', 'showOnPage'])
   },
   watch: {
     categories(val) {

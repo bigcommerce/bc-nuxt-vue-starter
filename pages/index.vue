@@ -87,33 +87,6 @@
         </SfImage>
       </div>
     </SfSection>
-    <SfBanner
-      image="/assets/storybook/Home/bannerD.png"
-      class="banner-application desktop-only"
-    >
-      <template #subtitle>
-        <div class="banner-application__subtitle">Fashion to Take Away</div>
-      </template>
-      <template #title>
-        <h1 class="banner-application__title">
-          Download our application to your&nbsp;mobile
-        </h1>
-      </template>
-      <template #call-to-action>
-        <div>
-          <img
-            class="banner-application__download"
-            src="assets/storybook/Home/google.png"
-            alt="google"
-          />
-          <img
-            class="banner-application__download"
-            src="assets/storybook/Home/apple.png"
-            alt="apple"
-          />
-        </div>
-      </template>
-    </SfBanner>
   </div>
 </template>
 <script>
