@@ -28,13 +28,12 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'POST_processPayment',
   'POST_addCoupons',
   'GET_getProductOption',
-  'GET_storefront'
+  'GET_storefront',
+  'GET_getHomePageContentWidgets'
 ];
 
 module.exports.checkApiAccessPermission = (permission) => {
-  if (ACCESSIBLE_API_ENDPOINTS.includes(permission)) {
-    return true;
-  } else {
-    return false;
+  if (!ACCESSIBLE_API_ENDPOINTS.includes(permission)) {
+    throw new Error('permission error');
   }
 };

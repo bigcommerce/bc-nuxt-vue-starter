@@ -6,13 +6,12 @@ const permission = (func) => (a, b) => {
       const { path, httpMethod } = args[0];
       const routePath = path.replace('/.netlify/functions/', '');
       const permString = `${httpMethod}_${routePath}`;
-      const perm = checkApiAccessPermission(permString);
-      if (!perm) {
+      try {
+        checkApiAccessPermission(permString);
+      } catch (error) {
         return {
           statusCode: 403,
-          body: JSON.stringify({
-            message: `This API Permission Denied`
-          })
+          body: JSON.stringify('API permission is denied')
         };
       }
 

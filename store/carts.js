@@ -94,6 +94,7 @@ export const actions = {
       const cartId = data?.data?.id;
       window.localStorage.setItem('cartId', cartId);
       dispatch('getCart');
+      this.$toast.success('Successfully added!');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in creating cart');
@@ -110,6 +111,7 @@ export const actions = {
       });
 
       dispatch('getCart');
+      this.$toast.success('Successfully added!');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong adding item to cart');
@@ -127,7 +129,7 @@ export const actions = {
           cartData
         }
       );
-
+      this.$toast.success('Successfully updated!');
       dispatch('getCart');
     } catch (error) {
       console.log(error);
@@ -145,6 +147,7 @@ export const actions = {
 
       const cart = productFilter(data?.data);
       dispatch('getCart');
+      this.$toast.success('Successfully deleted!');
       if (cart.length === 0) window.localStorage.removeItem('cartId');
     } catch (error) {
       console.log(error);
@@ -160,7 +163,7 @@ export const actions = {
         const carts = productFilter(data);
 
         commit('SET_CART', setCartLocale(carts));
-        commit('SET_REDIRECTURLS', data.redirect_urls);
+        commit('SET_REDIRECTURLS', data.data.redirect_urls);
       }
     } catch (error) {
       console.log(error);

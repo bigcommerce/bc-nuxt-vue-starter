@@ -49,7 +49,8 @@
     },
     { "source": "/processPayment", "destination": "/api/routes" },
     { "source": "/addCoupons", "destination": "/api/routes" },
-    { "source": "/storefront", "destination": "/api/routes" }
+    { "source": "/storefront", "destination": "/api/routes" },
+    { "source": "/getHomePageContentWidgets", "destination": "/api/routes" }
   ],
   "env": {
     "APP_NAME": "BigCommerce Nuxt Vue Starter",
@@ -64,6 +65,8 @@
     "BASE_URL": "https://store-storehash-channelid.mybigcommerce.com",
     "STOREFRONT_API_TOKEN": "***",
     "CHECKOUT_TYPE": "embedded",
-    "PAYMENT_URL": "https://payments.bigcommerce.com"
+    "PAYMENT_URL": "https://payments.bigcommerce.com",
+    "DEPLOY_PLATFORM": "vercel",
+    "NETLIFY_API_URL": ""
   }
 }

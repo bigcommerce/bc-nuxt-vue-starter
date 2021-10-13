@@ -1,5 +1,8 @@
 <template>
   <div id="home">
+    <template v-for="renderedRegion in renderedRegions">
+      <div :key="renderedRegion.name" v-append="renderedRegion.html"></div>
+    </template>
     <SfHero class="section">
       <SfHeroItem
         v-for="(hero, i) in heroes"
@@ -114,6 +117,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import {
   SfHero,
   SfBanner,
@@ -263,6 +267,12 @@ export default {
       ],
       bannerGrid: 1
     };
+  },
+  computed: {
+    ...mapGetters('storefront', ['renderedRegions'])
+  },
+  mounted() {
+    this.$store.dispatch('storefront/getHomePageContentWidgets');
   },
   methods: {
     toggleWishlist(index) {
