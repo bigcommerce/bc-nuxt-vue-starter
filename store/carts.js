@@ -2,7 +2,7 @@
 import { embedCheckout } from '@bigcommerce/checkout-sdk';
 import axios from 'axios';
 import { API_URL } from '~/config/constants';
-import { CHECKOUT_TYPE } from '~/constants/checkouttype';
+import { CHECKOUT_TYPE } from '~/constants';
 import {
   getCartCheckoutRedirectUrl,
   getSecuredData,
@@ -145,7 +145,7 @@ export const actions = {
         `${API_URL}/deleteCartItem?cartId=${cartId}&itemId=${itemId}`
       );
 
-      const cart = productFilter(data?.data);
+      const cart = productFilter(data);
       dispatch('getCart');
       this.$toast.success('Successfully deleted!');
       if (cart.length === 0) window.localStorage.removeItem('cartId');
@@ -169,7 +169,6 @@ export const actions = {
       console.log(error);
       window.localStorage.removeItem('cartId');
       commit('SET_CART', productFilter(null));
-      this.$toast.error('Something went wrong in getting cart');
     }
   },
 

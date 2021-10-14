@@ -164,7 +164,7 @@
         <div class="products__show-on-page desktop-only">
           <span class="products__show-on-page__label">Show on page:</span>
           <SfSelect
-            v-model="showOnPage"
+            v-model="showProductNumber"
             class="products__items-per-page"
             @input="handleShowPage"
           >
@@ -224,7 +224,8 @@ export default {
       showNumbersOnPage: ['5', '10', '20'],
       breadcrumbs: productsBreadcrumbs,
       hoveredProduct: null,
-      isCartSidebarOpen: false
+      isCartSidebarOpen: false,
+      showProductNumber: '10'
     };
   },
   computed: {

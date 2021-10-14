@@ -30,3 +30,14 @@ export const productBreadcrumbs = [
     link: '#'
   }
 ];
+
+export const cartBreadcrumbs = [
+  {
+    text: 'Home',
+    link: '/'
+  },
+  {
+    text: 'Cart',
+    link: '#'
+  }
+];
