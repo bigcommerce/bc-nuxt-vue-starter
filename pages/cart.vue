@@ -1,96 +1,139 @@
 <template>
-  <div id="cart">
-    <div id="embedded-checkout"></div>
-    <transition name="fade" mode="out-in">
-      <div v-if="totalItems" key="my-cart" class="my-cart">
-        <h3 class="my-cart__total-items">items: {{ totalItems }}</h3>
-        <div class="collected-product-list">
-          <transition-group name="fade" tag="div">
-            <SfCollectedProduct
-              v-for="(product, i) in products"
-              :key="'product' + i"
-              :qty="product.qty"
-              :image="product.image"
-              :title="product.title"
-              :regular-price="product.price.regular | price"
-              :special-price="product.price.special | price"
-              @click:remove="updateCart(0, product)"
-              @input="(e, value) => updateCart(e, product, value)"
-            >
-              <template #configuration>
-                <div class="collected-product__properties">
-                  <SfProperty
-                    v-for="(property, key) in product.configuration"
-                    :key="'property' + key"
-                    :name="property.name"
-                    :value="property.value"
-                  />
-                </div>
-              </template>
-              <template #actions>
-                <div class="collected-product__actions">
-                  <SfButton class="sf-button--text product__action">
-                    Save for later
-                  </SfButton>
-                  <SfButton class="sf-button--text product__action">
-                    Add to compare
-                  </SfButton>
-                </div>
-              </template>
-            </SfCollectedProduct>
-          </transition-group>
-        </div>
-        <SfProperty class="sf-property--full-width my-cart__total-price">
-          <template #name>
-            <span class="sf-property__name">TOTAL</span>
-          </template>
-          <template #value>
-            <SfPrice :regular="totalPrice | price" class="sf-price--big" />
-          </template>
-        </SfProperty>
-        <SfButton class="sf-button--full-width" @click="cartCheckout">
-          Go to checkout
-        </SfButton>
-      </div>
-      <div v-else key="empty-cart" class="empty-cart">
-        <div class="empty-cart__banner">
-          <img
-            src="@storefront-ui/shared/icons/empty_cart.svg"
-            alt="empty_cart"
-            class="empty-cart__icon"
-          />
-          <h3 class="empty-cart__label">Your bag is empty</h3>
-          <p class="empty-cart__description">
-            Looks like you haven’t added any items to the bag yet. Start
-            shopping to fill it in.
-          </p>
-        </div>
-        <SfButton
-          style="width: 100%"
-          link="/products"
-          class="sf-button--full-width color-secondary"
+  <div id="detailed-cart">
+    <SfBreadcrumbs
+      class="breadcrumbs desktop-only"
+      :breadcrumbs="breadcrumbs"
+    />
+    <div class="detailed-cart">
+      <div v-if="totalItems" class="detailed-cart__aside">
+        <SfOrderSummary
+          order-title="Order review"
+          :order-title-level="3"
+          :order="getOrder"
+          :properties-names="[
+            'Products',
+            'Subtotal',
+            'Shipping',
+            'Total price'
+          ]"
+          :characteristics="characteristics"
         >
-          Start shopping
-        </SfButton>
+          <template #promo>
+            <SfInput
+              v-model="promoCode"
+              name="promoCode"
+              placeholder="Enter promo code"
+              class="sf-input--filled sf-order-summary__promo-code-input"
+            />
+            <SfButton
+              class="sf-order-summary__promo-code-button"
+              data-testid="apply-button"
+              @click="addCouponCode"
+            >
+              Apply
+            </SfButton>
+          </template>
+        </SfOrderSummary>
       </div>
-    </transition>
+      <div class="detailed-cart__main">
+        <transition name="sf-fade" mode="out-in">
+          <div
+            v-if="totalItems"
+            key="detailed-cart"
+            class="collected-product-list"
+          >
+            <transition-group name="sf-fade" tag="div">
+              <SfCollectedProduct
+                v-for="(product, i) in products"
+                :key="'product' + i"
+                :qty="product.qty"
+                :image="product.image"
+                :title="product.title"
+                :regular-price="product.price.regular | price"
+                :special-price="product.price.special | price"
+                class="sf-collected-product--detailed collected-product"
+                @click:remove="updateCart(0, product)"
+                @input="(e, value) => updateCart(e, product, value)"
+              >
+                <template #configuration>
+                  <div class="collected-product__properties">
+                    <SfProperty
+                      v-for="(property, key) in product.configuration"
+                      :key="key"
+                      :name="property.name"
+                      :value="property.value"
+                    />
+                  </div>
+                </template>
+                <template #actions>
+                  <div class="actions desktop-only">
+                    <SfButton class="sf-button--text actions__button"
+                      >Save for later</SfButton
+                    >
+                    <span class="actions__description">
+                      Usually arrives in 5-13 business days. A shipping timeline
+                      specific to your destination can be viewed in Checkout.
+                    </span>
+                  </div>
+                </template>
+              </SfCollectedProduct>
+            </transition-group>
+          </div>
+          <div v-else key="empty-cart" class="empty-cart">
+            <SfImage
+              :src="require('@storefront-ui/shared/icons/empty_cart.svg')"
+              alt="Empty cart"
+              class="empty-cart__image"
+            />
+            <SfHeading
+              title="Your cart is empty"
+              :level="2"
+              description="Looks like you haven’t added any items to the cart yet. Start
+                shopping to fill it in."
+            />
+            <SfButton
+              link="/products"
+              class="sf-button--full-width color-primary empty-cart__button"
+              >Start shopping</SfButton
+            >
+          </div>
+        </transition>
+      </div>
+    </div>
+    <div v-if="totalItems" class="checkout-action">
+      <SfButton
+        class="sf-button--full-width cart-checkout"
+        @click="cartCheckout"
+      >
+        Go to checkout
+      </SfButton>
+    </div>
   </div>
 </template>
 <script>
 import {
   SfButton,
   SfProperty,
-  SfPrice,
-  SfCollectedProduct
+  SfCollectedProduct,
+  SfBreadcrumbs,
+  SfImage,
+  SfHeading,
+  SfOrderSummary,
+  SfInput
 } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
+import { cartBreadcrumbs, characteristics } from '~/constants';
 export default {
   name: 'Cart',
   components: {
     SfButton,
     SfProperty,
-    SfPrice,
-    SfCollectedProduct
+    SfCollectedProduct,
+    SfBreadcrumbs,
+    SfImage,
+    SfHeading,
+    SfOrderSummary,
+    SfInput
   },
   filters: {
     price: (price) => {
@@ -103,7 +146,10 @@ export default {
   layout: 'Default',
   data() {
     return {
-      isCartSidebarOpen: true
+      isCartSidebarOpen: true,
+      breadcrumbs: cartBreadcrumbs,
+      characteristics,
+      promoCode: ''
     };
   },
   computed: {
@@ -124,6 +170,19 @@ export default {
           return totalPrice + summary;
         }, 0)
         .toFixed(2);
+    },
+    getOrder() {
+      return {
+        orderItems: this.products.map((item) => {
+          return {
+            ...item,
+            price: {
+              ...item.price,
+              regular: `$${item.price.regular ?? 0}`
+            }
+          };
+        })
+      };
     }
   },
   mounted() {
@@ -147,7 +206,10 @@ export default {
             })
           : this.deleteCartItem(product.itemId);
       }
-    })
+    }),
+    addCouponCode() {
+      this.$store.dispatch('checkout/addCoupons', this.promoCode);
+    }
   }
 };
 </script>

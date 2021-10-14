@@ -63,6 +63,7 @@ import {
   OrderSummary,
   OrderReview
 } from '@/components/checkout';
+import { characteristics } from '~/constants';
 export default {
   name: 'Checkout',
   components: {
@@ -85,24 +86,7 @@ export default {
         'Pay for order',
         'Confirm and pay'
       ],
-      characteristics: [
-        {
-          title: 'Safety',
-          description: 'It carefully packaged with a personal touch',
-          icon: 'safety'
-        },
-        {
-          title: 'Easy shipping',
-          description:
-            'You’ll receive dispatch confirmation and an arrival date',
-          icon: 'shipping'
-        },
-        {
-          title: 'Changed your mind?',
-          description: 'Rest assured, we offer free returns within 30 days',
-          icon: 'return'
-        }
-      ]
+      characteristics
     };
   },
   methods: {
