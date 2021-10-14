@@ -53,6 +53,7 @@ const getProductModifiers = (modifiers) => {
 };
 
 export const state = () => ({
+  loading: true,
   products: [],
   product: null,
   categories: [],
@@ -64,6 +65,9 @@ export const state = () => ({
 });
 
 export const getters = {
+  loading(state) {
+    return state.loading;
+  },
   products(state) {
     return state.products;
   },
@@ -91,6 +95,9 @@ export const getters = {
 };
 
 export const mutations = {
+  SET_LOADING(state, loading) {
+    state.loading = loading;
+  },
   SET_PRODUCTS(state, products) {
     state.products = products;
   },
@@ -176,8 +183,9 @@ export const actions = {
       this.$toast.error('Something went wrong in getting products');
     }
   },
-  async getProductBySlug({ dispatch }, slug) {
+  async getProductBySlug({ dispatch, commit }, slug) {
     try {
+      commit('SET_LOADING', true);
       const { data } = await axios.get(
         `${API_URL}/getProductBySlug?slug=${slug}`
       );
@@ -206,6 +214,7 @@ export const actions = {
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in getting product');
+      commit('SET_LOADING', false);
     }
   },
   async getProductOption({ commit }, product) {
@@ -219,9 +228,11 @@ export const actions = {
       product.variants = getProductVariants(result?.variants);
       product.modifiers = getProductModifiers(result?.modifiers);
       commit('SET_PRODUCT', product);
+      commit('SET_LOADING', false);
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in getting product option');
+      commit('SET_LOADING', true);
     }
   },
   async searchProductByKey({ commit }, key) {

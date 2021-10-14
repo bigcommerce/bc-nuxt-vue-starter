@@ -1,32 +1,35 @@
 <template>
   <div>
     <div v-if="!product" id="error">
-      <div class="img_not_found">
-        <SfImage
-          class="image"
-          :src="require('../../static/assets/not-found.svg')"
-          alt="not_found"
+      <template v-if="!loading">
+        <div class="img_not_found">
+          <SfImage
+            class="image"
+            :src="require('../../static/assets/not-found.svg')"
+            alt="not_found"
+          />
+        </div>
+        <SfHeading
+          title="Page not found"
+          subtitle="We are sorry that we can’t find the page, please go back or try again"
+          class="heading sf-heading--no-underline"
         />
-      </div>
-      <SfHeading
-        title="Page not found"
-        subtitle="We are sorry that we can’t find the page, please go back or try again"
-        class="heading sf-heading--no-underline"
-      />
-      <div class="actions">
-        <SfButton
-          class="sf-button--full-width actions__button"
-          @click="window.location = '/'"
-        >
-          Return to home
-        </SfButton>
-        <SfButton
-          class="sf-button--full-width sf-button--text actions__button"
-          @click="$emit('click:back')"
-        >
-          Back
-        </SfButton>
-      </div>
+        <div class="actions">
+          <SfButton
+            class="sf-button--full-width actions__button"
+            @click="window.location = '/'"
+          >
+            Return to home
+          </SfButton>
+          <SfButton
+            class="sf-button--full-width sf-button--text actions__button"
+            @click="$emit('click:back')"
+          >
+            Back
+          </SfButton>
+        </div>
+      </template>
+      <template v-else><Loader :loading="loading" /></template>
     </div>
     <div v-else id="product">
       <div>
@@ -185,36 +188,6 @@
           </div>
         </div>
       </div>
-      <div>
-        <SfBanner
-          title="Download our application to your mobile"
-          image="/assets/storybook/Home/bannerD.png"
-          class="banner-application sf-banner--left sf-banner--center desktop-only"
-        >
-          <template #subtitle>
-            <div class="banner-application__subtitle">Fashion to Take Away</div>
-          </template>
-          <template #title>
-            <h1 class="banner-application__title">
-              Download our application to your&nbsp;mobile
-            </h1>
-          </template>
-          <template #call-to-action>
-            <div>
-              <img
-                class="banner-application__download"
-                src="/assets/storybook/Home/google.png"
-                alt="google"
-              />
-              <img
-                class="banner-application__download"
-                src="/assets/storybook/Home/apple.png"
-                alt="apple"
-              />
-            </div>
-          </template>
-        </SfBanner>
-      </div>
     </div>
   </div>
 </template>
@@ -234,11 +207,11 @@ import {
   SfProductOption,
   SfBreadcrumbs,
   SfImage,
-  SfBanner,
   SfInput
 } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
 import _ from 'lodash';
+import Loader from '@/components/Loader';
 import { productBreadcrumbs } from '~/constants';
 export default {
   name: 'Product',
@@ -257,8 +230,8 @@ export default {
     SfSelect,
     SfProductOption,
     SfBreadcrumbs,
-    SfBanner,
-    SfInput
+    SfInput,
+    Loader
   },
   data() {
     return {
@@ -275,7 +248,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('product', ['product'])
+    ...mapGetters('product', ['product', 'loading'])
   },
   watch: {
     product(val) {
