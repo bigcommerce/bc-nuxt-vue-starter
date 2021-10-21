@@ -1,0 +1,42 @@
+@import '~@storefront-ui/vue/styles';
+@import '@/assets/sass/_variables.scss';
+@import '@/assets/sass/_mixins.scss';
+.no-wishlist {
+  &__title {
+    margin: 0 0 var(--spacer-base) 0;
+  }
+  &__button {
+    --button-width: 100%;
+    margin: var(--spacer-2xl) 0 0 0;
+    @include for-desktop {
+      --button-width: 17.375rem;
+    }
+  }
+}
+#wishlist {
+  @include for-desktop {
+    &__element {
+      &--right {
+        text-align: right;
+      }
+    }
+  }
+  .sf-collected-product {
+    --collected-product-padding: var(--spacer-sm) 0;
+    --collected-product-actions-display: flex;
+    border: 1px solid var(--c-light);
+    border-width: 1px 0 0 0;
+    &:first-of-type {
+      border-top: none;
+    }
+    @include for-mobile {
+      --collected-product-remove-bottom: var(--spacer-sm);
+    }
+    @include for-desktop {
+      --collected-product-padding: var(--spacer-lg) 0;
+    }
+  }
+  .sf-collected-product__actions {
+    display: none;
+  }
+}

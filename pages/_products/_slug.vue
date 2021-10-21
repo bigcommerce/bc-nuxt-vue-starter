@@ -149,11 +149,11 @@
                 class="product__add-to-cart"
                 @click="addToCart"
               />
-              <SfButton class="sf-button--text desktop-only product__save">
+              <SfButton
+                class="sf-button--text desktop-only product__save"
+                @click="handleSaveForLater"
+              >
                 Save for later
-              </SfButton>
-              <SfButton class="sf-button--text desktop-only product__compare">
-                Add to compare
               </SfButton>
             </div>
             <SfTabs :open-tab="1" class="product__tabs">
@@ -248,7 +248,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('product', ['product', 'loading'])
+    ...mapGetters('product', ['product', 'loading']),
+    ...mapGetters('customer', ['loggedIn'])
   },
   watch: {
     product(val) {
@@ -271,50 +272,49 @@ export default {
     ...mapActions({
       getProductBySlug: 'product/getProductBySlug'
     }),
+    getMissedFields(fields) {
+      const missedFields = [];
+      fields.forEach((field) => {
+        if (!this.selectedField[field]) {
+          missedFields.push(field);
+        }
+      });
+      return missedFields;
+    },
+    getSelectedVariant() {
+      return this.variants.find((variant) => {
+        let matched = true;
+        variant.values.forEach((item) => {
+          if (
+            parseInt(this.selectedField[item.option_display_name]) !== item.id
+          )
+            matched = false;
+        });
+        if (matched) return true;
+        return false;
+      });
+    },
     addToCart() {
-      let isCartable = true;
       const addData = {
         quantity: this.qty,
         product_id: this.product.entityId
       };
 
       if (this.options.length) {
-        const missedFields = [];
-        this.optionFields.forEach((field) => {
-          if (!this.selectedField[field]) {
-            missedFields.push(field);
-          }
-        });
+        const missedFields = this.getMissedFields(this.optionFields);
         if (missedFields.length) {
           this.$toast.error(`Please select ${missedFields.toString()}`);
-          isCartable = false;
           return;
         }
-        const selectedVariant = this.variants.find((variant) => {
-          let matched = true;
-          variant.values.forEach((item) => {
-            if (
-              parseInt(this.selectedField[item.option_display_name]) !== item.id
-            )
-              matched = false;
-          });
-          if (matched) return true;
-          return false;
-        });
+        const selectedVariant = this.getSelectedVariant();
         if (selectedVariant) addData.variant_id = selectedVariant.id;
       }
 
       if (this.modifiers.length) {
         addData.option_selections = [];
-        const missedFields = [];
-        this.modifierFields.forEach((field) => {
-          if (!this.selectedField[field]) {
-            missedFields.push(field);
-          }
-        });
+        const missedFields = this.getMissedFields(this.modifierFields);
         if (missedFields.length) {
           this.$toast.error(`Please select ${missedFields.toString()}`);
-          isCartable = false;
           return;
         }
         this.modifiers.forEach((item) => {
@@ -326,7 +326,7 @@ export default {
           }
         });
       }
-      if (isCartable) this.$store.dispatch('carts/addToCart', addData);
+      this.$store.dispatch('carts/addToCart', addData);
     },
     selectColor(colorIndex) {
       this.options.map((option) => {
@@ -350,6 +350,24 @@ export default {
         }
         return option;
       });
+    },
+    handleSaveForLater() {
+      if (!this.loggedIn) this.$router.replace('/login');
+      else {
+        const wishListData = {
+          product_id: this.product.entityId
+        };
+        if (this.options.length) {
+          const missedFields = this.getMissedFields(this.optionFields);
+          if (missedFields.length) {
+            this.$toast.error(`Please select ${missedFields.toString()}`);
+            return;
+          }
+          const selectedVariant = this.getSelectedVariant();
+          if (selectedVariant) wishListData.variant_id = selectedVariant.id;
+        }
+        this.$store.dispatch('product/addToWishList', [wishListData]);
+      }
     }
   }
 };

@@ -28,6 +28,11 @@
           <OrderHistory :orders="orders" />
         </SfContentPage>
       </SfContentCategory>
+      <SfContentCategory title="Wishlists">
+        <SfContentPage title="Wishlists">
+          <Wishlist />
+        </SfContentPage>
+      </SfContentCategory>
       <SfContentPage title="Log out" />
     </SfContentPages>
   </div>
@@ -36,7 +41,12 @@
 import { profileBreadcrumbs } from '@/constants';
 import { SfBreadcrumbs, SfContentPages } from '@storefront-ui/vue';
 import { mapActions, mapGetters } from 'vuex';
-import { MyProfile, ShippingDetails, OrderHistory } from './_profile/index.js';
+import {
+  MyProfile,
+  ShippingDetails,
+  OrderHistory,
+  Wishlist
+} from './_profile/index.js';
 export default {
   name: 'MyAccount',
   components: {
@@ -44,7 +54,8 @@ export default {
     SfContentPages,
     MyProfile,
     ShippingDetails,
-    OrderHistory
+    OrderHistory,
+    Wishlist
   },
   data() {
     return {

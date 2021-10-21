@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 import { API_URL } from '~/config/constants';
+import { getSecuredData, getUser } from '~/utils/auth';
+import { getWishlistId, setWishlistId } from '~/utils/storage';
 
 const checkCartOnPage = (edges) => {
   return !!edges.find(
@@ -52,6 +54,24 @@ const getProductModifiers = (modifiers) => {
   return mds;
 };
 
+const getWishlistItems = (products, wishlistItems) => {
+  return wishlistItems.map((wishlistItem) => {
+    const product = products.find(
+      (product) => wishlistItem.product_id === product.id
+    );
+    const variant = product.variants.find(
+      (vnt) => vnt.id === wishlistItem.variant_id
+    );
+    product.configuration = variant
+      ? variant.option_values.map(({ option_display_name, label }) => ({
+          name: option_display_name,
+          value: label
+        }))
+      : [];
+    return { ...product, wishlistItemId: wishlistItem.id };
+  });
+};
+
 export const state = () => ({
   loading: true,
   products: [],
@@ -61,7 +81,8 @@ export const state = () => ({
   startCursor: '',
   endCursor: '',
   showOnPage: 10,
-  searchedProducts: []
+  searchedProducts: [],
+  wishlist: []
 });
 
 export const getters = {
@@ -91,6 +112,9 @@ export const getters = {
   },
   searchedProducts(state) {
     return state.searchedProducts;
+  },
+  wishlist(state) {
+    return state.wishlist;
   }
 };
 
@@ -121,6 +145,9 @@ export const mutations = {
   },
   SET_SEARCHED_PRODUCTS(state, searchedProducts) {
     state.searchedProducts = searchedProducts;
+  },
+  SET_WISHLIST(state, wishlist) {
+    state.wishlist = wishlist;
   }
 };
 
@@ -249,6 +276,85 @@ export const actions = {
           '/assets/storybook/SfProductCard/no-product.jpg'
       }));
       commit('SET_SEARCHED_PRODUCTS', products);
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
+  },
+  async addToWishList({ dispatch }, items) {
+    const wishlistId = getWishlistId();
+    if (wishlistId) dispatch('addToWishlistItem', { items, wishlistId });
+    else dispatch('createWishlist', items);
+  },
+  async createWishlist({ dispatch }, items) {
+    try {
+      const user = getUser();
+      const { id } = getSecuredData(user.secureData);
+      const wishlistData = {
+        name: 'My shopping',
+        items,
+        customer_id: id,
+        is_public: true
+      };
+
+      const { data } = await axios.post(`${API_URL}/createWishlist`, {
+        wishlistData
+      });
+      const wishlistId = data?.data?.id;
+      setWishlistId(wishlistId);
+      this.$toast.success('Successfully added!');
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong in creating wishlist');
+    }
+  },
+  async addToWishlistItem({ dispatch }, { items, wishlistId }) {
+    try {
+      const wishlistData = { items };
+
+      await axios.post(
+        `${API_URL}/addToWishlistItem?wishlistId=${wishlistId}`,
+        {
+          wishlistData
+        }
+      );
+      this.$toast.success('Successfully added!');
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong in adding a product to wishlist');
+    }
+  },
+  async getWishlist({ commit }) {
+    try {
+      const wishlistId = getWishlistId();
+      if (wishlistId) {
+        const { data } = await axios.get(
+          `${API_URL}/getWishlist?wishlistId=${wishlistId}`
+        );
+        const productIds = data.data.items.map(({ product_id }) => product_id);
+        const productResponse = await axios.get(
+          `${API_URL}/getProductsByIds?productIds=${productIds.toString()}`
+        );
+
+        const wishlistItems = data.data.items;
+        const products = productResponse.data.data;
+
+        const wishlist = getWishlistItems(products, wishlistItems);
+        commit('SET_WISHLIST', wishlist);
+      }
+    } catch (error) {
+      console.log(error);
+      this.$toast.error('Something went wrong');
+    }
+  },
+  async removeWishlistItem({ dispatch }, wishlistItemId) {
+    try {
+      const wishlistId = getWishlistId();
+      await axios.delete(
+        `${API_URL}/deleteWishlistItem?wishlistId=${wishlistId}&wishlistItemId=${wishlistItemId}`
+      );
+      this.$toast.success('Successfully removed in wishlist!');
+      dispatch('getWishlist');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong');

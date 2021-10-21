@@ -12,7 +12,7 @@
           <SfImage
             class="sf-header__logo"
             width="150%"
-            src="assets/logo.png"
+            src="/assets/logo.png"
             alt="logo"
           />
         </SfLink>

@@ -1,12 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '~/config/constants';
-import {
-  setUser,
-  getUser,
-  removeUserAndCookie,
-  setCookie,
-  getCookie
-} from '~/utils/auth';
+import { setUser, getUser } from '~/utils/auth';
+import { getCookie, removeUserAndCookie, setCookie } from '~/utils/storage';
 
 export const state = () => ({
   customer: null,

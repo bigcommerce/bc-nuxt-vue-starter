@@ -29,7 +29,12 @@ const ACCESSIBLE_API_ENDPOINTS = [
   'POST_addCoupons',
   'GET_getProductOption',
   'GET_storefront',
-  'GET_getHomePageContentWidgets'
+  'GET_getHomePageContentWidgets',
+  'POST_createWishlist',
+  'POST_addToWishlistItem',
+  'GET_getWishlist',
+  'GET_getProductsByIds',
+  'DELETE_deleteWishlistItem'
 ];
 
 module.exports.checkApiAccessPermission = (permission) => {
