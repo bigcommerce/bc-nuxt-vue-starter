@@ -3,6 +3,7 @@
 @import '@/assets/sass/_mixins.scss';
 
 #login-page {
+  font-family: var(--font-family--primary);
   margin: 3rem auto 6rem;
   max-width: 65rem;
   box-sizing: border-box;

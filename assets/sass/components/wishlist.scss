@@ -34,6 +34,9 @@
     }
     @include for-desktop {
       --collected-product-padding: var(--spacer-lg) 0;
+      &:hover {
+        --collected-product-configuration-display: flex !important;
+      }
     }
   }
   .sf-collected-product__actions {

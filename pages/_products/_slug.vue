@@ -80,7 +80,6 @@
               <SfButton class="sf-button--text desktop-only product__guide">
                 Size guide
               </SfButton>
-              <div v-if="options.length">Variants</div>
               <template v-for="(option, key) in options">
                 <div
                   v-if="option.field === 'Color' && option.values.length > 0"

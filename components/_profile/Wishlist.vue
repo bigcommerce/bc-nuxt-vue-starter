@@ -1,7 +1,6 @@
 <template>
   <SfTabs :open-tab="1">
     <SfTab title="My wishlist">
-      <p class="message">Your wishlist history.</p>
       <div v-if="wishlist.length === 0" class="no-wishlist">
         <p class="no-wishlist__title">
           You currently have no wishlist history.
