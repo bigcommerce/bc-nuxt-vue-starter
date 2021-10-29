@@ -9,20 +9,20 @@
           <div class="login-form">
             <SfInput
               ref="email"
-              v-model="email"
+              v-model="$v.email.$model"
               :type="'text'"
               :label="'Email'"
               :name="'email'"
-              :valid="$v.email.required"
+              :valid="checkFormValidation($v.email)"
               :placeholder="'Input Email Address'"
               :error-message="'Email is required'"
             />
             <SfInput
-              v-model="password"
+              v-model="$v.password.$model"
               :type="'password'"
               :label="'Password'"
               :name="'password'"
-              :valid="$v.password.required"
+              :valid="checkFormValidation($v.password)"
               :placeholder="'Input Password'"
               :error-message="'Password is required'"
             />
@@ -62,6 +62,7 @@ import { SfInput, SfButton, SfSection } from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
 import CustomerProfile from '~/components/CustomerProfile.vue';
+import { checkFormValidation } from '~/utils/validation';
 export default {
   components: {
     SfInput,
@@ -95,6 +96,7 @@ export default {
     ...mapActions({
       login: 'customer/login'
     }),
+    checkFormValidation,
     async handleLogin() {
       await this.login({ email: this.email, password: this.password });
     }

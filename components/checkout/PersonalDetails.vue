@@ -15,33 +15,36 @@
     />
     <div class="form">
       <SfInput
-        v-model="personalInfo.firstName"
+        v-model="$v.personalInfo.firstName.$model"
         :value="personalInfo.firstName"
         label="First name"
         name="firstName"
         class="form__element form__element--half"
         :readonly="loggedIn"
-        :valid="$v.personalInfo.firstName.required"
+        :valid="checkFormValidation($v.personalInfo.firstName)"
         :error-message="'First name is required'"
       />
       <SfInput
-        v-model="personalInfo.lastName"
+        v-model="$v.personalInfo.lastName.$model"
         :value="personalInfo.lastName"
         label="Last name"
         name="lastName"
         class="form__element form__element--half form__element--half-even"
         :readonly="loggedIn"
-        :valid="$v.personalInfo.lastName.required"
+        :valid="checkFormValidation($v.personalInfo.lastName)"
         :error-message="'Last name is required'"
       />
       <SfInput
-        v-model="personalInfo.email"
+        v-model="$v.personalInfo.email.$model"
         :value="personalInfo.email"
         label="Your email"
         name="email"
         class="form__element"
         :readonly="loggedIn"
-        :valid="$v.personalInfo.email.required"
+        :valid="
+          $v.personalInfo.email.email &&
+          checkFormValidation($v.personalInfo.email)
+        "
         :error-message="'Email is required'"
       />
       <div class="info">
@@ -66,7 +69,8 @@ import {
   SfCharacteristic
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
+import { required, email } from 'vuelidate/lib/validators';
+import { checkFormValidation } from '~/utils/validation';
 export default {
   name: 'PersonalDetails',
   components: {
@@ -95,7 +99,8 @@ export default {
         required
       },
       email: {
-        required
+        required,
+        email
       }
     }
   },
@@ -118,6 +123,7 @@ export default {
     this.$store.commit('checkout/SET_PERSONAL_DETAILS', this.personalInfo);
   },
   methods: {
+    checkFormValidation,
     runAction() {
       if (this.loggedIn) {
         this.$store.dispatch(

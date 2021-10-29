@@ -15,82 +15,82 @@
         @change="setBillingAsShipping"
       />
       <SfInput
-        v-model="billingInfo.first_name"
+        v-model="$v.billingInfo.first_name.$model"
         :value="billingInfo.first_name"
         label="First name"
         name="first_name"
         class="form__element form__element--half"
-        :valid="$v.billingInfo.first_name.required"
+        :valid="checkFormValidation($v.billingInfo.first_name)"
         :error-message="'First name is required'"
       />
       <SfInput
-        v-model="billingInfo.last_name"
+        v-model="$v.billingInfo.last_name.$model"
         :value="billingInfo.last_name"
         label="Last name"
         name="last_name"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.billingInfo.last_name.required"
+        :valid="checkFormValidation($v.billingInfo.last_name)"
         :error-message="'Last name is required'"
       />
       <SfInput
-        v-model="billingInfo.address1"
+        v-model="$v.billingInfo.address1.$model"
         :value="billingInfo.address1"
         label="Address 1"
         name="address1"
         class="form__element form__element--half"
-        :valid="$v.billingInfo.address1.required"
+        :valid="checkFormValidation($v.billingInfo.address1)"
         :error-message="'Address 1 is required'"
       />
       <SfInput
-        v-model="billingInfo.address2"
+        v-model="$v.billingInfo.address2.$model"
         :value="billingInfo.address2"
         label="Address 2"
         name="address2"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.billingInfo.address2.required"
+        :valid="checkFormValidation($v.billingInfo.address2)"
         :error-message="'Address 2 is required'"
       />
       <SfInput
-        v-model="billingInfo.city"
+        v-model="$v.billingInfo.city.$model"
         :value="billingInfo.city"
         label="City"
         name="city"
         class="form__element form__element--half"
-        :valid="$v.billingInfo.city.required"
+        :valid="checkFormValidation($v.billingInfo.city)"
         :error-message="'City is required'"
       />
       <SfInput
-        v-model="billingInfo.postal_code"
+        v-model="$v.billingInfo.postal_code.$model"
         :value="billingInfo.postal_code"
         label="Postal-code"
         name="postal_code"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.billingInfo.postal_code.required"
+        :valid="checkFormValidation($v.billingInfo.postal_code)"
         :error-message="'Postal code is required'"
       />
       <SfInput
-        v-model="billingInfo.country_code"
+        v-model="$v.billingInfo.country_code.$model"
         :value="billingInfo.country_code"
         label="Country code"
         name="country_code"
         class="form__element"
-        :valid="$v.billingInfo.country_code.required"
+        :valid="checkFormValidation($v.billingInfo.country_code)"
         :error-message="'Country code is required'"
       />
       <country-select
-        v-model="billingInfo.country"
+        v-model="$v.billingInfo.country.$model"
         :country-name="true"
         :country="billingInfo.country"
         top-country="US"
         class="country_select"
       />
       <span
-        v-if="!$v.billingInfo.country.required"
+        v-if="!checkFormValidation($v.billingInfo.country)"
         style="margin-top: -20px; color: red; font-size: 14px"
         >Country is required</span
       >
       <region-select
-        v-model="billingInfo.state_or_province"
+        v-model="$v.billingInfo.state_or_province.$model"
         :country="billingInfo.country"
         :region="billingInfo.state_or_province"
         :country-name="true"
@@ -98,17 +98,17 @@
         class="region_select"
       />
       <span
-        v-if="!$v.billingInfo.state_or_province.required"
+        v-if="!checkFormValidation($v.billingInfo.state_or_province)"
         style="margin-top: -20px; color: red; font-size: 14px"
         >State is required</span
       >
       <SfInput
-        v-model="billingInfo.phone"
+        v-model="$v.billingInfo.phone.$model"
         :value="billingInfo.phone"
         label="Phone number"
         name="phone"
         class="form__element"
-        :valid="$v.billingInfo.phone.required"
+        :valid="checkFormValidation($v.billingInfo.phone)"
         :error-message="'Phone is required'"
       />
     </div>
@@ -158,6 +158,7 @@
 import { SfHeading, SfInput, SfCheckbox, SfRadio } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
+import { checkFormValidation } from '~/utils/validation';
 export default {
   name: 'Payment',
   components: {
@@ -261,6 +262,7 @@ export default {
     this.$store.commit('checkout/SET_BILLING_ADDRESS', this.billingInfo);
   },
   methods: {
+    checkFormValidation,
     setBillingAsShipping() {
       const bAddress = { ...this.shippingAddress };
       if (this.sameAsShipping) this.billingInfo = bAddress;
