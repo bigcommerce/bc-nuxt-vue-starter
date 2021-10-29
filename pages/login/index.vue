@@ -86,12 +86,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('customer', ['loggedIn']),
+    ...mapGetters('customer', ['loggedIn', 'loginCred']),
     btnDisabled() {
       return this.$v.$invalid;
     }
   },
   watch: {},
+  activated() {
+    if (this.loginCred) {
+      this.email = this.loginCred.email;
+      this.password = this.loginCred.password;
+    }
+  },
   methods: {
     ...mapActions({
       login: 'customer/login'

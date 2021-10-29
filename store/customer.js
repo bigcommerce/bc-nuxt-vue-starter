@@ -5,7 +5,8 @@ import { getCookie, removeUserAndCookie, setCookie } from '~/utils/storage';
 
 export const state = () => ({
   customer: null,
-  loggedIn: false
+  loggedIn: false,
+  loginCred: null
 });
 
 export const getters = {
@@ -14,6 +15,9 @@ export const getters = {
   },
   loggedIn(state) {
     return state.loggedIn;
+  },
+  loginCred(state) {
+    return state.loginCred;
   }
 };
 
@@ -23,6 +27,9 @@ export const mutations = {
   },
   SET_LOGGEDIN(state, loggedIn) {
     state.loggedIn = loggedIn;
+  },
+  SET_LOGINCRED(state, loginCred) {
+    state.loginCred = loginCred;
   }
 };
 
@@ -48,6 +55,11 @@ export const actions = {
         variables
       });
       this.$toast.success('Successfully registered!');
+      commit('SET_LOGINCRED', {
+        email: variables.email,
+        password: variables._authentication.password
+      });
+      this.$router.push('/login');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in register');
