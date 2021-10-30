@@ -155,21 +155,21 @@
         <transition name="sf-fade">
           <div v-if="isCreditCard" class="credit-card-form">
             <SfInput
-              v-model="cardInfo.cardNumber"
+              v-model="$v.cardInfo.cardNumber.$model"
               :value="cardInfo.cardNumber"
               name="cardNumber"
               label="Card number"
               class="credit-card-form__input"
-              :valid="$v.cardInfo.cardNumber.required"
+              :valid="checkFormValidation($v.cardInfo.cardNumber)"
               :error-message="'Card number is required'"
             />
             <SfInput
-              v-model="cardInfo.cardHolder"
+              v-model="$v.cardInfo.cardHolder.$model"
               :value="cardInfo.cardHolder"
               label="Card holder"
               name="cardHolder"
               class="credit-card-form__input"
-              :valid="$v.cardInfo.cardHolder.required"
+              :valid="checkFormValidation($v.cardInfo.cardHolder)"
               :error-message="'Card holder name is required'"
             />
             <div class="credit-card-form__group">
@@ -194,7 +194,7 @@
                     </SfSelectOption>
                   </SfSelect>
                   <span
-                    v-if="!$v.cardInfo.cardMonth.required"
+                    v-if="!checkFormValidation($v.cardInfo.cardMonth)"
                     style="margin-top: 50px; color: red; font-size: 14px"
                     >Card month is required</span
                   >
@@ -215,7 +215,7 @@
                     </SfSelectOption>
                   </SfSelect>
                   <span
-                    v-if="!$v.cardInfo.cardYear.required"
+                    v-if="!checkFormValidation($v.cardInfo.cardYear)"
                     style="margin-top: 50px; color: red; font-size: 14px"
                     >Card year is required</span
                   >
@@ -224,13 +224,13 @@
             </div>
             <div class="credit-card-form__group">
               <SfInput
-                v-model="cardInfo.cardCVC"
+                v-model="$v.cardInfo.cardCVC.$model"
                 :value="cardInfo.cardCVC"
                 type="number"
                 label="Code CVC"
                 name="cardCVC"
                 class="credit-card-form__input credit-card-form__input--small credit-card-form__input--with-spacer"
-                :valid="$v.cardInfo.cardCVC.required"
+                :valid="checkFormValidation($v.cardInfo.cardCVC)"
                 :error-message="'Card CVC is required'"
               />
               <SfButton class="sf-button--text credit-card-form__button"
@@ -268,6 +268,7 @@ import {
 } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import { required } from 'vuelidate/lib/validators';
+import { checkFormValidation } from '~/utils/validation';
 export default {
   name: 'ReviewOrder',
   components: {
@@ -382,6 +383,7 @@ export default {
     }
   },
   methods: {
+    checkFormValidation,
     runAction() {
       if (!this.terms || !this.paymentMethodId || this.$v.$invalid)
         return false;

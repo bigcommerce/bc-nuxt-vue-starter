@@ -9,7 +9,7 @@ import {
   getUser
 } from '~/utils/auth';
 import sampleLanguageData, { getBrowserLocales } from '~/utils/language';
-import { getCartId } from '~/utils/storage';
+import { getCartId, removeCartId, setCartId } from '~/utils/storage';
 
 const productFilter = (cart) => {
   return cart && cart !== ''
@@ -92,7 +92,7 @@ export const actions = {
       const { data } = await axios.post(`${API_URL}/createCart`, { cartData });
 
       const cartId = data?.data?.id;
-      window.localStorage.setItem('cartId', cartId);
+      setCartId(cartId);
       dispatch('getCart');
       this.$toast.success('Successfully added!');
     } catch (error) {
@@ -148,7 +148,7 @@ export const actions = {
       const cart = productFilter(data);
       dispatch('getCart');
       this.$toast.success('Successfully deleted!');
-      if (cart.length === 0) window.localStorage.removeItem('cartId');
+      if (cart.length === 0) removeCartId();
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in deleting cart item');
@@ -167,7 +167,7 @@ export const actions = {
       }
     } catch (error) {
       console.log(error);
-      window.localStorage.removeItem('cartId');
+      removeCartId();
       commit('SET_CART', productFilter(null));
     }
   },

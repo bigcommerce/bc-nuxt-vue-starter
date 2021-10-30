@@ -85,6 +85,7 @@
             :max-rating="product.rating.max"
             :score-rating="product.rating.score"
             :show-add-to-cart-button="true"
+            wishlist-icon=""
             class="products__product-card"
             @click="gotoProduct(product)"
             @mouseover="handleProductHover(product.id)"

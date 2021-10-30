@@ -67,9 +67,6 @@
                 </template>
                 <template #actions>
                   <div class="actions desktop-only">
-                    <SfButton class="sf-button--text actions__button"
-                      >Save for later</SfButton
-                    >
                     <span class="actions__description">
                       Usually arrives in 5-13 business days. A shipping timeline
                       specific to your destination can be viewed in Checkout.

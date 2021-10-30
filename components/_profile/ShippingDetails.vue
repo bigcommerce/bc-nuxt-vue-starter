@@ -10,18 +10,18 @@
         <p class="message">Keep your addresses and contact details updated.</p>
         <div class="form">
           <SfInput
-            v-model="address.company"
+            v-model="$v.address.company.$model"
             name="company"
             label="Company"
             class="form__element form__element--half"
-            :valid="$v.address.company.required"
+            :valid="checkFormValidation($v.address.company)"
             :error-message="'Company is required'"
           />
           <SfComponentSelect
-            v-model="address.address_type"
+            v-model="$v.address.address_type.$model"
             name="address_type"
             label="Address Type"
-            :valid="$v.address.address_type.required"
+            :valid="checkFormValidation($v.address.address_type)"
             :error-message="'Address Type is required'"
             class="sf-component-select--underlined form__select form__element form__element--half form__element--half-even"
           >
@@ -34,47 +34,47 @@
             </SfComponentSelectOption>
           </SfComponentSelect>
           <SfInput
-            v-model="address.first_name"
+            v-model="$v.address.first_name.$model"
             name="firstName"
             label="First Name"
-            :valid="$v.address.first_name.required"
+            :valid="checkFormValidation($v.address.first_name)"
             :error-message="'First Name is required'"
             class="form__element form__element--half"
           />
           <SfInput
-            v-model="address.last_name"
+            v-model="$v.address.last_name.$model"
             name="lastName"
             label="Last Name"
-            :valid="$v.address.last_name.required"
+            :valid="checkFormValidation($v.address.last_name)"
             :error-message="'Last Name is required'"
             class="form__element form__element--half form__element--half-even"
           />
           <SfInput
-            v-model="address.street_1"
+            v-model="$v.address.street_1.$model"
             name="street_1"
             label="Street 1"
-            :valid="$v.address.street_1.required"
+            :valid="checkFormValidation($v.address.street_1)"
             :error-message="'Street 1 is required'"
             class="form__element"
           />
           <SfInput
-            v-model="address.street_2"
+            v-model="$v.address.street_2.$model"
             name="street_2"
             label="Street 2"
-            :valid="$v.address.street_2.required"
+            :valid="checkFormValidation($v.address.street_2)"
             :error-message="'Street 2 is required'"
             class="form__element"
           />
           <SfInput
-            v-model="address.city"
+            v-model="$v.address.city.$model"
             name="city"
             label="City"
-            :valid="$v.address.city.required"
+            :valid="checkFormValidation($v.address.city)"
             :error-message="'City is required'"
             class="form__element form__element--half"
           />
           <region-select
-            v-model="address.state"
+            v-model="$v.address.state.$model"
             :country="address.country"
             :region="address.state"
             :region-name="true"
@@ -82,35 +82,35 @@
             class="region_select"
           />
           <span
-            v-if="!$v.address.state.required"
+            v-if="!checkFormValidation($v.address.state)"
             style="margin-top: -20px; color: red; font-size: 14px"
             >State is required</span
           >
           <SfInput
-            v-model="address.zip"
+            v-model="$v.address.zip.$model"
             name="zip"
             label="Zip-code"
-            :valid="$v.address.zip.required"
+            :valid="checkFormValidation($v.address.zip)"
             :error-message="'ZipCode is required'"
             class="form__element"
           />
           <country-select
-            v-model="address.country"
+            v-model="$v.address.country.$model"
             :country-name="true"
             :country="address.country"
             top-country="US"
             class="country_select"
           />
           <span
-            v-if="!$v.address.country.required"
+            v-if="!checkFormValidation($v.address.country)"
             style="margin-top: -20px; color: red; font-size: 14px"
             >Country is required</span
           >
           <SfInput
-            v-model="address.phone"
+            v-model="$v.address.phone.$model"
             name="phone"
             label="Phone number"
-            :valid="$v.address.phone.required"
+            :valid="checkFormValidation($v.address.phone)"
             :error-message="'Phone Number is required'"
             class="form__element"
           />
@@ -175,6 +175,7 @@ import {
   SfComponentSelect
 } from '@storefront-ui/vue';
 import { required } from 'vuelidate/lib/validators';
+import { checkFormValidation } from '~/utils/validation';
 export default {
   name: 'ShippingDetails',
   components: {
@@ -251,6 +252,7 @@ export default {
     }
   },
   methods: {
+    checkFormValidation,
     changeAddress(index, action) {
       this.action = action;
       if (index > -1) {

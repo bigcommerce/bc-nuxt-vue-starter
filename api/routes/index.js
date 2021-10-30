@@ -34,7 +34,12 @@ import {
   getProductBySlug,
   getCategories,
   searchProductByKey,
-  getProductOption
+  getProductOption,
+  createWishlist,
+  addToWishlistItem,
+  getWishlist,
+  getProductsByIds,
+  deleteWishlistItem
 } from '../controller/product';
 import {
   storefront,
@@ -108,5 +113,11 @@ router.get(
   permissionMiddleware,
   getHomePageContentWidgets
 );
+// wishlist
+router.post('/createWishlist', permissionMiddleware, createWishlist);
+router.post('/addToWishlistItem', permissionMiddleware, addToWishlistItem);
+router.get('/getWishlist', permissionMiddleware, getWishlist);
+router.get('/getProductsByIds', permissionMiddleware, getProductsByIds);
+router.delete('/deleteWishlistItem', permissionMiddleware, deleteWishlistItem);
 
 export default router;

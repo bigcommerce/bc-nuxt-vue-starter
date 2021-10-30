@@ -3,6 +3,7 @@
 @import '@/assets/sass/_mixins.scss';
 
 #register-page {
+  font-family: var(--font-family--primary);
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -30,7 +31,7 @@
       align-items: center;
       margin-top: 1.5rem;
       .sf-button {
-        margin-top: 1rem;
+        margin: 1rem;
       }
     }
     .sf-input {

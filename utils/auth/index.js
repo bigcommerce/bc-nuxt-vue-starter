@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { getCustomer, setCustomer } from '../storage';
 const { v4: uuidv4 } = require('uuid');
 
 export const setUser = (user) => {
@@ -38,34 +39,21 @@ export const setUser = (user) => {
       secureData
     };
   }
-  window.localStorage.setItem('bigcommerceCustomer', JSON.stringify(user));
+  setCustomer(user);
   return user;
 };
 
 export const getUser = () => {
-  const user = window.localStorage.getItem('bigcommerceCustomer');
+  const user = getCustomer();
   if (typeof window !== 'undefined' && user && user !== 'null') {
     return JSON.parse(user);
   }
   return null;
 };
 
-export const setCookie = (cookie) => {
-  window.localStorage.setItem('cookie', cookie);
-};
-
-export const getCookie = () => {
-  return window.localStorage.getItem('cookie');
-};
-
 export const getSecuredData = (secureData) => {
   const data = jwt.verify(secureData, process.env.jwtSecret);
   return data;
-};
-
-export const removeUserAndCookie = () => {
-  window.localStorage.removeItem('bigcommerceCustomer');
-  window.localStorage.removeItem('cookie');
 };
 
 export const getCartCheckoutRedirectUrl = (url) => {

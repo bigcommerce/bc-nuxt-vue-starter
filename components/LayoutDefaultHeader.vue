@@ -2,12 +2,21 @@
   <div>
     <SfHeader
       :style="{ 'margin-bottom': '20px' }"
-      title="BCVueNuxt"
       class="sf-header--has-mobile-navigation sf-header--has-mobile-search"
       :cart-icon="false"
       :account-icon="false"
       :wishlist-icon="false"
     >
+      <template #logo>
+        <SfLink link="/">
+          <SfImage
+            class="sf-header__logo"
+            width="150%"
+            src="/assets/logo.png"
+            alt="logo"
+          />
+        </SfLink>
+      </template>
       <template #navigation>
         <SfHeaderNavigationItem
           v-for="item in menu"
@@ -50,7 +59,13 @@
 </template>
 
 <script>
-import { SfHeader, SfSearchBar, SfImage, SfModal } from '@storefront-ui/vue';
+import {
+  SfHeader,
+  SfSearchBar,
+  SfImage,
+  SfModal,
+  SfLink
+} from '@storefront-ui/vue';
 import { mapGetters, mapActions } from 'vuex';
 import { menu } from '~/constants';
 export default {
@@ -59,7 +74,8 @@ export default {
     SfHeader,
     SfSearchBar,
     SfImage,
-    SfModal
+    SfModal,
+    SfLink
   },
   props: {
     menu: {

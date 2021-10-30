@@ -59,3 +59,67 @@ export const getProductOption = async (req, res, next) => {
     next(error);
   }
 };
+
+export const createWishlist = async (req, res, next) => {
+  try {
+    const wishlistData = req.body.wishlistData;
+    const { data } = await customAxios('api').post(
+      `/stores/${process.env.STORE_HASH}/v3/wishlists`,
+      wishlistData
+    );
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addToWishlistItem = async (req, res, next) => {
+  try {
+    const wishlistId = req.query.wishlistId;
+    const wishlistData = req.body.wishlistData;
+    const { data } = await customAxios('api').post(
+      `/stores/${process.env.STORE_HASH}/v3/wishlists/${wishlistId}/items`,
+      wishlistData
+    );
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getWishlist = async (req, res, next) => {
+  try {
+    const wishlistId = req.query.wishlistId;
+    const { data } = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/wishlists/${wishlistId}`
+    );
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getProductsByIds = async (req, res, next) => {
+  try {
+    const productIds = req.query.productIds;
+    const { data } = await customAxios('api').get(
+      `/stores/${process.env.STORE_HASH}/v3/catalog/products?include_fields=name,description,price&include=variants,primary_image&id:in=${productIds}`
+    );
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteWishlistItem = async (req, res, next) => {
+  try {
+    const wishlistId = req.query.wishlistId;
+    const wishlistItemId = req.query.wishlistItemId;
+    await customAxios('api').delete(
+      `/stores/${process.env.STORE_HASH}/v3/wishlists/${wishlistId}/items/${wishlistItemId}`
+    );
+    res.json();
+  } catch (error) {
+    next(error);
+  }
+};

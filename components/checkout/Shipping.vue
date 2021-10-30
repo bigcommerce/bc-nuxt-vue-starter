@@ -11,91 +11,91 @@
     ></SpDropdown>
     <div class="form">
       <SfInput
-        v-model="shippingInfo.first_name"
+        v-model="$v.shippingInfo.first_name.$model"
         :value="shippingInfo.first_name"
         label="First name"
         name="first_name"
         class="form__element form__element--half"
-        :valid="$v.shippingInfo.first_name.required"
+        :valid="checkFormValidation($v.shippingInfo.first_name)"
         :error-message="'First name is required'"
       />
       <SfInput
-        v-model="shippingInfo.last_name"
+        v-model="$v.shippingInfo.last_name.$model"
         :value="shippingInfo.last_name"
         label="Last name"
         name="last_name"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.shippingInfo.last_name.required"
+        :valid="checkFormValidation($v.shippingInfo.last_name)"
         :error-message="'Last name is required'"
       />
       <SfInput
-        v-model="shippingInfo.email"
+        v-model="$v.shippingInfo.email.$model"
         :value="shippingInfo.email"
         label="Email Address"
         name="email"
         class="form__element form__element--half"
-        :valid="$v.shippingInfo.email.required"
+        :valid="checkFormValidation($v.shippingInfo.email)"
         :error-message="'Email is invalid'"
       />
       <SfInput
-        v-model="shippingInfo.address1"
+        v-model="$v.shippingInfo.address1.$model"
         :value="shippingInfo.address1"
         label="Address 1"
         name="address1"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.shippingInfo.address1.required"
+        :valid="checkFormValidation($v.shippingInfo.address1)"
         :error-message="'Address 1 is required'"
       />
       <SfInput
-        v-model="shippingInfo.address2"
+        v-model="$v.shippingInfo.address2.$model"
         :value="shippingInfo.address2"
         label="Address 2"
         name="address2"
         class="form__element form__element--half"
-        :valid="$v.shippingInfo.address2.required"
+        :valid="checkFormValidation($v.shippingInfo.address2)"
         :error-message="'Address 2 is required'"
       />
       <SfInput
-        v-model="shippingInfo.city"
+        v-model="$v.shippingInfo.city.$model"
         :value="shippingInfo.city"
         label="City"
         name="city"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.shippingInfo.city.required"
+        :valid="checkFormValidation($v.shippingInfo.city)"
         :error-message="'City is required'"
       />
       <SfInput
-        v-model="shippingInfo.postal_code"
+        v-model="$v.shippingInfo.postal_code.$model"
         :value="shippingInfo.postal_code"
         label="Postal-code"
         name="postal_code"
         class="form__element form__element--half"
-        :valid="$v.shippingInfo.postal_code.required"
+        :valid="checkFormValidation($v.shippingInfo.postal_code)"
         :error-message="'Postal code is required'"
       />
       <SfInput
-        v-model="shippingInfo.country_code"
+        v-model="$v.shippingInfo.country_code.$model"
         :value="shippingInfo.country_code"
         label="Country code"
         name="country_code"
         class="form__element form__element--half form__element--half-even"
-        :valid="$v.shippingInfo.country_code.required"
+        :valid="checkFormValidation($v.shippingInfo.country_code)"
         :error-message="'Country code is required'"
       />
       <country-select
-        v-model="shippingInfo.country"
+        v-model="$v.shippingInfo.country.$model"
         :country-name="true"
         :country="shippingInfo.country"
         top-country="US"
         class="country_select"
       />
       <span
-        v-if="!$v.shippingInfo.country.required"
+        v-if="!checkFormValidation($v.shippingInfo.country)"
         style="margin-top: -20px; color: red; font-size: 14px"
         >Country is required</span
       >
       <region-select
-        v-model="shippingInfo.state_or_province"
+        v-model="$v.shippingInfo.state_or_province.$model"
         :country="shippingInfo.country"
         :region="shippingInfo.state_or_province"
         :country-name="true"
@@ -103,17 +103,17 @@
         class="region_select"
       />
       <span
-        v-if="!$v.shippingInfo.state_or_province.required"
+        v-if="!checkFormValidation($v.shippingInfo.state_or_province)"
         style="margin-top: -20px; color: red; font-size: 14px"
         >State is required</span
       >
       <SfInput
-        v-model="shippingInfo.phone"
+        v-model="$v.shippingInfo.phone.$model"
         :value="shippingInfo.phone"
         label="Phone number"
         name="phone"
         class="form__element"
-        :valid="$v.shippingInfo.phone.required"
+        :valid="checkFormValidation($v.shippingInfo.phone)"
         :error-message="'Phone is required'"
       />
     </div>
@@ -124,6 +124,7 @@ import { SfHeading, SfInput } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
 import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
 import { required } from 'vuelidate/lib/validators';
+import { checkFormValidation } from '~/utils/validation';
 export default {
   name: 'Shipping',
   components: {
@@ -222,6 +223,7 @@ export default {
     this.$store.commit('checkout/SET_SHIPPING_ADDRESS', this.shippingInfo);
   },
   methods: {
+    checkFormValidation,
     handleSetAddress(action) {
       if (action) {
         Object.keys(this.shippingInfo).map(
