@@ -2,6 +2,38 @@
 
 > BigCommerce + Nuxt + Storefront UI Starter
 
+## UI Features
+
+> 1. Product
+>    > - Get products by category
+>    > - Search products in search bar
+>    > - Get product with details by slug
+>    >   - Add to cart
+>    >   - Add to wishlist
+> 2. Cart
+>    > - Get cart
+>    > - Create cart
+>    > - Add item to cart
+>    > - Delete cart
+> 3. Checkout ("redirected", "embedded", "custom")
+>    > - "redirected" - redirect to default checkout
+>    > - "embedded" - embed a checkout module in checkout page
+>    > - "custom" - customize checkout page
+>    >   - Get checkout
+>    >   - Add shipping address to checkout
+>    >   - Add billing address to checkout
+>    >   - Create an order based on checkout
+>    >   - Confirm and pay the order
+> 4. Profile
+>    > - Personal details (This is customer details)
+>    > - Shipping details (This is customer shipping address)
+>    >   - Add new shipping address
+>    >   - Update shipping address
+>    >   - Delete shipping address
+>    > - Order history (This is customer order history)
+>    > - Wishlist (This is wishlist of products)
+>    >   - Remove item in wishlist
+
 ## Build Setup
 
 ```
