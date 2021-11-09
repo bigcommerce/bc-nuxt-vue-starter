@@ -4,34 +4,37 @@
 
 ## UI Features
 
-> 1. Product
+> 1. Product [Click here for guide]()
 >    > - Get products by category
 >    > - Search products in search bar
 >    > - Get product with details by slug
 >    >   - Add to cart
 >    >   - Add to wishlist
-> 2. Cart
+> 2. Cart [Click here for guide]()
 >    > - Get cart
 >    > - Create cart
 >    > - Add item to cart
 >    > - Delete cart
 > 3. Checkout ("redirected", "embedded", "custom")
->    > - "redirected" - redirect to default checkout
->    > - "embedded" - embed a checkout module in checkout page
->    > - "custom" - customize checkout page
+>    > - "redirected" - redirect to default checkout [Click here for guide]()
+>    > - "embedded" - embed a checkout module in checkout page [Click here for guide]()
+>    > - "custom" - customize checkout page [Click here for guide]()
 >    >   - Get checkout
 >    >   - Add shipping address to checkout
 >    >   - Add billing address to checkout
 >    >   - Create an order based on checkout
 >    >   - Confirm and pay the order
 > 4. Profile
->    > - Personal details (This is customer details)
->    > - Shipping details (This is customer shipping address)
+>    > - Personal details (This is customer details) [Click here for guide]()
+>    >   - Login
+>    >   - Register
+>    > - Shipping details (This is customer shipping address) [Click here for guide]()
 >    >   - Add new shipping address
 >    >   - Update shipping address
 >    >   - Delete shipping address
 >    > - Order history (This is customer order history)
->    > - Wishlist (This is wishlist of products)
+>    > - Wishlist (This is wishlist of products) [Click here for guide]()
+>    >   - List wishlist items
 >    >   - Remove item in wishlist
 
 ## Build Setup
