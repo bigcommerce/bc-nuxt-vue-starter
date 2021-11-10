@@ -253,6 +253,7 @@ export const actions = {
         payment
       });
       dispatch('getCheckout');
+      this.$toast.success('Successfully processed order.');
     } catch (error) {
       console.log(error);
       this.$toast.error('Something went wrong in processing pay');

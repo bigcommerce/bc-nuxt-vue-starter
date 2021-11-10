@@ -54,7 +54,8 @@ const setCartLocale = (carts) => {
 
 export const state = () => ({
   products: [],
-  redirectUrls: {}
+  redirectUrls: {},
+  embedLoaded: false
 });
 
 export const getters = {
@@ -63,6 +64,9 @@ export const getters = {
   },
   redirectUrls(state) {
     return state.redirectUrls;
+  },
+  embedLoaded(state) {
+    return state.embedLoaded;
   }
 };
 
@@ -72,6 +76,9 @@ export const mutations = {
   },
   SET_REDIRECTURLS(state, redirectUrls) {
     state.redirectUrls = redirectUrls;
+  },
+  SET_EMBED_LOADED(state, embedLoaded) {
+    state.embedLoaded = embedLoaded;
   }
 };
 
@@ -188,7 +195,7 @@ export const actions = {
     }
   },
 
-  async cartCheckout({ state }) {
+  async cartCheckout({ state, commit }) {
     try {
       const user = getUser();
       const checkoutType = process.env.CHECKOUT_TYPE;
@@ -207,7 +214,8 @@ export const actions = {
         } else url = state.redirectUrls.embedded_checkout_url;
         embedCheckout({
           containerId: 'embedded-checkout',
-          url
+          url,
+          onComplete: commit('SET_EMBED_LOADED', true)
         });
       } else if (checkoutType === CHECKOUT_TYPE.CUSTOM) {
         this.$router.push('/checkout');

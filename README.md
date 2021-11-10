@@ -2,6 +2,41 @@
 
 > BigCommerce + Nuxt + Storefront UI Starter
 
+## UI Features
+
+> 1. Product [Click here for guide](https://www.youtube.com/watch?v=B1mtNPgKHew)
+>    > - Get products by category
+>    > - Search products in search bar
+>    > - Get product with details by slug
+>    >   - Add to cart
+>    >   - Add to wishlist
+> 2. Cart [Click here for guide](https://www.youtube.com/watch?v=pU0JH98ifmc)
+>    > - Get cart
+>    > - Create cart
+>    > - Add item to cart
+>    > - Delete cart
+> 3. Checkout ("redirected", "embedded", "custom")
+>    > - "redirected" - redirect to default checkout [Click here for guide](https://www.youtube.com/watch?v=FZi_7kn7W28)
+>    > - "embedded" - embed a checkout module in checkout page [Click here for guide](https://www.youtube.com/watch?v=B9W80JSYrXU)
+>    > - "custom" - customize checkout page [Click here for guide](https://www.youtube.com/watch?v=jzAGDeLeYts)
+>    >   - Get checkout
+>    >   - Add shipping address to checkout
+>    >   - Add billing address to checkout
+>    >   - Create an order based on checkout
+>    >   - Confirm and pay the order
+> 4. Profile
+>    > - Personal details (This is customer details) [Click here for guide](https://www.youtube.com/watch?v=0z3Vf5ZAUg0)
+>    >   - Login
+>    >   - Register
+>    > - Shipping details (This is customer shipping address) [Click here for guide](https://www.youtube.com/watch?v=IRgXry6ctZk)
+>    >   - Add new shipping address
+>    >   - Update shipping address
+>    >   - Delete shipping address
+>    > - Order history (This is customer order history)
+>    > - Wishlist (This is wishlist of products) [Click here for guide](https://www.youtube.com/watch?v=J2N6I_SxQiM)
+>    >   - List wishlist items
+>    >   - Remove item in wishlist
+
 ## Build Setup
 
 ```
