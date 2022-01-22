@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@bigcommerce/checkout-sdk": "^1.160.0",
-    "@nuxtjs/axios": "^5.12.4",
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/pwa": "^3.3.3",
