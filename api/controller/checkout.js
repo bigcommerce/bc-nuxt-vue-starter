@@ -46,9 +46,7 @@ export const updateShippingOption = async (req, res, next) => {
     const checkoutId = req.query.checkoutId;
     const consignmentId = req.query.consignmentId;
     const shippingOptionId = req.query.shippingOptionId;
-    const { data } = await customAxios(
-      'api'
-    ).put(
+    const { data } = await customAxios('api').put(
       `/stores/${process.env.STORE_HASH}/v3/checkouts/${checkoutId}/consignments/${consignmentId}`,
       { shipping_option_id: shippingOptionId }
     );

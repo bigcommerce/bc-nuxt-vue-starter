@@ -58,32 +58,13 @@
     >
       <div class="images-grid">
         <SfImage
+          v-for="look in looks"
+          :key="look.alt"
           class="images-grid__col"
-          src="assets/storybook/Home/imageA.jpg"
-          alt="imageA"
+          :src="look.image"
+          :alt="look.alt"
         >
-          katherina_trn
-        </SfImage>
-        <SfImage
-          class="images-grid__col"
-          src="assets/storybook/Home/imageB.jpg"
-          alt="imageB"
-        >
-          katherina_trn
-        </SfImage>
-        <SfImage
-          class="images-grid__col"
-          src="assets/storybook/Home/imageC.jpg"
-          alt="imageC"
-        >
-          katherina_trn
-        </SfImage>
-        <SfImage
-          class="images-grid__col"
-          src="assets/storybook/Home/imageD.jpg"
-          alt="imageD"
-        >
-          katherina_trn
+          {{ look.title }}
         </SfImage>
       </div>
     </SfSection>
@@ -116,6 +97,28 @@ export default {
   layout: 'Default',
   data() {
     return {
+      looks: [
+        {
+          title: 'katherina_trn',
+          image: 'assets/storybook/Home/imageA.jpg',
+          alt: 'imageA'
+        },
+        {
+          title: 'katherina_trn',
+          image: 'assets/storybook/Home/imageB.jpg',
+          alt: 'imageB'
+        },
+        {
+          title: 'katherina_trn',
+          image: 'assets/storybook/Home/imageC.jpg',
+          alt: 'imageC'
+        },
+        {
+          title: 'katherina_trn',
+          image: 'assets/storybook/Home/imageD.jpg',
+          alt: 'imageD'
+        }
+      ],
       heroes: [
         {
           title: 'Colorful summer dresses are already in store',

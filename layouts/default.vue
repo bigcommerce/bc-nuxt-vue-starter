@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import { menu } from '@/constants';
 import { mapGetters } from 'vuex';
 import { SfFooter, SfList, SfMenuItem } from '@storefront-ui/vue';
+import { menu } from '@/constants';
 import LayoutDefaultHeader from '@/components/LayoutDefaultHeader';
 export default {
   components: {

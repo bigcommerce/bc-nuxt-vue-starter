@@ -3,9 +3,9 @@
     <SfHeader
       :style="{ 'margin-bottom': '20px' }"
       class="sf-header--has-mobile-navigation sf-header--has-mobile-search"
-      :cart-icon="false"
-      :account-icon="false"
-      :wishlist-icon="false"
+      cart-icon=""
+      account-icon=""
+      wishlist-icon=""
     >
       <template #logo>
         <SfLink link="/">

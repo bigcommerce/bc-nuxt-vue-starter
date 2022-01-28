@@ -38,7 +38,6 @@
   </div>
 </template>
 <script>
-import { profileBreadcrumbs } from '@/constants';
 import { SfBreadcrumbs, SfContentPages } from '@storefront-ui/vue';
 import { mapActions, mapGetters } from 'vuex';
 import {
@@ -47,6 +46,7 @@ import {
   OrderHistory,
   Wishlist
 } from './_profile/index.js';
+import { profileBreadcrumbs } from '@/constants';
 export default {
   name: 'MyAccount',
   components: {
