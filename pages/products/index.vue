@@ -281,8 +281,9 @@ export default {
       else this.productQtys.push({ quantity, productId });
     },
     getQuantity(id) {
-      const qty = this.productQtys.find(({ productId }) => productId === id)
-        ?.quantity;
+      const qty = this.productQtys.find(
+        ({ productId }) => productId === id
+      )?.quantity;
       return qty ?? 1;
     },
     handleProductHover(id) {

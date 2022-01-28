@@ -122,8 +122,8 @@
 <script>
 import { SfHeading, SfInput } from '@storefront-ui/vue';
 import { mapGetters } from 'vuex';
-import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
 import { required } from 'vuelidate/lib/validators';
+import SpDropdown from '@/components/checkout/basic/SpDropdown.vue';
 import { checkFormValidation } from '~/utils/validation';
 export default {
   name: 'Shipping',
