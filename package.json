@@ -36,7 +36,7 @@
     "nuxt": "^2.14.12",
     "set-cookie-parser": "^2.4.8",
     "uuid": "^8.3.2",
-    "vue-append": "^2.0.1",
+    "vue-append": "^2.2.0",
     "vue-country-region-select": "^2.0.14",
     "vuelidate": "^0.7.6"
   },
